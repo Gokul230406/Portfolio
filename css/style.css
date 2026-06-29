@@ -757,7 +757,9 @@ ul { list-style: none; }
   transition: var(--transition);
 }
 .profile-badge img { width: 16px; height: 16px; border-radius: 3px; }
+.profile-badge i { width: 16px; text-align: center; font-size: 0.95rem; flex-shrink: 0; }
 .profile-badge:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.social-profiles { margin-top: 1rem; }
 
 /* About content */
 .about-subtitle {
