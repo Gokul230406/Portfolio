@@ -37,46 +37,47 @@ function applyThemeIcon(theme) {
 }
 
 /* ─── CUSTOM CURSOR ──────────────────────────────────────── */
+const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const cursor   = document.getElementById('cursor');
 const follower = document.getElementById('cursorFollower');
 
-let mouseX = 0, mouseY = 0;
-let followerX = 0, followerY = 0;
+if (!isTouchDevice && cursor && follower) {
+  let mouseX = 0, mouseY = 0;
+  let followerX = 0, followerY = 0;
 
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  if (cursor) {
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
     cursor.style.left = mouseX + 'px';
     cursor.style.top  = mouseY + 'px';
-  }
-});
+  });
 
-(function animateCursor() {
-  followerX += (mouseX - followerX) * 0.1;
-  followerY += (mouseY - followerY) * 0.1;
-  if (follower) {
+  (function animateCursor() {
+    followerX += (mouseX - followerX) * 0.1;
+    followerY += (mouseY - followerY) * 0.1;
     follower.style.left = followerX + 'px';
     follower.style.top  = followerY + 'px';
-  }
-  requestAnimationFrame(animateCursor);
-})();
+    requestAnimationFrame(animateCursor);
+  })();
 
-// Expand cursor on interactive elements
-document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor?.style.setProperty('width', '20px');
-    cursor?.style.setProperty('height', '20px');
-    follower?.style.setProperty('width', '56px');
-    follower?.style.setProperty('height', '56px');
+  document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.setProperty('width', '20px');
+      cursor.style.setProperty('height', '20px');
+      follower.style.setProperty('width', '56px');
+      follower.style.setProperty('height', '56px');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.setProperty('width', '10px');
+      cursor.style.setProperty('height', '10px');
+      follower.style.setProperty('width', '36px');
+      follower.style.setProperty('height', '36px');
+    });
   });
-  el.addEventListener('mouseleave', () => {
-    cursor?.style.setProperty('width', '10px');
-    cursor?.style.setProperty('height', '10px');
-    follower?.style.setProperty('width', '36px');
-    follower?.style.setProperty('height', '36px');
-  });
-});
+} else {
+  cursor?.remove();
+  follower?.remove();
+}
 
 /* ─── NAVBAR SCROLL ──────────────────────────────────────── */
 const navbar = document.getElementById('navbar');
@@ -116,21 +117,33 @@ function highlightNavLink() {
 /* ─── MOBILE MENU ────────────────────────────────────────── */
 const hamburger  = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
-const mobileClose = document.getElementById('mobileClose');
 const mobileLinks = document.querySelectorAll('.mobile-link');
 
-hamburger?.addEventListener('click', openMobileMenu);
-mobileClose?.addEventListener('click', closeMobileMenu);
+hamburger?.addEventListener('click', toggleMobileMenu);
 mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+mobileMenu?.addEventListener('click', (e) => {
+  if (e.target === mobileMenu) closeMobileMenu();
+});
 
+function toggleMobileMenu() {
+  if (mobileMenu?.classList.contains('open')) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
 function openMobileMenu() {
   mobileMenu?.classList.add('open');
   hamburger?.classList.add('open');
+  hamburger?.setAttribute('aria-expanded', 'true');
+  hamburger?.setAttribute('aria-label', 'Close menu');
   document.body.style.overflow = 'hidden';
 }
 function closeMobileMenu() {
   mobileMenu?.classList.remove('open');
   hamburger?.classList.remove('open');
+  hamburger?.setAttribute('aria-expanded', 'false');
+  hamburger?.setAttribute('aria-label', 'Open menu');
   document.body.style.overflow = '';
 }
 
