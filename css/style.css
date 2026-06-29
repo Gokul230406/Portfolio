@@ -1084,6 +1084,19 @@ ul { list-style: none; }
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.achievements-section .achievement-card .media-thumb {
+  aspect-ratio: 4 / 3;
+  min-height: 108px;
+  border-radius: 14px;
+}
+.achievements-section .achievement-card .media-more-overlay {
+  font-size: 0.68rem;
+}
+.achievements-section .achievement-card .media-more-overlay strong {
+  font-size: 1.15rem;
 }
 
 /* Certifications */
