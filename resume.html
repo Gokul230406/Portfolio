@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gokul P – Resume</title>
+  <meta name="description" content="Resume of Gokul P – Full Stack Developer & Java Programmer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: #f0edf8;
+      color: #1a1528;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ── PRINT BUTTON ─────────────────────────────────────── */
+    .print-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(11,10,15,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,58,237,0.3);
+      padding: 0.75rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .print-bar-left { display: flex; align-items: center; gap: 1rem; }
+    .print-bar-logo {
+      font-family: 'Inria Sans', serif;
+      font-size: 1.3rem; font-weight: 700;
+      background: linear-gradient(135deg, #9f67ff, #06b6d4);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .print-bar-title { color: #a09bba; font-size: 0.85rem; }
+    .print-bar-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .print-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: #fff; border: none; border-radius: 99px;
+      font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(124,58,237,0.4);
+      transition: all 0.2s ease;
+    }
+    .print-btn:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(124,58,237,0.6); }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1.1rem;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #a09bba; border-radius: 99px;
+      font-family: 'Nunito', sans-serif; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .back-btn:hover { border-color: rgba(124,58,237,0.5); color: #f0eef8; }
+
+    /* ── RESUME WRAPPER ───────────────────────────────────── */
+    .resume-wrapper {
+      max-width: 900px;
+      margin: 80px auto 3rem;
+      background: #fff;
+      box-shadow: 0 20px 80px rgba(124,58,237,0.15), 0 4px 20px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────── */
+    .r-header {
+      background: linear-gradient(145deg, #0f0d1a 0%, #1a1040 50%, #0d1a3a 100%);
+      padding: 3rem 3.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .r-header::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .r-header::after {
+      content: '';
+      position: absolute; bottom: -40px; left: 40%;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner {
+      display: flex; align-items: center; gap: 2.5rem;
+      position: relative; z-index: 1;
+    }
+    .header-photo-wrap {
+      flex-shrink: 0;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      border: 3px solid rgba(124,58,237,0.6);
+      box-shadow: 0 0 30px rgba(124,58,237,0.4);
+      overflow: hidden;
+    }
+    .header-photo { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .header-info { flex: 1; }
+    .r-name {
+      font-family: 'Inria Sans', serif;
+      font-size: 2.6rem; font-weight: 700; color: #f0eef8;
+      line-height: 1.1; margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+    .r-title {
+      font-size: 1rem; font-weight: 600;
+      background: linear-gradient(135deg, #9f67ff, #06b6d4);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .r-contacts {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem;
+    }
+    .r-contact-item {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; color: #a09bba;
+      transition: color 0.2s;
+    }
+    .r-contact-item:hover { color: #9f67ff; }
+    .r-contact-item i { color: #7c3aed; font-size: 0.75rem; width: 14px; text-align: center; }
+
+    /* ── BODY LAYOUT ──────────────────────────────────────── */
+    .r-body {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+
+    /* ── COLUMN SHARED ────────────────────────────────────── */
+    .r-col-left { padding: 2.5rem 2rem 2.5rem 3rem; border-right: 1px solid #f0edf8; }
+    .r-col-right { padding: 2.5rem 3rem 2.5rem 2rem; background: #faf9fe; }
+
+    /* ── SECTION HEADING ──────────────────────────────────── */
+    .r-section { margin-bottom: 2rem; }
+    .r-section-title {
+      font-family: 'Inria Sans', serif;
+      font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: #7c3aed;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #ede9fb;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .r-section-title i { font-size: 0.75rem; color: #9f67ff; }
+
+    /* ── SUMMARY ──────────────────────────────────────────── */
+    .r-summary {
+      font-size: 0.88rem; color: #4b4568;
+      line-height: 1.8;
+    }
+
+    /* ── EXPERIENCE / EDUCATION ITEMS ─────────────────────── */
+    .r-item { margin-bottom: 1.5rem; }
+    .r-item-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .r-item-title {
+      font-weight: 800; font-size: 0.92rem; color: #1a1528; margin-bottom: 0.1rem;
+    }
+    .r-item-sub {
+      font-size: 0.8rem; font-weight: 600; color: #7c3aed; margin-bottom: 0.1rem;
+    }
+    .r-item-org {
+      font-size: 0.78rem; color: #8880a0;
+    }
+    .r-item-date {
+      font-size: 0.75rem; font-weight: 700;
+      color: #a09bba; white-space: nowrap;
+      background: #ede9fb; padding: 0.15rem 0.55rem; border-radius: 99px;
+      flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .r-item-score {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.8rem; font-weight: 700;
+      color: #7c3aed; background: #f3f0ff;
+      padding: 0.2rem 0.6rem; border-radius: 99px;
+      margin-top: 0.3rem; border: 1px solid #ddd5f5;
+    }
+    .r-bullet-list { margin-top: 0.5rem; }
+    .r-bullet-item {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      font-size: 0.82rem; color: #4b4568; line-height: 1.7;
+      margin-bottom: 0.3rem;
+    }
+    .r-bullet-item::before {
+      content: '▸';
+      color: #7c3aed; font-size: 0.7rem;
+      margin-top: 0.2rem; flex-shrink: 0;
+    }
+    .r-tech {
+      display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem;
+    }
+    .r-tag {
+      font-size: 0.68rem; font-weight: 700;
+      background: #ede9fb; color: #7c3aed;
+      padding: 0.15rem 0.5rem; border-radius: 99px;
+      border: 1px solid #ddd5f5;
+    }
+    .r-award {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.7rem; font-weight: 700;
+      background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(239,68,68,0.05));
+      color: #d97706; border: 1px solid rgba(245,158,11,0.35);
+      padding: 0.2rem 0.55rem; border-radius: 99px; margin-left: 0.4rem;
+    }
+
+    /* ── SKILLS ───────────────────────────────────────────── */
+    .r-skill-group { margin-bottom: 1rem; }
+    .r-skill-label {
+      font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: #8880a0; margin-bottom: 0.4rem;
+    }
+    .r-skill-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .r-skill-tag {
+      font-size: 0.75rem; font-weight: 600;
+      background: #fff; color: #4b4568;
+      border: 1px solid #e0daef;
+      padding: 0.2rem 0.6rem; border-radius: 99px;
+      transition: all 0.2s;
+    }
+    .r-skill-tag:hover { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+    /* ── ACHIEVEMENTS ─────────────────────────────────────── */
+    .r-ach-item {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.83rem; color: #4b4568; line-height: 1.6; margin-bottom: 0.5rem;
+    }
+    .r-ach-icon { color: #7c3aed; font-size: 0.75rem; margin-top: 0.25rem; flex-shrink: 0; }
+
+    /* ── CERTIFICATIONS ───────────────────────────────────── */
+    .r-cert-item {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      background: #fff;
+      border: 1px solid #ede9fb;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s;
+    }
+    .r-cert-item:hover { border-color: #7c3aed; box-shadow: 0 2px 10px rgba(124,58,237,0.1); }
+    .r-cert-icon { color: #7c3aed; font-size: 0.9rem; flex-shrink: 0; }
+    .r-cert-name { font-size: 0.82rem; font-weight: 700; color: #1a1528; }
+    .r-cert-issuer { font-size: 0.72rem; color: #8880a0; }
+
+    /* ── LEADERSHIP ───────────────────────────────────────── */
+    .r-lead-item { margin-bottom: 1.25rem; }
+    .r-lead-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; flex-wrap: wrap; }
+    .r-lead-role { font-weight: 700; font-size: 0.88rem; color: #1a1528; }
+    .r-lead-org { font-size: 0.75rem; color: #7c3aed; font-weight: 600; margin-bottom: 0.2rem; }
+
+    /* ── DIVIDER ──────────────────────────────────────────── */
+    .r-divider { height: 1px; background: #f0edf8; margin: 1.25rem 0; }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .r-footer {
+      background: linear-gradient(145deg, #0f0d1a, #1a1040);
+      padding: 1.25rem 3.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .r-footer-text { font-size: 0.75rem; color: #615d78; }
+    .r-footer-links { display: flex; gap: 1.5rem; }
+    .r-footer-link {
+      display: flex; align-items: center; gap: 0.35rem;
+      font-size: 0.75rem; color: #a09bba;
+      transition: color 0.2s;
+    }
+    .r-footer-link:hover { color: #9f67ff; }
+    .r-footer-link i { font-size: 0.8rem; color: #7c3aed; }
+
+    /* ── PRINT ────────────────────────────────────────────── */
+    @media print {
+      .print-bar { display: none !important; }
+      body { background: #fff; font-size: 13px; }
+      .resume-wrapper {
+        margin: 0; box-shadow: none; border-radius: 0;
+        max-width: 100%;
+      }
+      .r-col-right { background: #faf9fe !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .r-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .r-footer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      @page { margin: 0.4cm; size: A4; }
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .print-bar { padding: 0.6rem 1rem; }
+      .print-bar-title { display: none; }
+      .resume-wrapper { margin: 70px 0.5rem 2rem; }
+      .r-header { padding: 2rem 1.5rem; }
+      .header-inner { flex-direction: column; text-align: center; gap: 1.25rem; }
+      .r-contacts { justify-content: center; }
+      .r-body { grid-template-columns: 1fr; }
+      .r-col-left { border-right: none; border-bottom: 1px solid #f0edf8; padding: 2rem 1.5rem; }
+      .r-col-right { padding: 2rem 1.5rem; }
+      .r-footer { flex-direction: column; gap: 0.75rem; text-align: center; padding: 1.25rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print bar -->
+  <div class="print-bar">
+    <div class="print-bar-left">
+      <span class="print-bar-logo">▶ GP ◀</span>
+      <span class="print-bar-title">Resume — Gokul P</span>
+    </div>
+    <div class="print-bar-actions">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+      <a href="Resume/Gokul_resume.pdf" download="Gokul_resume.pdf" class="print-btn"><i class="fas fa-download"></i> Download PDF</a>
+    </div>
+  </div>
+
+  <div class="resume-wrapper">
+
+    <!-- ══ HEADER ══ -->
+    <div class="r-header">
+      <div class="header-inner">
+        <div class="header-photo-wrap">
+          <img src="assets/profile.jpg" alt="Gokul P" class="header-photo" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(124,58,237,0.4),rgba(6,182,212,0.3));font-size:2.5rem;font-weight:700;color:#f0eef8;font-family:Inria Sans,serif;\'>GP</div>'" />
+        </div>
+        <div class="header-info">
+          <h1 class="r-name">Gokul P</h1>
+          <p class="r-title">Full Stack Developer &nbsp;·&nbsp; Java Programmer</p>
+          <div class="r-contacts">
+            <a href="tel:+918825427391" class="r-contact-item"><i class="fas fa-phone"></i> +91 8825427391</a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="r-contact-item" target="_blank" rel="noopener noreferrer"><i class="fas fa-envelope"></i> gokulp2304@gmail.com</a>
+            <span class="r-contact-item"><i class="fas fa-map-marker-alt"></i> Chennai, India</span>
+            <a href="https://linkedin.com/in/gokul2304" target="_blank" class="r-contact-item"><i class="fab fa-linkedin-in"></i> linkedin.com/in/gokul2304</a>
+            <a href="https://github.com/Gokul230406" target="_blank" class="r-contact-item"><i class="fab fa-github"></i> github.com/Gokul230406</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BODY ══ -->
+    <div class="r-body">
+
+      <!-- LEFT COLUMN -->
+      <div class="r-col-left">
+
+        <!-- Summary -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-user"></i> Summary</h2>
+          <p class="r-summary">
+            Passionate Full Stack Developer with a strong interest in building responsive and scalable web
+            applications. Dedicated to creating efficient, high-performance solutions with clean code and
+            modern development practices. Strong foundation in Java, OOP principles, and the MERN stack.
+          </p>
+        </div>
+
+        <!-- Education -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-graduation-cap"></i> Education</h2>
+
+          <div class="r-item">
+            <div class="r-item-header">
+              <div>
+                <p class="r-item-title">SRM Easwari Engineering College, Ramapuram</p>
+                <p class="r-item-sub">B.E. Computer Science</p>
+                <p class="r-item-org">Chennai, India</p>
+              </div>
+              <span class="r-item-date">2023 – Present</span>
+            </div>
+            <span class="r-item-score"><i class="fas fa-star" style="font-size:0.65rem;"></i> CGPA: 8.61 / 10</span>
+          </div>
+
+          <div class="r-item">
+            <div class="r-item-header">
+              <div>
+                <p class="r-item-title">KRM Vidhyashram, Ayanavaram</p>
+                <p class="r-item-sub">HSC (Class 12)</p>
+                <p class="r-item-org">Chennai, India</p>
+              </div>
+              <span class="r-item-date">2021 – 2023</span>
+            </div>
+            <span class="r-item-score"><i class="fas fa-star" style="font-size:0.65rem;"></i> Score: 93%</span>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-code"></i> Projects</h2>
+
+          <div class="r-item">
+            <div class="r-item-header">
+              <div>
+                <p class="r-item-title">
+                  CampusBox – Marketplace
+                  <span class="r-award"><i class="fas fa-trophy"></i> 2nd Place</span>
+                </p>
+              </div>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Developed a web platform enabling students to buy, sell, and rent items within the campus community through listings and direct connections, promoting resource reuse and easy item discovery.</li>
+              <li class="r-bullet-item">Secured <strong>2nd Place</strong> in Project Challenge 2026.</li>
+            </ul>
+            <div class="r-tech">
+              <span class="r-tag">MongoDB</span><span class="r-tag">Node.js</span><span class="r-tag">React.js</span>
+              <span class="r-tag">Tailwind CSS</span><span class="r-tag">Java</span>
+              <span class="r-tag">Bootstrap</span><span class="r-tag">Docker</span>
+            </div>
+          </div>
+
+          <div class="r-divider"></div>
+
+          <div class="r-item">
+            <div class="r-item-header">
+              <div><p class="r-item-title">AyurChain – Herb Quality Tracker</p></div>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Built a blockchain-based DApp to track medicinal herb quality from harvesting to final purchase with tamper-proof records and QR-based verification for transparency and traceability.</li>
+            </ul>
+            <div class="r-tech">
+              <span class="r-tag">Ethereum</span><span class="r-tag">Solidity</span><span class="r-tag">Ethers.js</span>
+              <span class="r-tag">React.js</span><span class="r-tag">Node.js</span>
+              <span class="r-tag">Express.js</span><span class="r-tag">MongoDB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Positions of Responsibility -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-users"></i> Positions of Responsibility</h2>
+
+          <div class="r-lead-item">
+            <div class="r-lead-header">
+              <div>
+                <p class="r-lead-role">President – Theatre Club, SRM Easwari</p>
+              </div>
+              <span class="r-item-date">2025 – Present</span>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Leading a team of 40+ members, organizing cultural performances and winning multiple overalls across colleges.</li>
+            </ul>
+          </div>
+
+          <div class="r-lead-item">
+            <div class="r-lead-header">
+              <div><p class="r-lead-role">Cultural Head – CSE Department</p></div>
+              <span class="r-item-date">2026 – Present</span>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Led departmental culturals, coordinating 50+ students. Managed event logistics and participant engagement.</li>
+            </ul>
+          </div>
+
+          <div class="r-lead-item">
+            <div class="r-lead-header">
+              <div><p class="r-lead-role">Ambassador – CSE Department</p></div>
+              <span class="r-item-date">2025 – Present</span>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Coordinated 50+ students for interdepartmental competitions, securing <strong>Overall Winners in 2025 & 2026</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="r-lead-item">
+            <div class="r-lead-header">
+              <div><p class="r-lead-role">Public Relations Officer – Rotaract Club</p></div>
+              <span class="r-item-date">2024 – 2025</span>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Managed event promotion, outreach, and communication for club initiatives.</li>
+            </ul>
+          </div>
+
+          <div class="r-lead-item">
+            <div class="r-lead-header">
+              <div><p class="r-lead-role">Joint Secretary – CSE Department</p></div>
+              <span class="r-item-date">2024 – 2025</span>
+            </div>
+            <ul class="r-bullet-list">
+              <li class="r-bullet-item">Organized 24-hour hackathon "AI Wars" and helped conduct annual technical symposium <em>Kratos</em>.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /left col -->
+
+      <!-- RIGHT COLUMN -->
+      <div class="r-col-right">
+
+        <!-- Skills -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-layer-group"></i> Skills</h2>
+
+          <div class="r-skill-group">
+            <p class="r-skill-label">Languages</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">Java</span>
+              <span class="r-skill-tag">JavaScript</span>
+            </div>
+          </div>
+          <div class="r-skill-group">
+            <p class="r-skill-label">Frontend</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">HTML5</span>
+              <span class="r-skill-tag">CSS3</span>
+              <span class="r-skill-tag">React.js</span>
+              <span class="r-skill-tag">Tailwind CSS</span>
+              <span class="r-skill-tag">Bootstrap</span>
+            </div>
+          </div>
+          <div class="r-skill-group">
+            <p class="r-skill-label">Backend</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">Node.js</span>
+              <span class="r-skill-tag">Express.js</span>
+            </div>
+          </div>
+          <div class="r-skill-group">
+            <p class="r-skill-label">Database</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">MongoDB</span>
+              <span class="r-skill-tag">PostgreSQL</span>
+              <span class="r-skill-tag">SQL</span>
+            </div>
+          </div>
+          <div class="r-skill-group">
+            <p class="r-skill-label">Blockchain</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">Ethereum</span>
+              <span class="r-skill-tag">Solidity</span>
+              <span class="r-skill-tag">Ethers.js</span>
+            </div>
+          </div>
+          <div class="r-skill-group">
+            <p class="r-skill-label">Tools & DevOps</p>
+            <div class="r-skill-tags">
+              <span class="r-skill-tag">Git</span>
+              <span class="r-skill-tag">GitHub</span>
+              <span class="r-skill-tag">Docker</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-trophy"></i> Achievements</h2>
+
+          <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8880a0;margin-bottom:0.6rem;">Technical</p>
+          <div class="r-ach-item"><i class="fas fa-trophy r-ach-icon"></i><span>Secured <strong>2nd Place</strong> in Project Challenge 2026</span></div>
+          <div class="r-ach-item"><i class="fas fa-rocket r-ach-icon"></i><span>Top 10 teams in national hackathon <strong>HackToFuture 4.0</strong></span></div>
+          <div class="r-ach-item"><i class="fas fa-fire r-ach-icon"></i><span>Won <strong>10+</strong> Stress Interview competitions</span></div>
+
+          <div class="r-divider"></div>
+
+          <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8880a0;margin-bottom:0.6rem;">Non-Technical</p>
+          <div class="r-ach-item"><i class="fas fa-theater-masks r-ach-icon"></i><span>Won <strong>75+</strong> literary and drama events in intercollege competitions</span></div>
+          <div class="r-ach-item"><i class="fas fa-crown r-ach-icon"></i><span>Earned <strong>9 titles</strong> across culturals including <strong>Mr.Techofest'26</strong> at CEG Guindy</span></div>
+          <div class="r-ach-item"><i class="fas fa-medal r-ach-icon"></i><span>Secured <strong>Overall Winner</strong> in 5 intercollege cultural competitions</span></div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-certificate"></i> Certifications</h2>
+
+          <div class="r-cert-item">
+            <i class="fab fa-java r-cert-icon" style="font-size:1.1rem;color:#f89838;"></i>
+            <div>
+              <p class="r-cert-name">Oracle Java SE17 Developer</p>
+              <p class="r-cert-issuer">Oracle Corporation</p>
+            </div>
+          </div>
+          <div class="r-cert-item">
+            <i class="fas fa-network-wired r-cert-icon" style="color:#00a79d;"></i>
+            <div>
+              <p class="r-cert-name">Cisco Networking Basics</p>
+              <p class="r-cert-issuer">Cisco Networking Academy</p>
+            </div>
+          </div>
+          <div class="r-cert-item">
+            <i class="fas fa-code r-cert-icon" style="color:#0072ce;"></i>
+            <div>
+              <p class="r-cert-name">Infosys C++ Fundamentals</p>
+              <p class="r-cert-issuer">Infosys Springboard</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coding Profiles -->
+        <div class="r-section">
+          <h2 class="r-section-title"><i class="fas fa-terminal"></i> Coding Profiles</h2>
+          <div class="r-skill-tags" style="gap:0.5rem;">
+            <a href="https://leetcode.com/u/2iVV1KHV9J/" class="r-skill-tag" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;cursor:pointer;">LeetCode</a>
+            <a href="https://www.hackerrank.com/profile/gokulp2304" class="r-skill-tag" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;cursor:pointer;">HackerRank</a>
+            <a href="https://www.codechef.com/users/gokul_2304" class="r-skill-tag" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.3rem;cursor:pointer;">CodeChef</a>
+          </div>
+        </div>
+
+      </div><!-- /right col -->
+
+    </div><!-- /r-body -->
+
+    <!-- ══ FOOTER ══ -->
+    <div class="r-footer">
+      <p class="r-footer-text">References available upon request &nbsp;·&nbsp; Updated June 2026</p>
+      <div class="r-footer-links">
+        <a href="https://github.com/Gokul230406" class="r-footer-link" target="_blank"><i class="fab fa-github"></i> Gokul230406</a>
+        <a href="https://linkedin.com/in/gokul2304" class="r-footer-link" target="_blank"><i class="fab fa-linkedin-in"></i> gokul2304</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="r-footer-link" target="_blank" rel="noopener noreferrer"><i class="fas fa-envelope"></i> gokulp2304</a>
+      </div>
+    </div>
+
+  </div><!-- /resume-wrapper -->
+
+</body>
+</html>

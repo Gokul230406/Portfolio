@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gokul P – Full Stack Developer & Java Programmer</title>
+  <meta name="description" content="Gokul P – Passionate Full Stack Developer with expertise in Java, React, Node.js and modern web technologies. B.E. Computer Science at SRM Easwari Engineering College." />
+  <meta name="keywords" content="Gokul P, Full Stack Developer, Java Programmer, React, Node.js, SRM Easwari, Portfolio, Chennai" />
+  <meta property="og:title" content="Gokul P – Full Stack Developer" />
+  <meta property="og:description" content="Passionate Full Stack Developer with a strong foundation in Java and modern web technologies." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <span class="loader-text">GP</span>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">
+        <span class="logo-bracket">&#9656;</span> GP <span class="logo-bracket">&#9666;</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home"         class="nav-link active" data-section="home">Home</a></li>
+        <li><a href="#about"        class="nav-link" data-section="about">About</a></li>
+        <li><a href="#education"    class="nav-link" data-section="education">Education</a></li>
+        <li><a href="#skills"       class="nav-link" data-section="skills">Skills</a></li>
+        <li><a href="#projects"     class="nav-link" data-section="projects">Projects</a></li>
+        <li><a href="#achievements" class="nav-link" data-section="achievements">Achievements</a></li>
+        <li><a href="#leadership"   class="nav-link" data-section="leadership">Leadership</a></li>
+        <li><a href="#contact"      class="nav-link" data-section="contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" id="resumeBtn">
+          <i class="fas fa-file-alt"></i> Resume
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileClose"><i class="fas fa-times"></i></button>
+    <ul class="mobile-nav-links">
+      <li><a href="#home"         class="mobile-link">Home</a></li>
+      <li><a href="#about"        class="mobile-link">About</a></li>
+      <li><a href="#education"    class="mobile-link">Education</a></li>
+      <li><a href="#skills"       class="mobile-link">Skills</a></li>
+      <li><a href="#projects"     class="mobile-link">Projects</a></li>
+      <li><a href="#achievements" class="mobile-link">Achievements</a></li>
+      <li><a href="#leadership"   class="mobile-link">Leadership</a></li>
+      <li><a href="#contact"      class="mobile-link">Contact</a></li>
+    </ul>
+    <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-primary mt-2">
+      <i class="fas fa-file-alt"></i> View Resume
+    </a>
+  </div>
+
+  <main>
+
+    <!-- ══════════════════ HERO ══════════════════ -->
+    <section id="home" class="section hero-section">
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+
+      <div class="hero-container">
+        <div class="hero-content" data-aos="fade-up">
+          <p class="hero-eyebrow">B.E. COMPUTER SCIENCE · SRM EASWARI · CGPA 8.61</p>
+          <h1 class="hero-title">Hi, I'm <span class="gradient-text">Gokul P</span></h1>
+          <div class="hero-typewriter">
+            <span class="typewriter-prefix">I'm a </span>
+            <span class="typewriter-text" id="typewriter"></span>
+            <span class="typewriter-cursor">|</span>
+          </div>
+          <p class="hero-bio">
+            Passionate Full Stack Developer with a strong interest in building responsive and scalable web applications.
+            Dedicated to creating efficient, high-performance solutions with clean code and modern development practices.
+          </p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">View My Work <i class="fas fa-arrow-right"></i></a>
+            <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass"><i class="fas fa-file-alt"></i> View Resume</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number" data-count="2">2nd</span>
+              <span class="stat-label">Place – Project Challenge</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">75+</span>
+              <span class="stat-label">Events Won</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">9</span>
+              <span class="stat-label">Cultural Titles</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-number">8.61</span>
+              <span class="stat-label">CGPA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-image-wrap" data-aos="fade-left" data-aos-delay="200">
+          <div class="hero-image-glow"></div>
+          <div class="hero-image-container">
+            <img src="assets/profile.jpg" alt="Gokul P – Full Stack Developer" class="hero-photo" id="heroPhoto" />
+          </div>
+          <div class="floating-badge badge-java"><i class="devicon-java-plain"></i> Java</div>
+          <div class="floating-badge badge-react"><i class="devicon-react-original"></i> React</div>
+          <div class="floating-badge badge-node"><i class="devicon-nodejs-plain"></i> Node</div>
+        </div>
+      </div>
+
+      <!-- Tech strip -->
+      <div class="skills-strip" data-aos="fade-up" data-aos-delay="400">
+        <p class="strip-label">TECH STACK</p>
+        <div class="strip-icons">
+          <span class="strip-icon" title="Java"><i class="devicon-java-plain colored"></i></span>
+          <span class="strip-icon" title="JavaScript"><i class="devicon-javascript-plain colored"></i></span>
+          <span class="strip-icon" title="React.js"><i class="devicon-react-original colored"></i></span>
+          <span class="strip-icon" title="Node.js"><i class="devicon-nodejs-plain colored"></i></span>
+          <span class="strip-icon" title="Express.js"><i class="devicon-express-original"></i></span>
+          <span class="strip-icon" title="MongoDB"><i class="devicon-mongodb-plain colored"></i></span>
+          <span class="strip-icon" title="HTML5"><i class="devicon-html5-plain colored"></i></span>
+          <span class="strip-icon" title="CSS3"><i class="devicon-css3-plain colored"></i></span>
+          <span class="strip-icon" title="Tailwind CSS"><i class="devicon-tailwindcss-plain colored"></i></span>
+          <span class="strip-icon" title="PostgreSQL"><i class="devicon-postgresql-plain colored"></i></span>
+          <span class="strip-icon" title="Docker"><i class="devicon-docker-plain colored"></i></span>
+          <span class="strip-icon" title="Git"><i class="devicon-git-plain colored"></i></span>
+          <span class="strip-icon" title="GitHub"><i class="devicon-github-original"></i></span>
+          <span class="strip-icon" title="Solidity"><i class="devicon-solidity-plain"></i></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ABOUT ══════════════════ -->
+    <section id="about" class="section about-section">
+      <div class="about-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">WHO I AM</p>
+          <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-image-col" data-aos="fade-right">
+            <div class="about-img-wrap">
+              <img src="assets/profile.jpg" alt="Gokul P" class="about-photo" />
+              <div class="about-img-border"></div>
+              <div class="about-img-glow"></div>
+            </div>
+            <div class="coding-profiles">
+              <p class="profiles-label"><i class="fas fa-code"></i> Coding Profiles</p>
+              <div class="profiles-grid">
+                <a href="https://leetcode.com/u/2iVV1KHV9J/" class="profile-badge" id="leetcode-link" target="_blank" rel="noopener">
+                  <img src="https://leetcode.com/favicon.ico" alt="LeetCode" />LeetCode
+                </a>
+                <a href="https://www.hackerrank.com/profile/gokulp2304" class="profile-badge" id="hackerrank-link" target="_blank" rel="noopener">
+                  <img src="https://www.hackerrank.com/favicon.ico" alt="HackerRank" />HackerRank
+                </a>
+                <a href="https://www.codechef.com/users/gokul_2304" class="profile-badge" id="codechef-link" target="_blank" rel="noopener">
+                  <img src="https://www.codechef.com/favicon.ico" alt="CodeChef" />CodeChef
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-content-col" data-aos="fade-left" data-aos-delay="150">
+            <h3 class="about-subtitle">Full Stack Developer & Java Programmer</h3>
+            <p class="about-text">
+              Passionate Full Stack Developer with a strong interest in building responsive and scalable web
+              applications. Currently pursuing B.E. Computer Science at SRM Easwari Engineering College, Ramapuram,
+              with a CGPA of 8.61/10.
+            </p>
+            <p class="about-text">
+              Beyond code, I lead as President of the Theatre Club, Cultural Head of CSE Department, and have won
+              9 cultural titles including <strong>Mr.Techofest'26</strong> at CEG Guindy. As an emcee and anchor, I
+              bring energy to college events and culturals — I believe great engineers are also great communicators.
+            </p>
+            <div class="about-details">
+              <div class="detail-item"><i class="fas fa-map-marker-alt"></i><span>Chennai, India</span></div>
+              <div class="detail-item"><i class="fas fa-graduation-cap"></i><span>SRM Easwari Engineering College</span></div>
+              <div class="detail-item"><i class="fas fa-book"></i><span>B.E. Computer Science · CGPA 8.61</span></div>
+              <div class="detail-item"><i class="fas fa-phone"></i><span>+91 8825427391</span></div>
+              <div class="detail-item"><i class="fas fa-envelope"></i><span>gokulp2304@gmail.com</span></div>
+              <div class="detail-item"><i class="fas fa-briefcase"></i><span>Open to Opportunities</span></div>
+            </div>
+            <div class="about-actions">
+              <a href="#contact" class="btn btn-primary">Hire Me</a>
+              <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass"><i class="fas fa-file-alt"></i> View Resume</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ EDUCATION ══════════════════ -->
+    <section id="education" class="section education-section">
+      <div class="skills-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">MY ACADEMICS</p>
+          <h2 class="section-title">Education <span class="gradient-text">Journey</span></h2>
+        </div>
+        <div class="education-timeline">
+
+          <div class="edu-item" data-aos="fade-up" data-aos-delay="0">
+            <div class="edu-icon-wrap">
+              <i class="fas fa-university"></i>
+            </div>
+            <div class="edu-card">
+              <div class="edu-header">
+                <div>
+                  <h3 class="edu-institution">SRM Easwari Engineering College, Ramapuram</h3>
+                  <p class="edu-degree">B.E. Computer Science</p>
+                </div>
+                <div class="edu-meta-right">
+                  <span class="edu-location"><i class="fas fa-map-marker-alt"></i> Chennai, India</span>
+                  <span class="edu-year">2023 – Present</span>
+                </div>
+              </div>
+              <div class="edu-footer">
+                <div class="edu-score-wrap">
+                  <span class="edu-score-label">CGPA</span>
+                  <span class="edu-score">8.61 / 10</span>
+                </div>
+                <div class="edu-tags">
+                  <span class="tag">Computer Science</span>
+                  <span class="tag">Full Stack</span>
+                  <span class="tag">Engineering</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="edu-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="edu-icon-wrap">
+              <i class="fas fa-school"></i>
+            </div>
+            <div class="edu-card">
+              <div class="edu-header">
+                <div>
+                  <h3 class="edu-institution">KRM Vidhyashram, Ayanavaram</h3>
+                  <p class="edu-degree">HSC (Class 12)</p>
+                </div>
+                <div class="edu-meta-right">
+                  <span class="edu-location"><i class="fas fa-map-marker-alt"></i> Chennai, India</span>
+                  <span class="edu-year">2021 – 2023</span>
+                </div>
+              </div>
+              <div class="edu-footer">
+                <div class="edu-score-wrap">
+                  <span class="edu-score-label">Score</span>
+                  <span class="edu-score">93%</span>
+                </div>
+                <div class="edu-tags">
+                  <span class="tag">Science Stream</span>
+                  <span class="tag">Mathematics</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ SKILLS ══════════════════ -->
+    <section id="skills" class="section skills-section">
+      <div class="skills-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">WHAT I KNOW</p>
+          <h2 class="section-title">Tech <span class="gradient-text">Skills</span></h2>
+          <p class="section-subtitle">A curated set of technologies I work with across the full development stack.</p>
+        </div>
+        <div class="skills-grid" data-aos="fade-up" data-aos-delay="100">
+
+          <div class="skill-card" data-level="70">
+            <div class="skill-icon-wrap"><i class="devicon-java-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Java</span><span class="skill-level intermediate">Intermediate</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div><span class="skill-percent">70%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="65">
+            <div class="skill-icon-wrap"><i class="devicon-javascript-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">JavaScript</span><span class="skill-level intermediate">Intermediate</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="65"></div></div><span class="skill-percent">65%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="75">
+            <div class="skill-icon-wrap"><i class="devicon-html5-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">HTML5</span><span class="skill-level intermediate">Intermediate</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div><span class="skill-percent">75%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="70">
+            <div class="skill-icon-wrap"><i class="devicon-css3-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">CSS3</span><span class="skill-level intermediate">Intermediate</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div><span class="skill-percent">70%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="60">
+            <div class="skill-icon-wrap"><i class="devicon-react-original colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">React.js</span><span class="skill-level beginner-inter" title="Beginner–Intermediate"><span class="level-full">Beginner–Intermediate</span><span class="level-short">Beg.–Inter.</span></span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div><span class="skill-percent">60%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="55">
+            <div class="skill-icon-wrap"><i class="devicon-tailwindcss-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Tailwind CSS</span><span class="skill-level beginner-inter" title="Beginner–Intermediate"><span class="level-full">Beginner–Intermediate</span><span class="level-short">Beg.–Inter.</span></span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="55"></div></div><span class="skill-percent">55%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="55">
+            <div class="skill-icon-wrap"><i class="devicon-bootstrap-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Bootstrap</span><span class="skill-level beginner-inter" title="Beginner–Intermediate"><span class="level-full">Beginner–Intermediate</span><span class="level-short">Beg.–Inter.</span></span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="55"></div></div><span class="skill-percent">55%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="50">
+            <div class="skill-icon-wrap"><i class="devicon-nodejs-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Node.js</span><span class="skill-level beginner-inter" title="Beginner–Intermediate"><span class="level-full">Beginner–Intermediate</span><span class="level-short">Beg.–Inter.</span></span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div><span class="skill-percent">50%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="45">
+            <div class="skill-icon-wrap"><i class="devicon-express-original skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Express.js</span><span class="skill-level beginner">Beginner</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="45"></div></div><span class="skill-percent">45%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="45">
+            <div class="skill-icon-wrap"><i class="devicon-mongodb-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">MongoDB</span><span class="skill-level beginner">Beginner</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="45"></div></div><span class="skill-percent">45%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="50">
+            <div class="skill-icon-wrap"><i class="devicon-postgresql-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">PostgreSQL</span><span class="skill-level beginner">Beginner</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div><span class="skill-percent">50%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="40">
+            <div class="skill-icon-wrap"><i class="devicon-docker-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Docker</span><span class="skill-level beginner">Beginner</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="40"></div></div><span class="skill-percent">40%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="35">
+            <div class="skill-icon-wrap"><i class="devicon-solidity-plain skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Solidity / Blockchain</span><span class="skill-level beginner">Beginner</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="35"></div></div><span class="skill-percent">35%</span></div>
+            </div>
+          </div>
+
+          <div class="skill-card" data-level="70">
+            <div class="skill-icon-wrap"><i class="devicon-git-plain colored skill-devicon"></i></div>
+            <div class="skill-info">
+              <div class="skill-header-row"><span class="skill-name">Git & GitHub</span><span class="skill-level intermediate">Intermediate</span></div>
+              <div class="skill-bar-wrap"><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div><span class="skill-percent">70%</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ PROJECTS ══════════════════ -->
+    <section id="projects" class="section projects-section">
+      <div class="projects-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">WHAT I'VE BUILT</p>
+          <h2 class="section-title">My <span class="gradient-text">Projects</span></h2>
+          <p class="section-subtitle">Real-world applications built with modern technology stacks.</p>
+        </div>
+        <div class="projects-list">
+
+          <!-- Project 1: CampusBox -->
+          <div class="project-item" data-aos="fade-up" data-aos-delay="0">
+            <div class="project-image-col">
+              <div class="project-img-wrap project-campusbox">
+                <div class="project-mockup">
+                  <div class="mockup-screen">
+                    <div class="mockup-browser">
+                      <div class="browser-bar">
+                        <div class="browser-dots"><span></span><span></span><span></span></div>
+                        <div class="browser-url">campusbox.marketplace</div>
+                      </div>
+                      <div class="browser-content campus-content">
+                        <div class="campus-grid">
+                          <div class="campus-item">📦 Sell Item</div>
+                          <div class="campus-item">🛒 Buy Now</div>
+                          <div class="campus-item">🔁 Rent</div>
+                          <div class="campus-item">📍 Near Me</div>
+                        </div>
+                        <p class="campus-tagline">Campus Marketplace Platform</p>
+                        <span class="campus-badge">🏆 2nd Place</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="project-glow-campusbox"></div>
+              </div>
+            </div>
+            <div class="project-content-col">
+              <p class="project-number">01</p>
+              <div class="project-title-row">
+                <h3 class="project-title">CampusBox – Marketplace</h3>
+                <span class="project-award"><i class="fas fa-trophy"></i> 2nd Place – Project Challenge 2026</span>
+              </div>
+              <p class="project-desc">
+                Developed a web platform enabling students to buy, sell, and rent items within the campus community
+                through listings and direct connections, promoting resource reuse and easy item discovery. Secured
+                <strong>2nd place</strong> in the project challenge.
+              </p>
+              <div class="project-tags">
+                <span class="tag">MongoDB</span><span class="tag">Node.js</span><span class="tag">React.js</span>
+                <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Tailwind CSS</span>
+                <span class="tag">Java</span><span class="tag">Bootstrap</span><span class="tag">Docker</span>
+              </div>
+              <div class="project-actions">
+                <a href="https://github.com/Gokul230406" class="btn btn-glass btn-sm" target="_blank"><i class="fab fa-github"></i> View Code</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2: AyurChain -->
+          <div class="project-item project-reverse" data-aos="fade-up" data-aos-delay="100">
+            <div class="project-image-col">
+              <div class="project-img-wrap project-ayur">
+                <div class="project-mockup">
+                  <div class="mockup-screen">
+                    <div class="mockup-code">
+                      <div class="code-line"><span class="kw">contract</span> <span class="cls">AyurChain</span> {</div>
+                      <div class="code-line pl"><span class="ty">mapping</span>(<span class="ty">uint</span> => Herb) herbs;</div>
+                      <div class="code-line pl"><span class="fn">trackHarvest</span>(herbId, batch);</div>
+                      <div class="code-line pl"><span class="fn">verifyQR</span>(qrCode);</div>
+                      <div class="code-line">}</div>
+                      <div class="code-line mt"><span class="cmt">// Ethereum · Solidity · Ethers.js</span></div>
+                      <div class="code-line"><span class="cmt">// Tamper-proof herb tracking</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="project-glow-ayur"></div>
+              </div>
+            </div>
+            <div class="project-content-col">
+              <p class="project-number">02</p>
+              <h3 class="project-title">AyurChain – Herb Quality Tracker</h3>
+              <p class="project-desc">
+                Built a blockchain-based DApp to track medicinal herb quality from harvesting to final purchase.
+                Features tamper-proof records and QR-based verification for transparency and traceability across
+                the entire supply chain using Ethereum smart contracts.
+              </p>
+              <div class="project-tags">
+                <span class="tag">Ethereum</span><span class="tag">Solidity</span><span class="tag">Ethers.js</span>
+                <span class="tag">React.js</span><span class="tag">Node.js</span>
+                <span class="tag">Express.js</span><span class="tag">MongoDB</span>
+              </div>
+              <div class="project-actions">
+                <a href="https://github.com/Gokul230406" class="btn btn-glass btn-sm" target="_blank"><i class="fab fa-github"></i> View Code</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ACHIEVEMENTS ══════════════════ -->
+    <section id="achievements" class="section achievements-section">
+      <div class="achievements-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">MILESTONES</p>
+          <h2 class="section-title">My <span class="gradient-text">Achievements</span></h2>
+          <p class="section-subtitle">Technical wins and cultural milestones from my journey.</p>
+        </div>
+
+        <div class="ach-categories">
+          <!-- Technical -->
+          <div class="ach-category" data-aos="fade-up" data-aos-delay="0">
+            <div class="ach-cat-header">
+              <i class="fas fa-laptop-code"></i>
+              <h3>Technical</h3>
+            </div>
+            <div class="ach-cat-cards">
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                <div class="achievement-number">2nd</div>
+                <h3 class="achievement-title">Project Challenge 2026</h3>
+                <p class="achievement-desc">Secured 2nd Place in the inter-college Project Challenge 2026 with CampusBox.</p>
+                <div class="media-gallery" data-gallery="project-challenge"></div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-rocket"></i></div>
+                <div class="achievement-number">Top 10</div>
+                <h3 class="achievement-title">HackToFuture 4.0</h3>
+                <p class="achievement-desc">Ranked in Top 10 teams at the national hackathon HackToFuture 4.0.</p>
+                <div class="media-gallery" data-gallery="hack-to-the-future"></div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-fire"></i></div>
+                <div class="achievement-number">10+</div>
+                <h3 class="achievement-title">Stress Interviews Won</h3>
+                <p class="achievement-desc">Won 10+ Stress Interview competitions, demonstrating strong communication and technical aptitude.</p>
+                <div class="media-gallery" data-gallery="stress-interview"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Non-Technical -->
+          <div class="ach-category" data-aos="fade-up" data-aos-delay="100">
+            <div class="ach-cat-header">
+              <i class="fas fa-star"></i>
+              <h3>Non-Technical</h3>
+            </div>
+            <div class="ach-cat-cards">
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-theater-masks"></i></div>
+                <div class="achievement-number">75+</div>
+                <h3 class="achievement-title">Literary & Drama Events</h3>
+                <p class="achievement-desc">Won 75+ literary and drama events in intercollege competitions across Tamil Nadu.</p>
+                <div class="media-gallery" data-gallery="non-tech-literary"></div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-crown"></i></div>
+                <div class="achievement-number">9</div>
+                <h3 class="achievement-title">Cultural Titles</h3>
+                <p class="achievement-desc">Earned 9 titles across culturals including <strong>Mr.Techofest'26</strong> at CEG Guindy.</p>
+                <div class="media-gallery" data-gallery="non-tech-cultural"></div>
+              </div>
+              <div class="achievement-card">
+                <div class="achievement-icon"><i class="fas fa-medal"></i></div>
+                <div class="achievement-number">5</div>
+                <h3 class="achievement-title">Overall Winner</h3>
+                <p class="achievement-desc">Secured Overall Winner in 5 intercollege cultural competitions, leading teams to victory across Tamil Nadu.</p>
+                <div class="media-gallery" data-gallery="non-tech-overall-winner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="certifications-wrap" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="cert-heading"><i class="fas fa-certificate"></i> Certifications</h3>
+          <div class="ach-cat-cards cert-blocks">
+            <div class="achievement-card">
+              <div class="achievement-icon"><i class="devicon-java-plain colored"></i></div>
+              <h3 class="achievement-title">Oracle Java SE17 Developer</h3>
+              <p class="achievement-desc">Oracle Corporation</p>
+              <div class="media-gallery" data-gallery="cert-oracle"></div>
+            </div>
+            <div class="achievement-card">
+              <div class="achievement-icon"><i class="fas fa-network-wired"></i></div>
+              <h3 class="achievement-title">Cisco Networking Basics</h3>
+              <p class="achievement-desc">Cisco Networking Academy</p>
+              <div class="media-gallery" data-gallery="cert-cisco"></div>
+            </div>
+            <div class="achievement-card">
+              <div class="achievement-icon"><i class="fas fa-code"></i></div>
+              <h3 class="achievement-title">Infosys C++ Fundamentals</h3>
+              <p class="achievement-desc">Infosys Springboard</p>
+              <div class="media-gallery" data-gallery="cert-cpp"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════ LEADERSHIP ══════════════════ -->
+    <section id="leadership" class="section leadership-section">
+      <div class="about-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">BEYOND CODE</p>
+          <h2 class="section-title">Leadership & <span class="gradient-text">Responsibility</span></h2>
+          <p class="section-subtitle">I believe great engineers are also great leaders and communicators.</p>
+        </div>
+        <div class="leadership-grid">
+
+          <div class="leadership-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="lead-icon"><i class="fas fa-masks-theater"></i></div>
+            <div class="lead-content">
+              <div class="lead-header">
+                <div>
+                  <h3 class="lead-role">President – Theatre Club</h3>
+                  <p class="lead-org">SRM Easwari Engineering College</p>
+                </div>
+                <span class="lead-year">2025 – Present</span>
+              </div>
+              <p class="lead-desc">Leading a team of <strong>40+ members</strong>, organizing cultural performances, emceeing events, and winning multiple overalls across colleges.</p>
+              <div class="media-gallery" data-gallery="president"></div>
+            </div>
+          </div>
+
+          <div class="leadership-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="lead-icon"><i class="fas fa-users"></i></div>
+            <div class="lead-content">
+              <div class="lead-header">
+                <div>
+                  <h3 class="lead-role">Cultural Head – CSE Department</h3>
+                  <p class="lead-org">SRM Easwari Engineering College</p>
+                </div>
+                <span class="lead-year">2026 – Present</span>
+              </div>
+              <p class="lead-desc">Led planning and execution of departmental culturals, coordinating <strong>50+ students</strong> across multiple activities. Managed event logistics, team coordination, and participant engagement.</p>
+            </div>
+          </div>
+
+          <div class="leadership-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="lead-icon"><i class="fas fa-bullhorn"></i></div>
+            <div class="lead-content">
+              <div class="lead-header">
+                <div>
+                  <h3 class="lead-role">Ambassador – CSE Department</h3>
+                  <p class="lead-org">SRM Easwari Engineering College</p>
+                </div>
+                <span class="lead-year">2025 – Present</span>
+              </div>
+              <p class="lead-desc">Coordinated <strong>50+ students</strong> for interdepartmental competitions, securing <strong>Overall Winners in 2025 & 2026</strong>.</p>
+              <div class="media-gallery" data-gallery="ambassador"></div>
+            </div>
+          </div>
+
+          <div class="leadership-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="lead-icon"><i class="fas fa-handshake"></i></div>
+            <div class="lead-content">
+              <div class="lead-header">
+                <div>
+                  <h3 class="lead-role">Public Relations Officer – Rotaract Club</h3>
+                  <p class="lead-org">SRM Easwari Engineering College</p>
+                </div>
+                <span class="lead-year">2024 – 2025</span>
+              </div>
+              <p class="lead-desc">Managed event promotion, outreach, and communication for club initiatives and community events.</p>
+              <div class="media-gallery" data-gallery="pro"></div>
+            </div>
+          </div>
+
+          <div class="leadership-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="lead-icon"><i class="fas fa-laptop"></i></div>
+            <div class="lead-content">
+              <div class="lead-header">
+                <div>
+                  <h3 class="lead-role">Joint Secretary – CSE Department</h3>
+                  <p class="lead-org">SRM Easwari Engineering College</p>
+                </div>
+                <span class="lead-year">2024 – 2025</span>
+              </div>
+              <p class="lead-desc">Organized the 24-hour hackathon <strong>"AI Wars"</strong> and helped conduct the annual technical symposium <strong>Kratos</strong>.</p>
+              <div class="media-gallery" data-gallery="joint-sec"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CONTACT ══════════════════ -->
+    <section id="contact" class="section contact-section">
+      <div class="contact-glow"></div>
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">LET'S CONNECT</p>
+          <h2 class="section-title">Get In <span class="gradient-text">Touch</span></h2>
+          <p class="section-subtitle">Whether you have a project in mind, want to collaborate, or just say hello — I'd love to hear from you.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info-col" data-aos="fade-right">
+            <h3 class="contact-info-title">Contact Information</h3>
+            <div class="contact-cards">
+
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="contact-card" id="email-link" target="_blank" rel="noopener noreferrer">
+                <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-card-body">
+                  <p class="contact-card-label">Email</p>
+                  <p class="contact-card-value">gokulp2304@gmail.com</p>
+                </div>
+                <i class="fas fa-arrow-right contact-card-arrow"></i>
+              </a>
+
+              <a href="tel:+918825427391" class="contact-card" id="phone-link">
+                <div class="contact-card-icon" style="background:linear-gradient(135deg,rgba(34,211,164,0.2),rgba(6,182,212,0.1));border-color:rgba(34,211,164,0.3);">
+                  <i class="fas fa-phone" style="color:#22d3a4;"></i>
+                </div>
+                <div class="contact-card-body">
+                  <p class="contact-card-label">Phone</p>
+                  <p class="contact-card-value">+91 8825427391</p>
+                </div>
+                <i class="fas fa-arrow-right contact-card-arrow"></i>
+              </a>
+
+              <a href="https://github.com/Gokul230406" class="contact-card" id="github-link" target="_blank" rel="noopener">
+                <div class="contact-card-icon github-icon"><i class="fab fa-github"></i></div>
+                <div class="contact-card-body">
+                  <p class="contact-card-label">GitHub</p>
+                  <p class="contact-card-value">github.com/Gokul230406</p>
+                </div>
+                <i class="fas fa-arrow-right contact-card-arrow"></i>
+              </a>
+
+              <a href="https://www.linkedin.com/in/gokul2304" class="contact-card" id="linkedin-link" target="_blank" rel="noopener">
+                <div class="contact-card-icon linkedin-icon"><i class="fab fa-linkedin-in"></i></div>
+                <div class="contact-card-body">
+                  <p class="contact-card-label">LinkedIn</p>
+                  <p class="contact-card-value">linkedin.com/in/gokul2304</p>
+                </div>
+                <i class="fas fa-arrow-right contact-card-arrow"></i>
+              </a>
+
+            </div>
+            <div class="availability-badge">
+              <span class="avail-dot"></span>
+              Available for internships & full-time opportunities
+            </div>
+          </div>
+
+          <div class="contact-right-col" data-aos="fade-left" data-aos-delay="150">
+            <div class="connect-card">
+              <h3 class="connect-title">Let's Build Something Together</h3>
+              <p class="connect-text">
+                Currently pursuing B.E. Computer Science at SRM Easwari. Open to internships, freelance projects,
+                hackathon collaborations, and full-time opportunities after graduation.
+              </p>
+              <div class="connect-socials">
+                <a href="https://github.com/Gokul230406" class="social-pill" id="s-github" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/gokul2304" class="social-pill" id="s-linkedin" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                <a href="https://leetcode.com/u/2iVV1KHV9J/" class="social-pill" id="s-leetcode" target="_blank" rel="noopener">LeetCode</a>
+                <a href="https://www.hackerrank.com/profile/gokulp2304" class="social-pill" id="s-hackerrank" target="_blank" rel="noopener">HackerRank</a>
+                <a href="https://www.codechef.com/users/gokul_2304" class="social-pill" id="s-codechef" target="_blank" rel="noopener">CodeChef</a>
+              </div>
+              <div class="resume-actions">
+                <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass btn-full">
+                  <i class="fas fa-eye"></i> View Resume
+                </a>
+                <a href="Resume/Gokul_resume.pdf" download="Gokul_resume.pdf" class="btn btn-primary btn-full">
+                  <i class="fas fa-download"></i> Download Resume
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <a href="#home" class="footer-logo"><span class="logo-bracket">&#9656;</span> GP <span class="logo-bracket">&#9666;</span></a>
+        <p class="footer-tagline">Building the web, one commit at a time.</p>
+      </div>
+      <div class="footer-center">
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#achievements">Achievements</a></li>
+          <li><a href="#leadership">Leadership</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-right">
+        <div class="footer-socials">
+          <a href="https://github.com/Gokul230406" target="_blank" rel="noopener" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/gokul2304" target="_blank" rel="noopener" class="footer-social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="footer-social-link" aria-label="Email" target="_blank" rel="noopener noreferrer"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Gokul P. Crafted with <span class="heart">♥</span> and lots of coffee.</p>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+  <script src="js/main.js"></script>
+</body>
+</html>
