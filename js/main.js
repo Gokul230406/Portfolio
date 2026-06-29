@@ -5,13 +5,17 @@
 'use strict';
 
 /* ─── LOADER ─────────────────────────────────────────────── */
+const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+if (isTouchDevice) {
+  document.documentElement.classList.add('touch-device');
+}
+
 window.addEventListener('load', () => {
   setTimeout(() => {
     const loader = document.getElementById('loader');
     if (loader) loader.classList.add('hidden');
-    // Kick off entry animations
     animateOnScroll();
-  }, 1600);
+  }, isTouchDevice ? 700 : 1600);
 });
 
 /* ─── THEME TOGGLE ───────────────────────────────────────── */
@@ -37,7 +41,6 @@ function applyThemeIcon(theme) {
 }
 
 /* ─── CUSTOM CURSOR ──────────────────────────────────────── */
-const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const cursor   = document.getElementById('cursor');
 const follower = document.getElementById('cursorFollower');
 
@@ -81,16 +84,22 @@ if (!isTouchDevice && cursor && follower) {
 
 /* ─── NAVBAR SCROLL ──────────────────────────────────────── */
 const navbar = document.getElementById('navbar');
+let scrollTicking = false;
 
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) {
-    navbar?.classList.add('scrolled');
-  } else {
-    navbar?.classList.remove('scrolled');
-  }
-  highlightNavLink();
-  toggleBackToTop();
-});
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    if (window.scrollY > 40) {
+      navbar?.classList.add('scrolled');
+    } else {
+      navbar?.classList.remove('scrolled');
+    }
+    highlightNavLink();
+    toggleBackToTop();
+    scrollTicking = false;
+  });
+}, { passive: true });
 
 /* ─── ACTIVE NAV LINK HIGHLIGHT ──────────────────────────── */
 function highlightNavLink() {
@@ -181,7 +190,7 @@ function typeWriter() {
 }
 
 // Start typewriter after loader
-setTimeout(typeWriter, 1800);
+setTimeout(typeWriter, isTouchDevice ? 900 : 1800);
 
 /* ─── SCROLL ANIMATIONS (AOS-like) ───────────────────────── */
 function animateOnScroll() {
@@ -277,12 +286,14 @@ if (heroPhoto) {
 const heroGlow1 = document.querySelector('.hero-glow-1');
 const heroGlow2 = document.querySelector('.hero-glow-2');
 
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth  - 0.5) * 30;
-  const y = (e.clientY / window.innerHeight - 0.5) * 30;
-  if (heroGlow1) heroGlow1.style.transform = `translate(${x}px, ${y}px)`;
-  if (heroGlow2) heroGlow2.style.transform = `translate(${-x}px, ${-y}px)`;
-});
+if (!isTouchDevice) {
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth  - 0.5) * 30;
+    const y = (e.clientY / window.innerHeight - 0.5) * 30;
+    if (heroGlow1) heroGlow1.style.transform = `translate(${x}px, ${y}px)`;
+    if (heroGlow2) heroGlow2.style.transform = `translate(${-x}px, ${-y}px)`;
+  });
+}
 
 /* ─── INIT ───────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -440,8 +451,12 @@ function isImagePath(path) {
   return /\.(jpe?g|png|gif|webp|bmp|svg)$/i.test(path);
 }
 
+function encodeMediaPath(path) {
+  return path.split('/').map(part => encodeURIComponent(part)).join('/');
+}
+
 function getCertThumbPath(pdfPath) {
-  return pdfPath.replace(/\.pdf$/i, '.png');
+  return pdfPath.replace(/\.pdf$/i, '.jpg');
 }
 
 function ensureMediaLightbox() {
@@ -503,15 +518,28 @@ function renderLightboxItem(index) {
   const counter = lb.querySelector('.media-lightbox-counter');
   const prev = lb.querySelector('.media-lightbox-prev');
   const next = lb.querySelector('.media-lightbox-next');
-  const src = encodeURI(item);
+  const src = encodeMediaPath(item);
 
   activeGalleryIndex = index;
 
   if (isPdfPath(item)) {
-    if (img) img.style.display = 'none';
+    const thumbPath = getCertThumbPath(item);
     if (iframe) {
-      iframe.style.display = 'block';
-      iframe.src = src;
+      iframe.style.display = 'none';
+      iframe.src = '';
+    }
+    if (img) {
+      img.style.display = 'block';
+      img.style.objectFit = 'contain';
+      img.src = encodeMediaPath(thumbPath);
+      img.alt = item.split('/').pop() || 'Certificate';
+      img.onerror = () => {
+        img.style.display = 'none';
+        if (iframe) {
+          iframe.style.display = 'block';
+          iframe.src = `${encodeMediaPath(item)}#toolbar=0&navpanes=0`;
+        }
+      };
     }
   } else {
     if (iframe) {
@@ -544,16 +572,16 @@ function stepMediaLightbox(delta) {
 }
 
 function buildMediaThumb(item, index, animDelay = 0) {
-  const src = encodeURI(item);
+  const src = encodeMediaPath(item);
   const name = item.split('/').pop() || 'media';
   const animStyle = animDelay ? ` style="animation-delay:${animDelay}ms"` : '';
 
   if (isPdfPath(item)) {
-    const thumbPng = encodeURI(getCertThumbPath(item));
+    const thumbJpg = encodeMediaPath(getCertThumbPath(item));
     return `
       <button class="media-thumb media-thumb-pdf gallery-thumb-enter" type="button" data-index="${index}" aria-label="Open certificate ${name}"${animStyle}>
-        <img class="media-cert-thumb" data-src="${thumbPng}" data-fallback-pdf="${src}" alt="${name}" loading="lazy" decoding="async" />
-        <iframe class="media-pdf-thumb-preview" data-pdf-src="${src}" title="Certificate preview" tabindex="-1"></iframe>
+        <img class="media-cert-thumb" data-src="${thumbJpg}" data-fallback-pdf="${src}" alt="${name}" loading="lazy" decoding="async" />
+        <span class="media-pdf-fallback-icon" aria-hidden="true"><i class="fas fa-certificate"></i></span>
         <span class="media-pdf-badge"><i class="fas fa-certificate"></i> Cert</span>
       </button>
     `;
@@ -568,7 +596,7 @@ function buildMediaThumb(item, index, animDelay = 0) {
 
 function buildSeeMoreThumb(hiddenCount, startIndex, items) {
   const previewItem = items[startIndex];
-  const previewSrc = previewItem && isImagePath(previewItem) ? encodeURI(previewItem) : '';
+  const previewSrc = previewItem && isImagePath(previewItem) ? encodeMediaPath(previewItem) : '';
   const previewImg = previewSrc
     ? `<img data-src="${previewSrc}" alt="" class="media-more-preview-img" loading="lazy" decoding="async" />`
     : '';
@@ -595,23 +623,20 @@ function loadGalleryImages(container) {
 
   container.querySelectorAll('.media-cert-thumb').forEach(img => {
     const btn = img.closest('.media-thumb-pdf');
-    const iframe = btn?.querySelector('.media-pdf-thumb-preview');
-
-    if (iframe?.dataset.pdfSrc) {
-      iframe.src = `${iframe.dataset.pdfSrc}#toolbar=0&navpanes=0`;
-    }
 
     img.addEventListener('load', () => {
-      btn?.classList.add('media-thumb-pdf-has-png');
+      btn?.classList.add('media-thumb-pdf-has-img');
     }, { once: true });
 
     img.addEventListener('error', () => {
-      img.remove();
+      img.style.display = 'none';
       btn?.classList.add('media-thumb-pdf-fallback');
     }, { once: true });
   });
 
-  initGalleryThumbCycle(container);
+  if (!isTouchDevice) {
+    initGalleryThumbCycle(container);
+  }
 }
 
 function initGalleryThumbCycle(container) {
@@ -638,7 +663,7 @@ function initGalleryThumbCycle(container) {
   const cyclePreview = () => {
     previewImg.style.opacity = '0';
     setTimeout(() => {
-      previewImg.src = encodeURI(hiddenItems[cycleIndex]);
+      previewImg.src = encodeMediaPath(hiddenItems[cycleIndex]);
       previewImg.style.opacity = '1';
       cycleIndex = (cycleIndex + 1) % hiddenItems.length;
     }, 320);
@@ -701,14 +726,16 @@ function renderMediaGalleries() {
 }
 
 /* ─── PROJECT CARD TILT ──────────────────────────────────── */
-document.querySelectorAll('.project-img-wrap').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 8;
-    const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 8;
-    card.style.transform = `perspective(800px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.03)`;
+if (!isTouchDevice) {
+  document.querySelectorAll('.project-img-wrap').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 8;
+      const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 8;
+      card.style.transform = `perspective(800px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.03)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
   });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
-});
+}
