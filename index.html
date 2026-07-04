@@ -43,6 +43,7 @@
         <li><a href="#skills"       class="nav-link" data-section="skills">Skills</a></li>
         <li><a href="#projects"     class="nav-link" data-section="projects">Projects</a></li>
         <li><a href="#achievements" class="nav-link" data-section="achievements">Achievements</a></li>
+        <li><a href="#certifications" class="nav-link" data-section="certifications">Certifications</a></li>
         <li><a href="#leadership"   class="nav-link" data-section="leadership">Leadership</a></li>
         <li><a href="#contact"      class="nav-link" data-section="contact">Contact</a></li>
       </ul>
@@ -69,6 +70,7 @@
       <li><a href="#skills"       class="mobile-link">Skills</a></li>
       <li><a href="#projects"     class="mobile-link">Projects</a></li>
       <li><a href="#achievements" class="mobile-link">Achievements</a></li>
+      <li><a href="#certifications" class="mobile-link">Certifications</a></li>
       <li><a href="#leadership"   class="mobile-link">Leadership</a></li>
       <li><a href="#contact"      class="mobile-link">Contact</a></li>
     </ul>
@@ -441,25 +443,50 @@
           <div class="project-item" data-aos="fade-up" data-aos-delay="0">
             <div class="project-image-col">
               <div class="project-img-wrap project-campusbox">
-                <div class="project-mockup">
-                  <div class="mockup-screen">
-                    <div class="mockup-browser">
-                      <div class="browser-bar">
-                        <div class="browser-dots"><span></span><span></span><span></span></div>
-                        <div class="browser-url">campusbox.marketplace</div>
+                <div class="project-carousel" data-carousel data-interval="3000" aria-label="CampusBox Marketplace screenshots">
+                  <div class="project-carousel-slides">
+                    <div class="project-carousel-slide is-active">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/01-landing.jpg" alt="CampusBox landing page — Your Campus. Your Marketplace." loading="lazy" width="1200" height="900">
                       </div>
-                      <div class="browser-content campus-content">
-                        <div class="campus-grid">
-                          <div class="campus-item">📦 Sell Item</div>
-                          <div class="campus-item">🛒 Buy Now</div>
-                          <div class="campus-item">🔁 Rent</div>
-                          <div class="campus-item">📍 Near Me</div>
-                        </div>
-                        <p class="campus-tagline">Campus Marketplace Platform</p>
-                        <span class="campus-badge">🏆 2nd Place</span>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/02-browse.jpg" alt="CampusBox browse products page with listings" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/03-trending.jpg" alt="CampusBox trending marketplace section" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/04-my-items.jpg" alt="CampusBox seller dashboard — My Items for Sale" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/05-physics.jpg" alt="CampusBox product page — Physics project listing" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/06-blazer.jpg" alt="CampusBox product page — Blazer rental listing" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/07-sell.jpg" alt="CampusBox sell your item listing form" loading="lazy" width="1200" height="900">
+                      </div>
+                    </div>
+                    <div class="project-carousel-slide">
+                      <div class="project-carousel-frame">
+                        <img src="pictures/campusbox/optimized/08-profile.jpg" alt="CampusBox user profile and wallet page" loading="lazy" width="1200" height="900">
                       </div>
                     </div>
                   </div>
+                  <div class="project-carousel-dots" role="tablist" aria-label="Screenshot navigation"></div>
                 </div>
                 <div class="project-glow-campusbox"></div>
               </div>
@@ -481,7 +508,8 @@
                 <span class="tag">Java</span><span class="tag">Bootstrap</span><span class="tag">Docker</span>
               </div>
               <div class="project-actions">
-                <a href="https://github.com/Gokul230406" class="btn btn-glass btn-sm" target="_blank"><i class="fab fa-github"></i> View Code</a>
+                <a href="https://github.com/Gokul230406/Campusbox-marketplace" class="btn btn-glass btn-sm" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> View Code</a>
+                <a href="https://campusbox-marketplace.vercel.app/" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> Live Demo</a>
               </div>
             </div>
           </div>
@@ -603,31 +631,37 @@
           </div>
         </div>
 
-        <!-- Certifications -->
-        <div class="certifications-wrap" data-aos="fade-up" data-aos-delay="100">
-          <h3 class="cert-heading"><i class="fas fa-certificate"></i> Certifications</h3>
-          <div class="ach-cat-cards cert-blocks">
-            <div class="achievement-card">
-              <div class="achievement-icon"><i class="devicon-java-plain colored"></i></div>
-              <h3 class="achievement-title">Oracle Java SE17 Developer</h3>
-              <p class="achievement-desc">Oracle Corporation</p>
-              <div class="media-gallery" data-gallery="cert-oracle"></div>
-            </div>
-            <div class="achievement-card">
-              <div class="achievement-icon"><i class="fas fa-network-wired"></i></div>
-              <h3 class="achievement-title">Cisco Networking Basics</h3>
-              <p class="achievement-desc">Cisco Networking Academy</p>
-              <div class="media-gallery" data-gallery="cert-cisco"></div>
-            </div>
-            <div class="achievement-card">
-              <div class="achievement-icon"><i class="fas fa-code"></i></div>
-              <h3 class="achievement-title">Infosys C++ Fundamentals</h3>
-              <p class="achievement-desc">Infosys Springboard</p>
-              <div class="media-gallery" data-gallery="cert-cpp"></div>
-            </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CERTIFICATIONS ══════════════════ -->
+    <section id="certifications" class="section certifications-section">
+      <div class="container">
+        <div class="section-header" data-aos="fade-up">
+          <p class="section-eyebrow">CREDENTIALS</p>
+          <h2 class="section-title">My <span class="gradient-text">Certifications</span></h2>
+          <p class="section-subtitle">Industry-recognized certifications in Java, networking, and programming fundamentals.</p>
+        </div>
+        <div class="ach-cat-cards cert-blocks" data-aos="fade-up" data-aos-delay="100">
+          <div class="achievement-card">
+            <div class="achievement-icon"><i class="devicon-java-plain colored"></i></div>
+            <h3 class="achievement-title">Oracle Java SE17 Developer</h3>
+            <p class="achievement-desc">Oracle Corporation</p>
+            <div class="media-gallery" data-gallery="cert-oracle"></div>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-icon"><i class="fas fa-network-wired"></i></div>
+            <h3 class="achievement-title">Cisco Networking Basics</h3>
+            <p class="achievement-desc">Cisco Networking Academy</p>
+            <div class="media-gallery" data-gallery="cert-cisco"></div>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-icon"><i class="fas fa-code"></i></div>
+            <h3 class="achievement-title">Infosys C++ Fundamentals</h3>
+            <p class="achievement-desc">Infosys Springboard</p>
+            <div class="media-gallery" data-gallery="cert-cpp"></div>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -789,9 +823,9 @@
               <div class="connect-socials">
                 <a href="https://github.com/Gokul230406" class="social-pill" id="s-github" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
                 <a href="https://www.linkedin.com/in/gokul2304" class="social-pill" id="s-linkedin" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-                <a href="https://leetcode.com/u/2iVV1KHV9J/" class="social-pill" id="s-leetcode" target="_blank" rel="noopener">LeetCode</a>
-                <a href="https://www.hackerrank.com/profile/gokulp2304" class="social-pill" id="s-hackerrank" target="_blank" rel="noopener">HackerRank</a>
-                <a href="https://www.codechef.com/users/gokul_2304" class="social-pill" id="s-codechef" target="_blank" rel="noopener">CodeChef</a>
+                <a href="https://leetcode.com/u/2iVV1KHV9J/" class="social-pill" id="s-leetcode" target="_blank" rel="noopener"><img src="https://leetcode.com/favicon.ico" alt="" class="social-pill-icon" width="16" height="16"> LeetCode</a>
+                <a href="https://www.hackerrank.com/profile/gokulp2304" class="social-pill" id="s-hackerrank" target="_blank" rel="noopener"><img src="https://www.hackerrank.com/favicon.ico" alt="" class="social-pill-icon" width="16" height="16"> HackerRank</a>
+                <a href="https://www.codechef.com/users/gokul_2304" class="social-pill" id="s-codechef" target="_blank" rel="noopener"><img src="https://www.codechef.com/favicon.ico" alt="" class="social-pill-icon" width="16" height="16"> CodeChef</a>
               </div>
               <div class="resume-actions">
                 <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass btn-full">
@@ -824,6 +858,7 @@
           <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#achievements">Achievements</a></li>
+          <li><a href="#certifications">Certifications</a></li>
           <li><a href="#leadership">Leadership</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>

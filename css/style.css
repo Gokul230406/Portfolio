@@ -909,6 +909,10 @@ ul { list-style: none; }
   border: 1px solid var(--glass-border);
   transition: var(--transition);
 }
+.project-img-wrap.project-campusbox {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+}
 .project-img-wrap:hover { transform: perspective(1000px) rotateY(-3deg) rotateX(2deg) scale(1.02); }
 .project-item.project-reverse .project-img-wrap:hover { transform: perspective(1000px) rotateY(3deg) rotateX(2deg) scale(1.02); }
 
@@ -1028,6 +1032,12 @@ ul { list-style: none; }
 /* ─── ACHIEVEMENTS SECTION ───────────────────────────────── */
 .achievements-section { background: var(--bg-base); }
 
+/* ─── CERTIFICATIONS SECTION ───────────────────────────── */
+.certifications-section { background: var(--bg-surface); }
+.certifications-section .cert-blocks {
+  margin-bottom: 0;
+}
+
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1129,19 +1139,21 @@ ul { list-style: none; }
 .cert-blocks { margin-bottom: 0; }
 .cert-blocks .media-gallery {
   grid-template-columns: 1fr;
-  max-width: 240px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
 .cert-blocks .media-thumb {
-  aspect-ratio: 3 / 4;
-  min-height: 200px;
+  aspect-ratio: 7 / 5;
+  min-height: 0;
+  border-radius: var(--radius-md);
 }
 .cert-blocks .media-cert-thumb {
   object-fit: contain !important;
   object-position: center;
   background: #fff;
-  padding: 0.35rem;
+  padding: 0;
+  border-radius: calc(var(--radius-md) - 2px);
 }
 .cert-blocks .media-thumb-pdf-fallback .media-pdf-fallback-icon {
   display: flex;
@@ -1267,6 +1279,14 @@ ul { list-style: none; }
 .github-icon { border-color: rgba(255,255,255,0.15); }
 .linkedin-icon { border-color: rgba(10,102,194,0.4); }
 .lc-icon { border-color: rgba(255,160,28,0.4); }
+.hr-icon { border-color: rgba(0,179,98,0.4); }
+.cc-icon { border-color: rgba(91,57,154,0.4); }
+.contact-platform-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
 
 .contact-card-body { flex: 1; min-width: 0; }
 .contact-card-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem; }
@@ -1340,6 +1360,12 @@ ul { list-style: none; }
   transition: var(--transition);
 }
 .social-pill:hover { border-color: var(--accent); color: var(--accent-light); transform: translateY(-2px); }
+.social-pill-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 
 .resume-actions {
   display: grid;
@@ -1501,7 +1527,21 @@ ul { list-style: none; }
   .project-item { grid-template-columns: 1fr; gap: 2rem; }
   .project-item.project-reverse { direction: ltr; }
   .project-content-col { order: 1; }
-  .project-image-col { order: 2; }
+  .project-image-col {
+    order: 2;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .project-img-wrap.project-campusbox {
+    width: 100%;
+    max-width: min(100%, 600px);
+    margin: 0 auto;
+  }
+  .project-img-wrap:hover,
+  .project-item.project-reverse .project-img-wrap:hover {
+    transform: none;
+  }
 
   .contact-grid { grid-template-columns: 1fr; }
 
@@ -1623,12 +1663,122 @@ ul { list-style: none; }
 .project-award i { color: var(--orange); font-size: 0.75rem; }
 .cmt { color: #5c6370; font-style: italic; }
 
-/* Campus project mockup */
-.campus-content { width: 100%; text-align: center; }
-.campus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-bottom: 0.75rem; }
-.campus-item { padding: 0.4rem; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.2); border-radius: 6px; font-size: 0.65rem; color: #c9d1d9; }
-.campus-tagline { font-size: 0.72rem; color: #8b949e; margin-bottom: 0.5rem; font-style: italic; }
-.campus-badge { display: inline-block; padding: 0.2rem 0.6rem; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); border-radius: 99px; font-size: 0.65rem; color: var(--orange); font-weight: 700; }
+/* Campus project mockup — carousel matches AyurChain mockup-screen frame */
+.project-campusbox .project-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.project-campusbox .project-carousel-slides {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+.project-campusbox .project-carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: transparent;
+}
+.project-campusbox .project-carousel-slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+.project-campusbox .project-carousel-frame {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: none;
+  background: #0d1117;
+  box-shadow: none;
+}
+.project-campusbox .project-carousel-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+/* Project screenshot carousel (base) */
+.project-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.project-carousel-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.project-carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.project-carousel-slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+.project-carousel-frame {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.project-carousel-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.project-carousel-dots {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.45rem;
+  z-index: 2;
+  padding: 0.35rem 0.6rem;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 99px;
+  backdrop-filter: blur(6px);
+}
+.project-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.project-carousel-dot.is-active {
+  background: var(--accent-light);
+  transform: scale(1.15);
+}
+.project-carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
 
 /* Ayur project mockup */
 .project-glow-campusbox { position: absolute; inset: -20px; background: radial-gradient(circle at 50% 50%, rgba(124,58,237,0.2) 0%, transparent 65%); pointer-events: none; z-index: -1; }
@@ -1761,7 +1911,7 @@ ul { list-style: none; }
   inset: 0;
   z-index: 1;
   animation: none;
-  padding: 0.25rem;
+  padding: 0;
 }
 .media-thumb-pdf .media-pdf-fallback-icon {
   position: absolute;
