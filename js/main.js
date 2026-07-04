@@ -258,6 +258,43 @@ backToTop?.addEventListener('click', () => {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+/* ─── PORTFOLIO VIEW COUNT (CountAPI) ───────────────────── */
+const VIEW_COUNTER_KEY = 'gokul230406_portfolio_views';
+const VIEW_COUNT_SESSION = 'gp-view-counted';
+
+async function initPortfolioViewCount() {
+  const wrap = document.getElementById('portfolioViews');
+  const countEl = document.getElementById('portfolioViewCount');
+  if (!wrap || !countEl) return;
+
+  const base = 'https://countapi.mileshilliard.com/api/v1';
+  const countedThisSession = sessionStorage.getItem(VIEW_COUNT_SESSION) === '1';
+
+  try {
+    const endpoint = countedThisSession
+      ? `${base}/get/${VIEW_COUNTER_KEY}`
+      : `${base}/hit/${VIEW_COUNTER_KEY}`;
+
+    const res = await fetch(endpoint);
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'counter unavailable');
+
+    const value = Number(data.value);
+    if (!Number.isFinite(value)) throw new Error('invalid count');
+
+    if (!countedThisSession) {
+      sessionStorage.setItem(VIEW_COUNT_SESSION, '1');
+    }
+
+    countEl.textContent = value.toLocaleString();
+    wrap.hidden = false;
+  } catch {
+    wrap.hidden = true;
+  }
+}
+
+initPortfolioViewCount();
+
 /* ─── SMOOTH ANCHOR LINKS ────────────────────────────────── */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
