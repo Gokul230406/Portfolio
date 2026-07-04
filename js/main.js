@@ -725,6 +725,64 @@ function renderMediaGalleries() {
   galleries.forEach(g => galleryObserver.observe(g));
 }
 
+/* ─── PROJECT CAROUSEL ───────────────────────────────────── */
+function initProjectCarousels() {
+  document.querySelectorAll('[data-carousel]').forEach(carousel => {
+    const slides = [...carousel.querySelectorAll('.project-carousel-slide')];
+    const dotsContainer = carousel.querySelector('.project-carousel-dots');
+    if (!slides.length) return;
+
+    let current = 0;
+    let timer = null;
+    const interval = Number(carousel.dataset.interval) || 3000;
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'project-carousel-dot' + (index === 0 ? ' is-active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Screenshot ${index + 1} of ${slides.length}`);
+      dot.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+      dot.addEventListener('click', () => goTo(index, true));
+      dotsContainer?.appendChild(dot);
+    });
+
+    const dots = dotsContainer ? [...dotsContainer.querySelectorAll('.project-carousel-dot')] : [];
+
+    function goTo(index, manual = false) {
+      slides[current].classList.remove('is-active');
+      dots[current]?.classList.remove('is-active');
+      dots[current]?.setAttribute('aria-selected', 'false');
+
+      current = (index + slides.length) % slides.length;
+
+      slides[current].classList.add('is-active');
+      dots[current]?.classList.add('is-active');
+      dots[current]?.setAttribute('aria-selected', 'true');
+
+      if (manual) restartTimer();
+    }
+
+    function next() {
+      goTo(current + 1);
+    }
+
+    function restartTimer() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(next, interval);
+    }
+
+    restartTimer();
+
+    carousel.addEventListener('mouseenter', () => {
+      if (timer) clearInterval(timer);
+    });
+    carousel.addEventListener('mouseleave', restartTimer);
+  });
+}
+
+initProjectCarousels();
+
 /* ─── PROJECT CARD TILT ──────────────────────────────────── */
 if (!isTouchDevice) {
   document.querySelectorAll('.project-img-wrap').forEach(card => {
