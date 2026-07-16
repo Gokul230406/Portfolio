@@ -52,7 +52,7 @@ const theme = {
   meshColor: 0xd4af37,
   ringColor: 0xf0d060,
   bgColor: 0x050505,
-  fog: 0.0014
+  fog: 0.0008
 };
 
 function initThree() {
@@ -99,7 +99,7 @@ function createParticles(palette) {
   const scratch = new THREE.Color();
 
   for (let i = 0; i < count; i++) {
-    const r = 80 + Math.random() * 440;
+    const r = 120 + Math.random() * 680;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
@@ -190,9 +190,25 @@ function animate() {
   camera.lookAt(20, 0, 0);
 
   scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * 0.08;
-  if (particleSystem) particleSystem.position.y = scrollInfo.y * 0.12;
-  if (heroMesh) { heroMesh.position.y = 10 - scrollInfo.y * 0.22; heroMesh.position.x = 70 + scrollInfo.y * 0.08; }
-  if (secondaryMesh) secondaryMesh.position.x = -90 - scrollInfo.y * 0.05;
+
+  const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const scrollNorm = scrollInfo.y / docHeight;
+  const waveY = Math.sin(scrollNorm * Math.PI * 4) * 35;
+  const waveX = Math.cos(scrollNorm * Math.PI * 3) * 25;
+
+  if (particleSystem) {
+    particleSystem.position.y = waveY;
+    particleSystem.position.x = waveX * 0.5;
+    particleSystem.rotation.y = time * 0.08 + scrollNorm * Math.PI * 2;
+  }
+  if (heroMesh) {
+    heroMesh.position.y = 10 + waveY * 0.4;
+    heroMesh.position.x = 70 + waveX;
+  }
+  if (secondaryMesh) {
+    secondaryMesh.position.x = -90 - waveX * 0.6;
+    secondaryMesh.position.y = -40 + Math.sin(time * 1.5) * 12 + waveY * 0.3;
+  }
 
   renderer.render(scene, camera);
 }
@@ -354,20 +370,24 @@ function initEntranceAnimations() {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // 1. Camera parallax through scroll
+  // 1. Camera parallax through full page scroll
   if (camera) {
-    gsap.timeline({ scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1.4 } })
-      .to(camera.position, { z: 180, x: -35, y: -10, ease: 'none' })
-      .to(camera.position, { z: 200, x: 45, y: 15, ease: 'none' })
-      .to(camera.position, { z: 170, x: -20, y: -5, ease: 'none' })
-      .to(camera.position, { z: 190, x: 35, y: 10, ease: 'none' })
-      .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' })
-      .to(camera.position, { z: 220, x: -30, y: -10, ease: 'none' })
-      .to(camera.position, { z: 260, x: 40, y: 15, ease: 'none' })
-      .to(camera.position, { z: 190, x: -25, y: -5, ease: 'none' })
-      .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' })
-      .to(camera.position, { z: 210, x: 30, y: 10, ease: 'none' })
-      .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' });
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: 'top top',
+        end: 'max',
+        scrub: 1.2,
+        invalidateOnRefresh: true
+      }
+    })
+      .to(camera.position, { z: 200, x: -25, y: -8, ease: 'none' }, 0)
+      .to(camera.position, { z: 185, x: 30, y: 12, ease: 'none' }, 0.15)
+      .to(camera.position, { z: 210, x: -18, y: -5, ease: 'none' }, 0.3)
+      .to(camera.position, { z: 195, x: 22, y: 8, ease: 'none' }, 0.45)
+      .to(camera.position, { z: 220, x: -12, y: -10, ease: 'none' }, 0.6)
+      .to(camera.position, { z: 205, x: 18, y: 6, ease: 'none' }, 0.75)
+      .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' }, 1);
   }
 
   // 2. HERO entrance — cinematic zoom-in from scale
@@ -384,96 +404,84 @@ function initEntranceAnimations() {
     }, 0.18)
     .to('.hero-meta-bar', { opacity: 1, y: 0, duration: 0.65 }, 0.9);
 
-  // 3. All sections — intro text reveal + per-FX transitions
-  document.querySelectorAll('section[data-cinematic]').forEach(section => {
-    const fx = section.getAttribute('data-fx');
+  // 3. All sections — intro text reveal + smooth per-section transitions
+  const sectionAnimSelectors = [
+    '.feat-card', '.creative-card', '.achievement-card', '.leadership-card',
+    '.edu-item', '.skill-card', '.project-item', '.contact-card', '.connect-card',
+    '.stat-item', '.about-grid', '.manifesto-inner'
+  ].join(', ');
+
+  function getSectionItems(section) {
+    return section.querySelectorAll(sectionAnimSelectors);
+  }
+
+  function initSectionTransition(section) {
     const number = section.querySelector('.cine-number');
     const titleInner = section.querySelectorAll('.line-inner');
     const sub = section.querySelector('.cine-sub');
     const outro = section.querySelector('.cine-outro span');
+    const items = getSectionItems(section);
 
     if (titleInner.length) gsap.set(titleInner, { yPercent: 110 });
     if (sub) gsap.set(sub, { opacity: 0, y: 28 });
-    if (number) gsap.set(number, { opacity: 0, x: -18 });
+    if (number) gsap.set(number, { opacity: 0, y: 12 });
+    if (items.length) gsap.set(items, { opacity: 0, y: 36 });
 
     const introTl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: 'top 78%', toggleActions: 'play none none reverse' }
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+        once: true
+      }
     });
-    if (number) introTl.to(number, { opacity: 1, x: 0, duration: 0.55, ease: 'power2.out' }, 0);
-    if (titleInner.length) introTl.to(titleInner, { yPercent: 0, duration: 0.8, stagger: 0.1, ease: 'expo.out' }, 0.08);
-    if (sub) introTl.to(sub, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.3);
+    if (number) introTl.to(number, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0);
+    if (titleInner.length) introTl.to(titleInner, { yPercent: 0, duration: 0.85, stagger: 0.1, ease: 'expo.out' }, 0.06);
+    if (sub) introTl.to(sub, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.28);
 
-    // FX-specific cinematic section transitions without blurring section parent!
-    if (fx === 'zoom-in') {
-      const items = section.querySelectorAll('.featured-grid, .achievements-grid-unified, .contact-grid');
-      if (items.length) {
-        gsap.fromTo(items,
-          { scale: 0.96, opacity: 0.35, y: 30 },
-          { scale: 1, opacity: 1, y: 0, duration: 0.8,
-            scrollTrigger: { trigger: section, start: 'top 92%', end: 'top 45%', scrub: true } }
-        );
-        gsap.to(items, { scale: 1.02, opacity: 0.35, y: -30,
-          scrollTrigger: { trigger: section, start: 'bottom 55%', end: 'bottom 10%', scrub: true } });
-      }
-    }
-    else if (fx === 'zoom-split') {
-      const visualEl = section.querySelector('.portrait-frame, .about-img-wrap');
-      const textEl = section.querySelector('.hero-left, .about-content-col');
-      const gridCards = section.querySelectorAll('.creative-card, .leadership-card');
+    if (items.length) {
+      // Smooth enter — animate individual items (avoids backdrop-filter blur on parent)
+      gsap.fromTo(items,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          ease: 'none',
+          stagger: 0.04,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 90%',
+            end: 'top 55%',
+            scrub: 0.6
+          }
+        }
+      );
 
-      if (visualEl) {
-        gsap.fromTo(visualEl,
-          { scale: 1.15, opacity: 0.3, clipPath: 'inset(10% 10% 10% 10% round var(--radius-xl))' },
-          { scale: 1, opacity: 1, clipPath: 'inset(0% 0% 0% 0% round var(--radius-xl))',
-            scrollTrigger: { trigger: section, start: 'top 88%', end: 'top 45%', scrub: true } }
-        );
-        gsap.to(visualEl, { scale: 0.9, opacity: 0.3, clipPath: 'inset(10% 10% 10% 10% round var(--radius-xl))',
-          scrollTrigger: { trigger: section, start: 'bottom 50%', end: 'bottom 5%', scrub: true } });
-      }
-      if (textEl) {
-        gsap.fromTo(textEl, { y: 30, opacity: 0.4 }, { y: 0, opacity: 1,
-          scrollTrigger: { trigger: section, start: 'top 85%', end: 'top 48%', scrub: true } });
-        gsap.to(textEl, { y: -30, opacity: 0.4,
-          scrollTrigger: { trigger: section, start: 'bottom 50%', end: 'bottom 10%', scrub: true } });
-      }
-      if (gridCards.length) {
-        gsap.fromTo(gridCards,
-          { y: 40, opacity: 0.3, scale: 0.96 },
-          { y: 0, opacity: 1, scale: 1, stagger: 0.05,
-            scrollTrigger: { trigger: section, start: 'top 85%', end: 'top 48%', scrub: true } }
-        );
-        gsap.to(gridCards, { y: -40, opacity: 0.3, scale: 1.02, stagger: 0.05,
-          scrollTrigger: { trigger: section, start: 'bottom 50%', end: 'bottom 10%', scrub: true } });
-      }
-    }
-    else if (fx === 'split-out') {
-      const items = section.querySelectorAll('.project-item, .manifesto-quote');
-      items.forEach(item => {
-        gsap.fromTo(item,
-          { scale: 0.96, opacity: 0.4, rotateX: 6, transformPerspective: 1200 },
-          { scale: 1, opacity: 1, rotateX: 0,
-            scrollTrigger: { trigger: item, start: 'top 93%', end: 'top 55%', scrub: true } }
-        );
-        gsap.to(item, { scale: 1.04, opacity: 0.4, rotateX: -6,
-          scrollTrigger: { trigger: item, start: 'bottom 45%', end: 'bottom 5%', scrub: true } });
-      });
-    }
-    else if (fx === 'slide-up') {
-      const blocks = section.querySelectorAll('.education-timeline, .cert-blocks, .skills-grid');
-      if (blocks.length) {
-        gsap.fromTo(blocks, { y: 60, opacity: 0.35 }, { y: 0, opacity: 1,
-          scrollTrigger: { trigger: section, start: 'top 88%', end: 'top 50%', scrub: true } });
-        gsap.to(blocks, { y: -60, opacity: 0.35,
-          scrollTrigger: { trigger: section, start: 'bottom 48%', end: 'bottom 10%', scrub: true } });
-      }
+      // Smooth exit — subtle fade, fully reverses on scroll up
+      gsap.fromTo(items,
+        { y: 0, opacity: 1 },
+        {
+          y: -40,
+          opacity: 0.55,
+          ease: 'none',
+          stagger: 0.03,
+          scrollTrigger: {
+            trigger: section,
+            start: 'bottom 60%',
+            end: 'bottom 15%',
+            scrub: 0.6
+          }
+        }
+      );
     }
 
-    // Outro gold line fill
     if (outro) {
       gsap.to(outro, { width: '100%', ease: 'none',
-        scrollTrigger: { trigger: section, start: 'bottom 90%', end: 'bottom 72%', scrub: true } });
+        scrollTrigger: { trigger: section, start: 'bottom 88%', end: 'bottom 70%', scrub: true } });
     }
-  });
+  }
+
+  document.querySelectorAll('section[data-cinematic]').forEach(initSectionTransition);
 
   // Manifesto quote lines (split-out)
   const quoteLineInners = document.querySelectorAll('.quote-line-inner');
@@ -481,23 +489,23 @@ function initEntranceAnimations() {
     gsap.set(quoteLineInners, { y: '100%' });
     gsap.to(quoteLineInners, {
       y: '0%', stagger: 0.18, duration: 0.95, ease: 'expo.out',
-      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none none', once: true }
     });
     gsap.to('.manifesto-sign', {
       opacity: 1, duration: 0.8, delay: 0.5,
-      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none reverse' }
+      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none none', once: true }
     });
   }
 
-  // Achievement + leadership cards stagger in
-  gsap.utils.toArray('.achievement-card, .leadership-card, .edu-card, .skill-card').forEach((card, i) => {
-    gsap.fromTo(card,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
-        scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none reverse' },
-        delay: (i % 3) * 0.07
-      }
-    );
+  // Skill bar fills
+  gsap.utils.toArray('.skill-card').forEach(card => {
+    const bar = card.querySelector('.skill-fill');
+    if (!bar) return;
+    gsap.to(bar, {
+      width: (bar.getAttribute('data-width') || '0') + '%',
+      duration: 1.2, ease: 'power2.out',
+      scrollTrigger: { trigger: card, start: 'top 92%' }
+    });
   });
 
   // Skill bar fills
@@ -511,15 +519,7 @@ function initEntranceAnimations() {
     });
   });
 
-  // Stat items stagger
-  gsap.utils.toArray('.stat-item').forEach((item, i) => {
-    gsap.fromTo(item,
-      { scale: 0.88, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.4)', delay: i * 0.1,
-        scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none reverse' }
-      }
-    );
-  });
+  ScrollTrigger.refresh();
 
   // Magnetic elements
   if (!isTouchDevice) {
@@ -902,4 +902,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMediaGalleries();
   highlightNavLink();
   toggleBackToTop();
+});
+
+window.addEventListener('load', () => {
+  if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
 });
