@@ -7,7 +7,8 @@
   <meta name="description" content="Gokul P – Passionate Full Stack Developer with expertise in Java, React, Node.js and modern web technologies." />
   <meta property="og:title" content="Gokul P – Full Stack Developer" />
   <meta property="og:type" content="website" />
-  <link rel="icon" href="portfolio.png">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="portfolio.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,17 +45,15 @@
     <div class="cursor-trail-dot"></div>
   </div>
 
-  <!-- LOADER -->
   <div class="loader" id="loader">
     <div class="loader-inner">
-      <p class="loader-eyebrow">Cinematic Portfolio</p>
+      <p class="loader-eyebrow">Portfolio</p>
       <h1 class="loader-title"><span class="loader-load">Load</span> Gokul</h1>
       <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
       <p class="loader-pct" id="loaderPct">0%</p>
     </div>
   </div>
 
-  <!-- Transition veil -->
   <div class="cine-veil" id="cineVeil" aria-hidden="true">
     <div class="veil-panel veil-l"></div>
     <div class="veil-panel veil-r"></div>
@@ -68,17 +67,18 @@
       </a>
       <ul class="nav-links">
         <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
-        <li><a href="#featured" class="nav-link" data-section="featured">Featured</a></li>
-        <li><a href="#creative" class="nav-link" data-section="creative">Creative</a></li>
         <li><a href="#about" class="nav-link" data-section="about">About</a></li>
-        <li><a href="#projects" class="nav-link" data-section="projects">Work</a></li>
+        <li><a href="#featured" class="nav-link" data-section="featured">Featured</a></li>
+        <li><a href="#education" class="nav-link" data-section="education">Education</a></li>
+        <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+        <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
         <li><a href="#achievements" class="nav-link" data-section="achievements">Achievements</a></li>
-        <li><a href="#certifications" class="nav-link" data-section="certifications">Credentials</a></li>
+        <li><a href="#certifications" class="nav-link" data-section="certifications">Certifications</a></li>
         <li><a href="#leadership" class="nav-link" data-section="leadership">Leadership</a></li>
-        <li><a href="#contact" class="nav-link" data-section="contact">Connect</a></li>
+        <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Resume</a>
+        <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-primary btn-sm nav-resume">Resume</a>
         <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -94,59 +94,47 @@
   <div class="mobile-menu" id="mobileMenu">
     <ul class="mobile-nav-links">
       <li><a href="#home" class="mobile-link">Home</a></li>
-      <li><a href="#featured" class="mobile-link">Featured</a></li>
-      <li><a href="#creative" class="mobile-link">Creative</a></li>
       <li><a href="#about" class="mobile-link">About</a></li>
-      <li><a href="#projects" class="mobile-link">Work</a></li>
+      <li><a href="#featured" class="mobile-link">Featured</a></li>
+      <li><a href="#education" class="mobile-link">Education</a></li>
+      <li><a href="#skills" class="mobile-link">Skills</a></li>
+      <li><a href="#projects" class="mobile-link">Projects</a></li>
       <li><a href="#achievements" class="mobile-link">Achievements</a></li>
-      <li><a href="#certifications" class="mobile-link">Credentials</a></li>
+      <li><a href="#certifications" class="mobile-link">Certifications</a></li>
       <li><a href="#leadership" class="mobile-link">Leadership</a></li>
-      <li><a href="#contact" class="mobile-link">Connect</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
     </ul>
     <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-primary mt-2">View Resume</a>
   </div>
 
   <main>
 
-    <!-- ════ HERO ════ -->
-    <section id="home" class="cine-section hero-section" data-cinematic data-fx="zoom-split">
+    <!-- ════ 01 HOME ════ -->
+    <section id="home" class="cine-section hero-section" data-cinematic data-fx="fade-up">
       <div class="hero-stage">
         <div class="hero-left">
           <p class="hero-eyebrow cine-fade">
             <span class="eyebrow-dot"></span>
-            Full Stack · Java · Chennai
+            Open to opportunities · Chennai
           </p>
           <h1 class="hero-brand">
-            <span class="brand-line"><span class="brand-line-inner">Gokul</span></span>
-            <span class="brand-line accent"><span class="brand-line-inner">P</span></span>
+            <span class="brand-line brand-oneline"><span class="brand-line-inner">Gokul P</span></span>
           </h1>
+          <p class="hero-role-primary cine-fade">Full Stack Developer</p>
           <p class="hero-role cine-fade">
             Building high-performance web apps — and bringing the same fight on stage.
           </p>
           <div class="hero-cta cine-fade">
             <a href="#projects" class="btn btn-primary" data-magnetic>View Work <i class="fas fa-arrow-right"></i></a>
-            <a href="#contact" class="btn btn-glass" data-magnetic>Connect with Me</a>
+            <a href="#contact" class="btn btn-glass" data-magnetic>Get in Touch</a>
           </div>
         </div>
 
         <div class="hero-portrait cine-zoom" id="heroPortrait">
           <div class="portrait-frame">
-            <img src="assets/profile.jpg" alt="Gokul P" class="portrait-img" width="640" height="800" />
+            <img src="assets/profile.jpg" alt="Gokul P, Full Stack Developer" class="portrait-img" width="640" height="800" fetchpriority="high" />
             <div class="portrait-shine" aria-hidden="true"></div>
           </div>
-          <div class="portrait-caption">
-            <span>Gokul P</span>
-            <span class="cap-sub">Full Stack Developer</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-meta-bar cine-fade">
-        <div class="meta-chip"><span>Status</span><strong>Open to opportunities</strong></div>
-        <div class="meta-chip"><span>Study</span><strong>B.E. CSE · CGPA 8.61</strong></div>
-        <div class="meta-chip">
-          <span>Next</span>
-          <strong class="typewriter-wrap"><span id="typewriter"></span><span class="typewriter-cursor">_</span></strong>
         </div>
       </div>
 
@@ -157,225 +145,191 @@
           <span>Theatre Club President</span><span class="mq-dot">◆</span>
           <span>Mr. Techofest '26</span><span class="mq-dot">◆</span>
           <span>CampusBox</span><span class="mq-dot">◆</span>
+          <span>Travo</span><span class="mq-dot">◆</span>
           <span>Blockchain Enthusiast</span><span class="mq-dot">◆</span>
           <span>Full Stack Developer</span><span class="mq-dot">◆</span>
           <span>Java Programmer</span><span class="mq-dot">◆</span>
           <span>Theatre Club President</span><span class="mq-dot">◆</span>
           <span>Mr. Techofest '26</span><span class="mq-dot">◆</span>
           <span>CampusBox</span><span class="mq-dot">◆</span>
+          <span>Travo</span><span class="mq-dot">◆</span>
           <span>Blockchain Enthusiast</span><span class="mq-dot">◆</span>
         </div>
       </div>
+
+      <div class="hero-stats cine-fade" aria-label="Portfolio highlights">
+        <div class="stat-item"><span class="stat-number" data-suffix="+">3</span><span class="stat-label">Projects</span></div>
+        <div class="stat-item"><span class="stat-number">3</span><span class="stat-label">Certifications</span></div>
+        <div class="stat-item"><span class="stat-number" data-suffix="+">75</span><span class="stat-label">Achievements</span></div>
+        <div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Leadership</span></div>
+        <div class="stat-item"><span class="stat-number">9</span><span class="stat-label">Cultural Titles</span></div>
+        <div class="stat-item"><span class="stat-number">8.61</span><span class="stat-label">CGPA</span></div>
+      </div>
     </section>
 
-    <!-- ════ FEATURED ════ -->
-    <section id="featured" class="cine-section featured-section" data-cinematic data-fx="zoom-in">
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 02 ABOUT ════ -->
+    <section id="about" class="cine-section about-section" data-cinematic data-fx="slide-left">
       <div class="cine-intro">
-        <span class="cine-number">01</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Featured</span></span>
-        </h2>
-        <p class="cine-sub">Moments that define the reel.</p>
-      </div>
-
-      <div class="featured-grid">
-        <a href="#projects" class="feat-card feat-large" data-magnetic>
-          <div class="feat-media">
-            <img src="pictures/campusbox/optimized/01-landing.jpg" alt="CampusBox" loading="lazy" />
-          </div>
-          <div class="feat-overlay">
-            <span class="feat-tag">Project</span>
-            <h3>CampusBox Marketplace</h3>
-            <p>2nd Place · Project Challenge 2026</p>
-          </div>
-          <div class="feat-arrow"><i class="fas fa-arrow-right"></i></div>
-        </a>
-        <a href="#achievements" class="feat-card" data-magnetic>
-          <div class="feat-media">
-            <img src="pictures/Hack to the Future/DSC06595.JPG" alt="HackToFuture" loading="lazy" />
-          </div>
-          <div class="feat-overlay">
-            <span class="feat-tag">Hackathon</span>
-            <h3>HackToFuture 4.0</h3>
-            <p>Top 10 National</p>
-          </div>
-          <div class="feat-arrow"><i class="fas fa-arrow-right"></i></div>
-        </a>
-        <a href="#achievements" class="feat-card" data-magnetic>
-          <div class="feat-media">
-            <img src="pictures/project challenge/IMG_9735.JPG" alt="Cultural titles" loading="lazy" />
-          </div>
-          <div class="feat-overlay">
-            <span class="feat-tag">Culture</span>
-            <h3>Mr. Techofest '26</h3>
-            <p>9 Cultural Titles</p>
-          </div>
-          <div class="feat-arrow"><i class="fas fa-arrow-right"></i></div>
-        </a>
-        <a href="#certifications" class="feat-card" data-magnetic>
-          <div class="feat-media">
-            <img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java" loading="lazy" />
-          </div>
-          <div class="feat-overlay">
-            <span class="feat-tag">Cert</span>
-            <h3>Oracle Java SE17</h3>
-            <p>Certified Developer</p>
-          </div>
-          <div class="feat-arrow"><i class="fas fa-arrow-right"></i></div>
-        </a>
-      </div>
-
-      <div class="cine-outro"><span></span></div>
-    </section>
-
-    <!-- ════ CREATIVE SPOTLIGHT ════ -->
-    <section id="creative" class="cine-section creative-section" data-cinematic data-fx="zoom-split">
-      <div class="cine-intro">
-        <span class="cine-number">02</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Creative</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">Spotlight</span></span>
-        </h2>
-        <p class="cine-sub">Commanding the stage, leading the spotlight.</p>
-      </div>
-
-      <div class="creative-grid">
-        <div class="creative-card creative-main-card" data-magnetic>
-          <div class="creative-media">
-            <img src="pictures/president/m.jpeg" alt="Theatre Club Presidency" loading="lazy" />
-          </div>
-          <div class="creative-overlay">
-            <span class="creative-tag"><i class="fas fa-theater-masks"></i> Leadership</span>
-            <h3>Theatre Club President</h3>
-            <p>Directing, writing, and performing in major intercollege events across Tamil Nadu.</p>
-          </div>
+        <div class="cine-heading">
+          <span class="cine-number">01</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">About</span></span></h2>
         </div>
-
-        <div class="creative-side-grid">
-          <div class="creative-card creative-mini-card" data-magnetic>
-            <div class="creative-media">
-              <img src="pictures/Ambassador/Copy of DSC04966.JPG" alt="Cultural Ambassador" loading="lazy" />
-            </div>
-            <div class="creative-overlay">
-              <span class="creative-tag"><i class="fas fa-crown"></i> Culturals</span>
-              <h3>9 Cultural Titles</h3>
-              <p>Won Mr. Techofest '26 and multiple overall championships.</p>
-            </div>
-          </div>
-
-          <div class="creative-card creative-mini-card" data-magnetic>
-            <div class="creative-media">
-              <img src="pictures/Stress interview/WhatsApp Image 2026-06-29 at 4.41.41 PM.jpeg" alt="Stress Interview Winner" loading="lazy" />
-            </div>
-            <div class="creative-overlay">
-              <span class="creative-tag"><i class="fas fa-fire"></i> Communication</span>
-              <h3>Stress Interviews</h3>
-              <p>Won 10+ stress interview challenges, proving communication under pressure.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cine-outro"><span></span></div>
-    </section>
-
-    <!-- ════ MANIFESTO ════ -->
-    <section id="manifesto" class="cine-section manifesto-section" data-cinematic data-fx="split-out">
-      <div class="cine-intro">
-        <span class="cine-number">03</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Manifesto</span></span>
-        </h2>
-      </div>
-      <div class="manifesto-inner">
-        <blockquote class="manifesto-quote">
-          <span class="quote-line"><span class="quote-line-inner">Redefining what a developer can ship —</span></span>
-          <span class="quote-line"><span class="quote-line-inner">fighting for <em>wins</em> on the stage and in the stack.</span></span>
-          <span class="quote-line"><span class="quote-line-inner">Defining a <em>legacy</em> through code and culture.</span></span>
-        </blockquote>
-        <p class="manifesto-sign">— Gokul P</p>
-      </div>
-      <div class="cine-outro"><span></span></div>
-    </section>
-
-    <!-- ════ ABOUT ════ -->
-    <section id="about" class="cine-section about-section" data-cinematic data-fx="zoom-split">
-      <div class="cine-intro">
-        <span class="cine-number">04</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">About</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">Me</span></span>
-        </h2>
         <p class="cine-sub">Who I am beyond the commit history.</p>
       </div>
 
       <div class="about-grid">
         <div class="about-image-col">
           <div class="about-img-wrap cine-parallax">
-            <img src="assets/about.jpeg" alt="Gokul P" class="about-photo" width="640" height="800" />
-          </div>
-          <div class="coding-profiles">
-            <p class="profiles-label">Coding Profiles</p>
-            <div class="profiles-grid">
-              <a href="https://leetcode.com/u/2iVV1KHV9J/" class="profile-badge" target="_blank" rel="noopener"><img src="https://leetcode.com/favicon.ico" alt="" />LeetCode</a>
-              <a href="https://www.hackerrank.com/profile/gokulp2304" class="profile-badge" target="_blank" rel="noopener"><img src="https://www.hackerrank.com/favicon.ico" alt="" />HackerRank</a>
-              <a href="https://www.codechef.com/users/gokul_2304" class="profile-badge" target="_blank" rel="noopener"><img src="https://www.codechef.com/favicon.ico" alt="" />CodeChef</a>
-            </div>
-          </div>
-          <div class="coding-profiles">
-            <p class="profiles-label">Socials</p>
-            <div class="profiles-grid">
-              <a href="https://github.com/Gokul230406" class="profile-badge" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-              <a href="https://www.linkedin.com/in/gokul2304" class="profile-badge" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-            </div>
+            <img src="assets/about.jpeg" alt="Gokul P" class="about-photo" width="640" height="800" loading="lazy" />
           </div>
         </div>
         <div class="about-content-col">
           <h3 class="about-subtitle">Full Stack Developer & Java Programmer</h3>
-          <p class="about-text">Passionate Full Stack Developer building responsive, scalable web applications. B.E. Computer Science at SRM Easwari Engineering College — CGPA 8.61/10.</p>
-          <p class="about-text">President of the Theatre Club, Cultural Head of CSE, and winner of 9 cultural titles including <strong>Mr.Techofest'26</strong>. Great engineers are also great communicators.</p>
+          <p class="about-text">Passionate Full Stack Developer building responsive, scalable web applications. Currently pursuing B.E. Computer Science at SRM Easwari Engineering College with a CGPA of 8.61/10.</p>
+          <p class="about-text">President of the Theatre Club and Cultural Head of CSE — winner of 9 cultural titles including <strong>Mr.Techofest'26</strong>. Great engineers are also great communicators.</p>
           <div class="about-details">
-            <div class="detail-item"><i class="fas fa-map-marker-alt"></i><span>Chennai, India</span></div>
-            <div class="detail-item"><i class="fas fa-graduation-cap"></i><span>SRM Easwari Engineering College</span></div>
-            <div class="detail-item"><i class="fas fa-book"></i><span>B.E. CSE · CGPA 8.61</span></div>
-            <div class="detail-item"><i class="fas fa-envelope"></i><span>gokulp2304@gmail.com</span></div>
+            <div class="detail-item"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Chennai, India</span></div>
+            <div class="detail-item"><i class="fas fa-graduation-cap" aria-hidden="true"></i><span>SRM Easwari Engineering College</span></div>
+            <div class="detail-item"><i class="fas fa-book" aria-hidden="true"></i><span>B.E. CSE · CGPA 8.61</span></div>
+            <div class="detail-item"><i class="fas fa-envelope" aria-hidden="true"></i><span>gokulp2304@gmail.com</span></div>
           </div>
           <div class="about-actions">
             <a href="#contact" class="btn btn-primary">Connect with Me</a>
             <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass">View Resume</a>
           </div>
+          <div class="about-profiles-row">
+            <div class="coding-profiles">
+              <p class="profiles-label">Coding Profiles</p>
+              <div class="profiles-grid">
+                <a href="https://leetcode.com/u/2iVV1KHV9J/" class="profile-badge" target="_blank" rel="noopener"><img src="https://leetcode.com/favicon.ico" alt="" />LeetCode</a>
+                <a href="https://www.codechef.com/users/gokul_2304" class="profile-badge" target="_blank" rel="noopener"><img src="https://www.codechef.com/favicon.ico" alt="" />CodeChef</a>
+              </div>
+            </div>
+            <div class="coding-profiles">
+              <p class="profiles-label">Socials</p>
+              <div class="profiles-grid">
+                <a href="https://github.com/Gokul230406" class="profile-badge" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/gokul2304" class="profile-badge" target="_blank" rel="noopener"><i class="fab fa-linkedin-in" aria-hidden="true"></i> LinkedIn</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="stats-row">
-        <div class="stat-item"><span class="stat-number">2nd</span><span class="stat-label">Project Challenge</span></div>
-        <div class="stat-item"><span class="stat-number">75+</span><span class="stat-label">Events Won</span></div>
-        <div class="stat-item"><span class="stat-number">9</span><span class="stat-label">Cultural Titles</span></div>
-        <div class="stat-item"><span class="stat-number">8.61</span><span class="stat-label">CGPA</span></div>
-      </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ EDUCATION ════ -->
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 03 FEATURED ════ -->
+    <section id="featured" class="cine-section featured-section" data-cinematic data-fx="scale-fade">
+      <div class="cine-intro">
+        <div class="cine-heading">
+          <span class="cine-number">02</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Featured</span></span></h2>
+        </div>
+        <p class="cine-sub">Projects, achievements, and certifications in motion.</p>
+      </div>
+
+      <div class="featured-carousel" id="featuredCarousel" data-featured-carousel>
+        <button class="feat-nav feat-nav-prev" type="button" aria-label="Previous featured item">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="featured-viewport">
+          <div class="featured-track">
+            <a href="#projects" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/campusbox/optimized/01-landing.jpg" alt="CampusBox Marketplace" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Project</span>
+                <h3>CampusBox Marketplace</h3>
+                <p>2nd Place · Project Challenge 2026</p>
+              </div>
+            </a>
+            <a href="#projects" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/travo/01-hero.png" alt="Travo AI Trip Planner" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Project</span>
+                <h3>Travo</h3>
+                <p>AI-powered travel planner</p>
+              </div>
+            </a>
+            <a href="#achievements" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/Hack to the Future/DSC06595.JPG" alt="HackToFuture 4.0" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Hackathon</span>
+                <h3>HackToFuture 4.0</h3>
+                <p>Top 10 National</p>
+              </div>
+            </a>
+            <a href="#achievements" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.16 PM.jpeg" alt="Mr. Techofest 2026" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Culture</span>
+                <h3>Mr. Techofest '26</h3>
+                <p>9 Cultural Titles</p>
+              </div>
+            </a>
+            <a href="#certifications" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java SE17 Certification" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Certification</span>
+                <h3>Oracle Java SE17</h3>
+                <p>Certified Developer</p>
+              </div>
+            </a>
+            <a href="#leadership" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="pictures/president/m.jpeg" alt="Theatre Club President" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Leadership</span>
+                <h3>Theatre Club President</h3>
+                <p>Leading 40+ members</p>
+              </div>
+            </a>
+            <a href="#projects" class="feat-slide" data-magnetic>
+              <div class="feat-media"><img src="assets/ayurchain-preview.svg" alt="AyurChain blockchain herb tracker" loading="lazy" /></div>
+              <div class="feat-overlay">
+                <span class="feat-tag">Project</span>
+                <h3>AyurChain</h3>
+                <p>Blockchain Herb Tracker</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button class="feat-nav feat-nav-next" type="button" aria-label="Next featured item">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 04 EDUCATION ════ -->
     <section id="education" class="cine-section education-section" data-cinematic data-fx="slide-up">
       <div class="cine-intro">
-        <span class="cine-number">05</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Education</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">03</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Education</span></span></h2>
+        </div>
         <p class="cine-sub">The academic lane.</p>
       </div>
       <div class="education-timeline">
         <div class="edu-item">
-          <div class="edu-icon-wrap"><i class="fas fa-university"></i></div>
+          <div class="edu-icon-wrap"><i class="fas fa-university" aria-hidden="true"></i></div>
           <div class="edu-card">
             <div class="edu-header">
               <div>
                 <h3 class="edu-institution">SRM Easwari Engineering College, Ramapuram</h3>
                 <p class="edu-degree">B.E. Computer Science</p>
               </div>
-              <div class="edu-meta-right">
-                <span class="edu-year">2023 – Present</span>
-              </div>
+              <div class="edu-meta-right"><span class="edu-year">2023 – Present</span></div>
             </div>
             <div class="edu-footer">
               <div class="edu-score-wrap"><span class="edu-score-label">CGPA</span><span class="edu-score">8.61 / 10</span></div>
@@ -384,7 +338,7 @@
           </div>
         </div>
         <div class="edu-item">
-          <div class="edu-icon-wrap"><i class="fas fa-school"></i></div>
+          <div class="edu-icon-wrap"><i class="fas fa-school" aria-hidden="true"></i></div>
           <div class="edu-card">
             <div class="edu-header">
               <div>
@@ -400,44 +354,50 @@
           </div>
         </div>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ SKILLS ════ -->
-    <section id="skills" class="cine-section skills-section" data-cinematic data-fx="zoom-in">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 05 SKILLS ════ -->
+    <section id="skills" class="cine-section skills-section" data-cinematic data-fx="rotate-fade">
       <div class="cine-intro">
-        <span class="cine-number">06</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Tech</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">Stack</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">04</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Skills</span></span></h2>
+        </div>
         <p class="cine-sub">Tools across the full development stack.</p>
       </div>
       <div class="skills-grid" id="skillsGrid">
-        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-java-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Java</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
-        <div class="skill-card" data-level="65"><div class="skill-icon-wrap"><i class="devicon-javascript-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">JavaScript</span><span class="skill-level">65%</span></div><div class="skill-bar"><div class="skill-fill" data-width="65"></div></div></div></div>
-        <div class="skill-card" data-level="75"><div class="skill-icon-wrap"><i class="devicon-html5-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">HTML5</span><span class="skill-level">75%</span></div><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div></div>
-        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-css3-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">CSS3</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
-        <div class="skill-card" data-level="60"><div class="skill-icon-wrap"><i class="devicon-react-original colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">React.js</span><span class="skill-level">60%</span></div><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div></div></div>
-        <div class="skill-card" data-level="55"><div class="skill-icon-wrap"><i class="devicon-tailwindcss-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Tailwind</span><span class="skill-level">55%</span></div><div class="skill-bar"><div class="skill-fill" data-width="55"></div></div></div></div>
-        <div class="skill-card" data-level="50"><div class="skill-icon-wrap"><i class="devicon-nodejs-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Node.js</span><span class="skill-level">50%</span></div><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div></div></div>
-        <div class="skill-card" data-level="45"><div class="skill-icon-wrap"><i class="devicon-mongodb-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">MongoDB</span><span class="skill-level">45%</span></div><div class="skill-bar"><div class="skill-fill" data-width="45"></div></div></div></div>
-        <div class="skill-card" data-level="50"><div class="skill-icon-wrap"><i class="devicon-postgresql-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">PostgreSQL</span><span class="skill-level">50%</span></div><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div></div></div>
-        <div class="skill-card" data-level="40"><div class="skill-icon-wrap"><i class="devicon-docker-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Docker</span><span class="skill-level">40%</span></div><div class="skill-bar"><div class="skill-fill" data-width="40"></div></div></div></div>
-        <div class="skill-card" data-level="35"><div class="skill-icon-wrap"><i class="devicon-solidity-plain"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Solidity</span><span class="skill-level">35%</span></div><div class="skill-bar"><div class="skill-fill" data-width="35"></div></div></div></div>
-        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-git-plain colored"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Git & GitHub</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
+        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-java-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Java</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
+        <div class="skill-card" data-level="65"><div class="skill-icon-wrap"><i class="devicon-javascript-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">JavaScript</span><span class="skill-level">65%</span></div><div class="skill-bar"><div class="skill-fill" data-width="65"></div></div></div></div>
+        <div class="skill-card" data-level="75"><div class="skill-icon-wrap"><i class="devicon-html5-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">HTML5</span><span class="skill-level">75%</span></div><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div></div>
+        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-css3-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">CSS3</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
+        <div class="skill-card" data-level="60"><div class="skill-icon-wrap"><i class="devicon-react-original colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">React.js</span><span class="skill-level">60%</span></div><div class="skill-bar"><div class="skill-fill" data-width="60"></div></div></div></div>
+        <div class="skill-card" data-level="55"><div class="skill-icon-wrap"><i class="devicon-tailwindcss-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Tailwind</span><span class="skill-level">55%</span></div><div class="skill-bar"><div class="skill-fill" data-width="55"></div></div></div></div>
+        <div class="skill-card" data-level="50"><div class="skill-icon-wrap"><i class="devicon-nodejs-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Node.js</span><span class="skill-level">50%</span></div><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div></div></div>
+        <div class="skill-card" data-level="45"><div class="skill-icon-wrap"><i class="devicon-mongodb-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">MongoDB</span><span class="skill-level">45%</span></div><div class="skill-bar"><div class="skill-fill" data-width="45"></div></div></div></div>
+        <div class="skill-card" data-level="50"><div class="skill-icon-wrap"><i class="devicon-postgresql-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">PostgreSQL</span><span class="skill-level">50%</span></div><div class="skill-bar"><div class="skill-fill" data-width="50"></div></div></div></div>
+        <div class="skill-card" data-level="40"><div class="skill-icon-wrap"><i class="devicon-docker-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Docker</span><span class="skill-level">40%</span></div><div class="skill-bar"><div class="skill-fill" data-width="40"></div></div></div></div>
+        <div class="skill-card" data-level="35"><div class="skill-icon-wrap"><i class="devicon-solidity-plain" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Solidity</span><span class="skill-level">35%</span></div><div class="skill-bar"><div class="skill-fill" data-width="35"></div></div></div></div>
+        <div class="skill-card" data-level="70"><div class="skill-icon-wrap"><i class="devicon-git-plain colored" aria-hidden="true"></i></div><div class="skill-info"><div class="skill-header-row"><span class="skill-name">Git & GitHub</span><span class="skill-level">70%</span></div><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div></div>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ PROJECTS ════ -->
-    <section id="projects" class="cine-section projects-section" data-cinematic data-fx="split-out">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 06 PROJECTS ════ -->
+    <section id="projects" class="cine-section projects-section" data-cinematic data-fx="slide-up">
       <div class="cine-intro">
-        <span class="cine-number">07</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Selected</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">Work</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">05</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Projects</span></span></h2>
+        </div>
         <p class="cine-sub">Builds that shipped.</p>
       </div>
 
@@ -445,9 +405,9 @@
         <article class="project-item">
           <div class="project-image-col">
             <div class="project-img-wrap">
-              <div class="project-carousel" data-carousel data-interval="3200">
+              <div class="project-carousel" data-carousel data-interval="3200" data-gallery="campusbox">
                 <div class="project-carousel-slides">
-                  <div class="project-carousel-slide is-active"><div class="project-carousel-frame"><img src="pictures/campusbox/optimized/01-landing.jpg" alt="CampusBox" loading="lazy"></div></div>
+                  <div class="project-carousel-slide is-active"><div class="project-carousel-frame"><img src="pictures/campusbox/optimized/01-landing.jpg" alt="CampusBox landing" loading="lazy"></div></div>
                   <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/campusbox/optimized/02-browse.jpg" alt="Browse" loading="lazy"></div></div>
                   <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/campusbox/optimized/03-trending.jpg" alt="Trending" loading="lazy"></div></div>
                   <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/campusbox/optimized/04-my-items.jpg" alt="My items" loading="lazy"></div></div>
@@ -461,235 +421,350 @@
             </div>
           </div>
           <div class="project-content-col">
-            <p class="project-number">01</p>
             <div class="project-title-row">
               <h3 class="project-title">CampusBox – Marketplace</h3>
-              <span class="project-award"><i class="fas fa-trophy"></i> 2nd Place</span>
+              <span class="project-award"><i class="fas fa-trophy" aria-hidden="true"></i> 2nd Place</span>
             </div>
-            <p class="project-desc">Campus marketplace for students to buy, sell, and rent — secured <strong>2nd place</strong> in Project Challenge 2026.</p>
-            <div class="project-tags"><span class="tag">MongoDB</span><span class="tag">Node.js</span><span class="tag">React</span><span class="tag">Docker</span></div>
+            <div class="project-tags"><span class="tag">MongoDB</span><span class="tag">Node.js</span><span class="tag">React</span><span class="tag">Next.js</span><span class="tag">TypeScript</span></div>
+            <p class="project-desc">Campus marketplace for students to buy, sell, and rent — secured 2nd place in Project Challenge 2026.</p>
             <div class="project-actions">
-              <a href="https://github.com/Gokul230406/Campusbox-marketplace" class="btn btn-glass btn-sm" target="_blank" rel="noopener"><i class="fab fa-github"></i> Code</a>
-              <a href="https://campusbox-marketplace.vercel.app/" class="btn btn-primary btn-sm" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Live</a>
+              <a href="https://github.com/Gokul230406/Campusbox-marketplace" class="btn btn-glass btn-sm" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+              <a href="https://campusbox-marketplace.vercel.app/" class="btn btn-primary btn-sm" target="_blank" rel="noopener"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Live Demo</a>
+              <a href="https://lnkd.in/p/dmwDmMBi" class="btn btn-ghost btn-sm" target="_blank" rel="noopener"><i class="fas fa-play-circle" aria-hidden="true"></i> Showcase</a>
             </div>
           </div>
         </article>
 
         <article class="project-item project-reverse">
           <div class="project-image-col">
-            <div class="project-img-wrap project-ayur">
-              <div class="project-mockup">
-                <div class="mockup-screen">
-                  <div class="mockup-code">
-                    <div class="code-line"><span class="kw">contract</span> <span class="cls">AyurChain</span> {</div>
-                    <div class="code-line pl"><span class="ty">mapping</span>(<span class="ty">uint</span> => Herb) herbs;</div>
-                    <div class="code-line pl"><span class="fn">trackHarvest</span>(herbId, batch);</div>
-                    <div class="code-line pl"><span class="fn">verifyQR</span>(qrCode);</div>
-                    <div class="code-line">}</div>
-                    <div class="code-line mt"><span class="cmt">// Ethereum · Solidity · Ethers.js</span></div>
-                  </div>
+            <div class="project-img-wrap">
+              <div class="project-carousel" data-carousel data-interval="3400" data-gallery="travo">
+                <div class="project-carousel-slides">
+                  <div class="project-carousel-slide is-active"><div class="project-carousel-frame"><img src="pictures/travo/01-hero.png" alt="Travo hero" loading="lazy"></div></div>
+                  <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/travo/02-planner.png" alt="AI Planner" loading="lazy"></div></div>
+                  <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/travo/03-itinerary.png" alt="Itinerary" loading="lazy"></div></div>
+                  <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/travo/04-compare.png" alt="Compare deals" loading="lazy"></div></div>
+                  <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/travo/05-destination.png" alt="Destination" loading="lazy"></div></div>
+                  <div class="project-carousel-slide"><div class="project-carousel-frame"><img src="pictures/travo/06-assistant.png" alt="AI Assistant" loading="lazy"></div></div>
                 </div>
+                <div class="project-carousel-dots" role="tablist"></div>
               </div>
             </div>
           </div>
           <div class="project-content-col">
-            <p class="project-number">02</p>
-            <h3 class="project-title">AyurChain – Herb Tracker</h3>
-            <p class="project-desc">Blockchain DApp tracking medicinal herb quality with tamper-proof records and QR verification.</p>
-            <div class="project-tags"><span class="tag">Ethereum</span><span class="tag">Solidity</span><span class="tag">React</span><span class="tag">MongoDB</span></div>
+            <h3 class="project-title">Travo – AI Trip Planner</h3>
+            <div class="project-tags">
+              <span class="tag">Next.js</span><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">MongoDB</span>
+              <span class="tag">Tailwind</span><span class="tag">JWT</span><span class="tag">shadcn/ui</span>
+            </div>
+            <p class="project-desc">Full-stack AI-powered travel platform to discover destinations, create personalized itineraries, and compare deals across booking platforms — with secure auth and a scalable architecture.</p>
             <div class="project-actions">
-              <a href="https://github.com/Gokul230406" class="btn btn-glass btn-sm" target="_blank"><i class="fab fa-github"></i> Code</a>
+              <a href="https://github.com/Gokul230406/Travo" class="btn btn-glass btn-sm" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+              <a href="https://travo-lac-alpha.vercel.app/" class="btn btn-primary btn-sm" target="_blank" rel="noopener"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Live Demo</a>
+              <button type="button" class="btn btn-ghost btn-sm showcase-btn" data-showcase="travo"><i class="fas fa-images" aria-hidden="true"></i> Showcase</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-item">
+          <div class="project-image-col">
+            <div class="project-img-wrap project-ayur">
+              <div class="project-mockup">
+                <img src="assets/ayurchain-preview.svg" alt="AyurChain smart contract preview" class="ayur-preview-img" loading="lazy" width="800" height="500" />
+              </div>
+            </div>
+          </div>
+          <div class="project-content-col">
+            <h3 class="project-title">AyurChain – Herb Tracker</h3>
+            <div class="project-tags"><span class="tag">Ethereum</span><span class="tag">Solidity</span><span class="tag">React</span><span class="tag">MongoDB</span></div>
+            <p class="project-desc">Blockchain DApp tracking medicinal herb quality with tamper-proof records and QR verification.</p>
+            <div class="project-actions">
+              <a href="https://github.com/Gokul230406" class="btn btn-glass btn-sm" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+              <a href="https://github.com/Gokul230406" class="btn btn-primary btn-sm" target="_blank" rel="noopener"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Live Demo</a>
+              <button type="button" class="btn btn-ghost btn-sm showcase-btn" data-showcase="ayurchain"><i class="fas fa-images" aria-hidden="true"></i> Showcase</button>
             </div>
           </div>
         </article>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ ACHIEVEMENTS ════ -->
-    <section id="achievements" class="cine-section achievements-section" data-cinematic data-fx="zoom-in">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 07 ACHIEVEMENTS ════ -->
+    <section id="achievements" class="cine-section achievements-section" data-cinematic data-fx="stagger-cards">
       <div class="cine-intro">
-        <span class="cine-number">08</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Achieve</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">ments</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">06</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Achievements</span></span></h2>
+        </div>
         <p class="cine-sub">Technical wins and cultural milestones.</p>
       </div>
 
-      <div class="achievements-grid-unified">
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
-          <div class="achievement-number">2nd</div>
-          <h3 class="achievement-title">Project Challenge 2026</h3>
-          <p class="achievement-desc">2nd Place with CampusBox.</p>
-          <div class="media-gallery" data-gallery="project-challenge"></div>
+      <div class="ach-categories">
+        <div class="ach-category">
+          <div class="ach-cat-header">
+            <i class="fas fa-microchip" aria-hidden="true"></i>
+            <h3>Technical Achievements</h3>
+          </div>
+          <div class="achievements-grid">
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="project-challenge"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Project Recognition</span>
+                <div class="achievement-number">2nd</div>
+                <h3 class="achievement-title">Project Challenge 2026</h3>
+                <p class="achievement-desc">2nd Place with CampusBox marketplace.</p>
+              </div>
+            </div>
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="hack-to-the-future"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Hackathon</span>
+                <div class="achievement-number">Top 10</div>
+                <h3 class="achievement-title">HackToFuture 4.0</h3>
+                <p class="achievement-desc">Top 10 at the national hackathon.</p>
+              </div>
+            </div>
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="stress-interview"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Technical Soft Skill</span>
+                <div class="achievement-number">10+</div>
+                <h3 class="achievement-title">Stress Interviews Won</h3>
+                <p class="achievement-desc">Communication under pressure.</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-rocket"></i></div>
-          <div class="achievement-number">Top 10</div>
-          <h3 class="achievement-title">HackToFuture 4.0</h3>
-          <p class="achievement-desc">Top 10 at the national hackathon.</p>
-          <div class="media-gallery" data-gallery="hack-to-the-future"></div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-fire"></i></div>
-          <div class="achievement-number">10+</div>
-          <h3 class="achievement-title">Stress Interviews Won</h3>
-          <p class="achievement-desc">Communication under pressure.</p>
-          <div class="media-gallery" data-gallery="stress-interview"></div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-theater-masks"></i></div>
-          <div class="achievement-number">75+</div>
-          <h3 class="achievement-title">Literary & Drama</h3>
-          <p class="achievement-desc">Intercollege wins across TN.</p>
-          <div class="media-gallery" data-gallery="non-tech-literary"></div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-crown"></i></div>
-          <div class="achievement-number">9</div>
-          <h3 class="achievement-title">Cultural Titles</h3>
-          <p class="achievement-desc">Including <strong>Mr.Techofest'26</strong>.</p>
-          <div class="media-gallery" data-gallery="non-tech-cultural"></div>
-        </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-medal"></i></div>
-          <div class="achievement-number">5</div>
-          <h3 class="achievement-title">Overall Winner</h3>
-          <p class="achievement-desc">5 intercollege overall wins.</p>
-          <div class="media-gallery" data-gallery="non-tech-overall-winner"></div>
+
+        <div class="ach-category">
+          <div class="ach-cat-header">
+            <i class="fas fa-star" aria-hidden="true"></i>
+            <h3>Non-Technical Achievements</h3>
+          </div>
+          <div class="achievements-grid">
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="non-tech-cultural"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Cultural</span>
+                <div class="achievement-number">9</div>
+                <h3 class="achievement-title">Cultural Titles</h3>
+                <p class="achievement-desc">Including <strong>Mr.Techofest'26</strong>.</p>
+              </div>
+            </div>
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="non-tech-literary"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Literary & Drama</span>
+                <div class="achievement-number">75+</div>
+                <h3 class="achievement-title">Literary & Drama Wins</h3>
+                <p class="achievement-desc">Intercollege wins across Tamil Nadu.</p>
+              </div>
+            </div>
+            <div class="achievement-card achievement-card-lg">
+              <div class="achievement-thumb media-gallery" data-gallery="non-tech-overall-winner"></div>
+              <div class="achievement-body">
+                <span class="achievement-badge">Event Management</span>
+                <div class="achievement-number">5</div>
+                <h3 class="achievement-title">Overall Winner</h3>
+                <p class="achievement-desc">5 intercollege overall championships.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ CERTIFICATIONS ════ -->
-    <section id="certifications" class="cine-section certifications-section" data-cinematic data-fx="slide-up">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 08 CERTIFICATIONS ════ -->
+    <section id="certifications" class="cine-section certifications-section" data-cinematic data-fx="scale-fade">
       <div class="cine-intro">
-        <span class="cine-number">09</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Credentials</span></span>
-        </h2>
-        <p class="cine-sub">Verified skills and professional certifications.</p>
+        <div class="cine-heading">
+          <span class="cine-number">07</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Certifications</span></span></h2>
+        </div>
+        <p class="cine-sub">Verified skills and professional credentials.</p>
       </div>
-      <div class="ach-cat-cards cert-blocks">
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="devicon-java-plain colored"></i></div>
-          <h3 class="achievement-title">Oracle Java SE17</h3>
-          <p class="achievement-desc">Oracle Corporation</p>
-          <div class="media-gallery" data-gallery="cert-oracle"></div>
+      <div class="certs-grid">
+        <div class="cert-card">
+          <div class="cert-thumb media-gallery" data-gallery="cert-oracle"></div>
+          <div class="cert-body">
+            <div class="cert-icon"><i class="devicon-java-plain colored" aria-hidden="true"></i></div>
+            <h3 class="achievement-title">Oracle Java SE17</h3>
+            <p class="achievement-desc">Oracle Corporation</p>
+          </div>
         </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-network-wired"></i></div>
-          <h3 class="achievement-title">Cisco Networking</h3>
-          <p class="achievement-desc">Cisco Networking Academy</p>
-          <div class="media-gallery" data-gallery="cert-cisco"></div>
+        <div class="cert-card">
+          <div class="cert-thumb media-gallery" data-gallery="cert-cisco"></div>
+          <div class="cert-body">
+            <div class="cert-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
+            <h3 class="achievement-title">Cisco Networking</h3>
+            <p class="achievement-desc">Cisco Networking Academy</p>
+          </div>
         </div>
-        <div class="achievement-card">
-          <div class="achievement-icon"><i class="fas fa-code"></i></div>
-          <h3 class="achievement-title">Infosys C++</h3>
-          <p class="achievement-desc">Infosys Springboard</p>
-          <div class="media-gallery" data-gallery="cert-cpp"></div>
+        <div class="cert-card">
+          <div class="cert-thumb media-gallery" data-gallery="cert-cpp"></div>
+          <div class="cert-body">
+            <div class="cert-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
+            <h3 class="achievement-title">Infosys C++</h3>
+            <p class="achievement-desc">Infosys Springboard</p>
+          </div>
         </div>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ LEADERSHIP ════ -->
-    <section id="leadership" class="cine-section leadership-section" data-cinematic data-fx="zoom-split">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 09 LEADERSHIP ════ -->
+    <section id="leadership" class="cine-section leadership-section" data-cinematic data-fx="slide-right">
       <div class="cine-intro">
-        <span class="cine-number">10</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Leadership</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">& Stage</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">08</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Leadership</span></span></h2>
+        </div>
         <p class="cine-sub">Leading teams on campus and behind the curtain.</p>
       </div>
-      <div class="leadership-grid">
-        <div class="leadership-card">
-          <div class="lead-icon"><i class="fas fa-masks-theater"></i></div>
-          <div class="lead-content">
-            <div class="lead-header"><div><h3 class="lead-role">President – Theatre Club</h3><p class="lead-org">SRM Easwari</p></div><span class="lead-year">2025 – Present</span></div>
-            <p class="lead-desc">Leading <strong>40+ members</strong>, performances, and emceeing.</p>
-            <div class="media-gallery" data-gallery="president"></div>
+
+      <div class="lead-timeline" aria-label="Leadership timeline">
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-thumb media-gallery" data-gallery="president"></div>
+          <div class="lead-node-body">
+            <span class="lead-year">2025 – Present</span>
+            <h3 class="lead-role">President – Theatre Club</h3>
+            <p class="lead-org">SRM Easwari · <span>40+ members</span></p>
+            <p class="lead-desc">Directing performances and emceeing major intercollege events.</p>
           </div>
-        </div>
-        <div class="leadership-card">
-          <div class="lead-icon"><i class="fas fa-users"></i></div>
-          <div class="lead-content">
-            <div class="lead-header"><div><h3 class="lead-role">Cultural Head – CSE</h3><p class="lead-org">SRM Easwari</p></div><span class="lead-year">2026 – Present</span></div>
-            <p class="lead-desc">Coordinating <strong>50+ students</strong> across culturals.</p>
+        </article>
+
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-thumb lead-node-thumb-placeholder">
+            <i class="fas fa-users" aria-hidden="true"></i>
           </div>
-        </div>
-        <div class="leadership-card">
-          <div class="lead-icon"><i class="fas fa-bullhorn"></i></div>
-          <div class="lead-content">
-            <div class="lead-header"><div><h3 class="lead-role">Ambassador – CSE</h3><p class="lead-org">SRM Easwari</p></div><span class="lead-year">2025 – Present</span></div>
-            <p class="lead-desc">Overall winners <strong>2025 & 2026</strong>.</p>
-            <div class="media-gallery" data-gallery="ambassador"></div>
+          <div class="lead-node-body">
+            <span class="lead-year">2026 – Present</span>
+            <h3 class="lead-role">Cultural Head – CSE</h3>
+            <p class="lead-org">SRM Easwari · <span>50+ students</span></p>
+            <p class="lead-desc">Coordinating department culturals and championships.</p>
           </div>
-        </div>
-        <div class="leadership-card">
-          <div class="lead-icon"><i class="fas fa-handshake"></i></div>
-          <div class="lead-content">
-            <div class="lead-header"><div><h3 class="lead-role">PRO – Rotaract</h3><p class="lead-org">SRM Easwari</p></div><span class="lead-year">2024 – 2025</span></div>
-            <p class="lead-desc">Promotion, outreach, and communication.</p>
-            <div class="media-gallery" data-gallery="pro"></div>
+        </article>
+
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-thumb media-gallery" data-gallery="ambassador"></div>
+          <div class="lead-node-body">
+            <span class="lead-year">2025 – Present</span>
+            <h3 class="lead-role">Ambassador – CSE</h3>
+            <p class="lead-org">SRM Easwari · <span>Overall winners ’25 & ’26</span></p>
+            <p class="lead-desc">Representing the department on stage.</p>
           </div>
-        </div>
-        <div class="leadership-card">
-          <div class="lead-icon"><i class="fas fa-laptop"></i></div>
-          <div class="lead-content">
-            <div class="lead-header"><div><h3 class="lead-role">Joint Secretary – CSE</h3><p class="lead-org">SRM Easwari</p></div><span class="lead-year">2024 – 2025</span></div>
-            <p class="lead-desc">Organized <strong>AI Wars</strong> and <strong>Kratos</strong>.</p>
-            <div class="media-gallery" data-gallery="joint-sec"></div>
+        </article>
+
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-thumb media-gallery" data-gallery="pro"></div>
+          <div class="lead-node-body">
+            <span class="lead-year">2024 – 2025</span>
+            <h3 class="lead-role">PRO – Rotaract</h3>
+            <p class="lead-org">SRM Easwari</p>
+            <p class="lead-desc">Promotion, outreach, and campus Rotaract communication.</p>
           </div>
-        </div>
+        </article>
+
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-thumb media-gallery" data-gallery="joint-sec"></div>
+          <div class="lead-node-body">
+            <span class="lead-year">2024 – 2025</span>
+            <h3 class="lead-role">Joint Secretary – CSE</h3>
+            <p class="lead-org">SRM Easwari · <span>AI Wars & Kratos</span></p>
+            <p class="lead-desc">Organized technical events for the department.</p>
+          </div>
+        </article>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
 
-    <!-- ════ CONTACT ════ -->
-    <section id="contact" class="cine-section contact-section" data-cinematic data-fx="zoom-in">
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 10 CONTACT ════ -->
+    <section id="contact" class="cine-section contact-section" data-cinematic data-fx="fade-up">
       <div class="cine-intro">
-        <span class="cine-number">11</span>
-        <h2 class="cine-title">
-          <span class="line-mask"><span class="line-inner">Connect</span></span>
-          <span class="line-mask"><span class="line-inner accent-text">with Me</span></span>
-        </h2>
+        <div class="cine-heading">
+          <span class="cine-number">09</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Contact</span></span></h2>
+        </div>
         <p class="cine-sub">Projects, collaborations, or a quick hello.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-info-col">
+          <p class="contact-col-label">Get in touch</p>
           <div class="contact-cards">
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="contact-card" target="_blank" rel="noopener noreferrer">
-              <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
-              <div class="contact-card-body"><p class="contact-card-label">Email</p><p class="contact-card-value">gokulp2304@gmail.com</p></div>
-              <i class="fas fa-arrow-right contact-card-arrow"></i>
-            </a>
             <a href="tel:+918825427391" class="contact-card">
-              <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
-              <div class="contact-card-body"><p class="contact-card-label">Phone</p><p class="contact-card-value">+91 8825427391</p></div>
-              <i class="fas fa-arrow-right contact-card-arrow"></i>
+              <div class="contact-card-icon"><i class="fas fa-mobile-alt" aria-hidden="true"></i></div>
+              <div class="contact-card-body"><p class="contact-card-label">Mobile</p><p class="contact-card-value">+91 8825427391</p></div>
+              <i class="fas fa-arrow-right contact-card-arrow" aria-hidden="true"></i>
             </a>
-            <a href="https://github.com/Gokul230406" class="contact-card" target="_blank" rel="noopener">
-              <div class="contact-card-icon"><i class="fab fa-github"></i></div>
-              <div class="contact-card-body"><p class="contact-card-label">GitHub</p><p class="contact-card-value">Gokul230406</p></div>
-              <i class="fas fa-arrow-right contact-card-arrow"></i>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gokulp2304@gmail.com" class="contact-card" target="_blank" rel="noopener noreferrer">
+              <div class="contact-card-icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
+              <div class="contact-card-body"><p class="contact-card-label">Email</p><p class="contact-card-value">gokulp2304@gmail.com</p></div>
+              <i class="fas fa-arrow-right contact-card-arrow" aria-hidden="true"></i>
             </a>
-            <a href="https://www.linkedin.com/in/gokul2304" class="contact-card" target="_blank" rel="noopener">
-              <div class="contact-card-icon"><i class="fab fa-linkedin-in"></i></div>
-              <div class="contact-card-body"><p class="contact-card-label">LinkedIn</p><p class="contact-card-value">gokul2304</p></div>
-              <i class="fas fa-arrow-right contact-card-arrow"></i>
-            </a>
+            <div class="contact-card" tabindex="0">
+              <div class="contact-card-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></div>
+              <div class="contact-card-body"><p class="contact-card-label">Location</p><p class="contact-card-value">Chennai, India</p></div>
+            </div>
+          </div>
+          <div class="contact-socials-block">
+            <p class="contact-col-label">Socials & Profiles</p>
+            <div class="contact-socials">
+              <a href="https://github.com/Gokul230406" class="contact-social" target="_blank" rel="noopener" aria-label="GitHub">
+                <i class="fab fa-github" aria-hidden="true"></i>
+                <span>GitHub</span>
+              </a>
+              <a href="https://www.linkedin.com/in/gokul2304" class="contact-social" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                <span>LinkedIn</span>
+              </a>
+              <a href="https://leetcode.com/u/2iVV1KHV9J/" class="contact-social" target="_blank" rel="noopener" aria-label="LeetCode">
+                <img src="https://leetcode.com/favicon.ico" alt="" width="16" height="16" />
+                <span>LeetCode</span>
+              </a>
+              <a href="https://www.codechef.com/users/gokul_2304" class="contact-social" target="_blank" rel="noopener" aria-label="CodeChef">
+                <img src="https://www.codechef.com/favicon.ico" alt="" width="16" height="16" />
+                <span>CodeChef</span>
+              </a>
+            </div>
           </div>
           <div class="availability-badge"><span class="avail-dot"></span> Available for internships & full-time roles</div>
         </div>
         <div class="contact-right-col">
           <div class="connect-card">
             <h3 class="connect-title">Always bringing the fight.</h3>
-            <p class="connect-text">Open to internships, freelance, hackathons, and opportunities after graduation.</p>
+            <p class="connect-text">Open to internships, freelance, hackathons, and opportunities after graduation. Prefer email for project collabs — phone for quick syncs.</p>
+            <div class="connect-meta">
+              <div class="connect-meta-item"><i class="fas fa-graduation-cap" aria-hidden="true"></i><span>B.E. CSE · SRM Easwari Engineering College</span></div>
+              <div class="connect-meta-item"><i class="fas fa-briefcase" aria-hidden="true"></i><span>Full Stack Developer · Java Programmer</span></div>
+              <div class="connect-meta-item"><i class="fas fa-clock" aria-hidden="true"></i><span>Usually replies within 24 hours</span></div>
+            </div>
             <div class="resume-actions">
               <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-glass btn-full">View Resume</a>
               <a href="Resume/Gokul_resume.pdf" download="Gokul_resume.pdf" class="btn btn-primary btn-full">Download Resume</a>
@@ -697,8 +772,12 @@
           </div>
         </div>
       </div>
-      <div class="cine-outro"><span></span></div>
     </section>
+
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
 
   </main>
 
@@ -709,12 +788,13 @@
         <p class="footer-tagline">Always building. Always learning.</p>
       </div>
       <ul class="footer-links">
+        <li><a href="#about">About</a></li>
         <li><a href="#featured">Featured</a></li>
-        <li><a href="#projects">Work</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#achievements">Achievements</a></li>
-        <li><a href="#certifications">Credentials</a></li>
+        <li><a href="#certifications">Certifications</a></li>
         <li><a href="#leadership">Leadership</a></li>
-        <li><a href="#contact">Connect</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
       <div class="footer-socials">
         <a href="https://github.com/Gokul230406" target="_blank" rel="noopener" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>

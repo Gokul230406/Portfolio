@@ -42,7 +42,8 @@ window.addEventListener('load', runLoader);
 
 /* ── THREE.JS SCENE ─────────────────────────────────────────── */
 let scene, camera, renderer;
-let particleSystem, heroMesh, ringMesh, secondaryMesh;
+let particleSystem, techGroup;
+let techMeshes = [];
 let targetMouseX = 0, targetMouseY = 0, currentMouseX = 0, currentMouseY = 0;
 const scrollInfo = { y: 0, targetY: 0 };
 
@@ -77,7 +78,7 @@ function initThree() {
   lightB.position.set(-110, -70, 60); scene.add(lightB);
 
   createParticles(theme);
-  createHeroMeshes(theme);
+  createTechFloats(theme);
 
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(onWindowResize, 120); });
   if (!isTouchDevice) window.addEventListener('mousemove', onMouseMove, { passive: true });
@@ -90,7 +91,7 @@ function initThree() {
 }
 
 function createParticles(palette) {
-  const count = isLowPower ? 800 : 2400;
+  const count = isLowPower ? 500 : 1400;
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
@@ -99,7 +100,7 @@ function createParticles(palette) {
   const scratch = new THREE.Color();
 
   for (let i = 0; i < count; i++) {
-    const r = 120 + Math.random() * 680;
+    const r = 140 + Math.random() * 680;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
@@ -113,37 +114,246 @@ function createParticles(palette) {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   particleSystem = new THREE.Points(geometry, new THREE.PointsMaterial({
-    size: isLowPower ? 2 : 2.4, vertexColors: true, transparent: true,
-    opacity: 0.75, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
+    size: isLowPower ? 1.8 : 2.1, vertexColors: true, transparent: true,
+    opacity: 0.55, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
   scene.add(particleSystem);
 }
 
-function createHeroMeshes(palette) {
-  const mat = { wireframe: true, transparent: true };
-  heroMesh = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(52, isLowPower ? 0 : 1),
-    new THREE.MeshBasicMaterial({ ...mat, color: palette.meshColor, opacity: 0.38 })
-  );
-  heroMesh.position.set(70, 10, -20);
-  scene.add(heroMesh);
+function wireMat(color, opacity = 0.42) {
+  return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity, depthWrite: false });
+}
 
-  ringMesh = new THREE.Mesh(
-    new THREE.TorusGeometry(70, 0.55, 8, isLowPower ? 48 : 80),
-    new THREE.MeshBasicMaterial({ color: palette.ringColor, transparent: true, opacity: 0.32 })
-  );
-  ringMesh.position.copy(heroMesh.position);
-  ringMesh.rotation.x = Math.PI / 2.4;
-  scene.add(ringMesh);
+function solidMat(color, opacity = 0.28) {
+  return new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false });
+}
 
-  if (!isLowPower) {
-    secondaryMesh = new THREE.Mesh(
-      new THREE.OctahedronGeometry(18, 0),
-      new THREE.MeshBasicMaterial({ ...mat, color: palette.ringColor, opacity: 0.45 })
-    );
-    secondaryMesh.position.set(-90, -40, -40);
-    scene.add(secondaryMesh);
+function makeCodeBrackets(color) {
+  const g = new THREE.Group();
+  const barGeo = new THREE.BoxGeometry(2.2, 22, 2.2);
+  const tipGeo = new THREE.BoxGeometry(10, 2.2, 2.2);
+  const m = wireMat(color, 0.5);
+  [[-12, 0, 0, 0], [12, 0, 0, 0], [-8, 10, 0, 0], [-8, -10, 0, 0], [8, 10, 0, Math.PI], [8, -10, 0, Math.PI]].forEach(([x, y, z, r], i) => {
+    const mesh = new THREE.Mesh(i < 2 ? barGeo : tipGeo, m);
+    mesh.position.set(x, y, z);
+    if (r) mesh.rotation.z = r;
+    g.add(mesh);
+  });
+  const slash = new THREE.Mesh(new THREE.BoxGeometry(2, 18, 2), m);
+  slash.rotation.z = -0.45;
+  g.add(slash);
+  return g;
+}
+
+function makeReactAtom(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(4, 10, 10), solidMat(color, 0.55)));
+  for (let i = 0; i < 3; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(16, 0.45, 6, 48), wireMat(color, 0.4));
+    ring.rotation.x = Math.PI / 2;
+    ring.rotation.y = (i * Math.PI) / 3;
+    g.add(ring);
   }
+  return g;
+}
+
+function makeNodeHex(color) {
+  return new THREE.Mesh(new THREE.CylinderGeometry(14, 14, 6, 6), wireMat(color, 0.45));
+}
+
+function makeDatabase(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 18, 16), wireMat(color, 0.4)));
+  g.add(new THREE.Mesh(new THREE.TorusGeometry(10, 0.5, 6, 24), wireMat(color, 0.35)));
+  return g;
+}
+
+function makeGitBranch(color) {
+  const g = new THREE.Group();
+  const m = solidMat(color, 0.5);
+  [[0, -12, 0], [0, 0, 0], [0, 12, 0], [10, 6, 0]].forEach(([x, y, z]) => {
+    const n = new THREE.Mesh(new THREE.SphereGeometry(2.4, 8, 8), m);
+    n.position.set(x, y, z); g.add(n);
+  });
+  const line = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 24, 6), wireMat(color, 0.45));
+  g.add(line);
+  const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 12, 6), wireMat(color, 0.45));
+  branch.rotation.z = -0.7; branch.position.set(5, 3, 0);
+  g.add(branch);
+  return g;
+}
+
+function makeTerminal(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(28, 18, 2), wireMat(color, 0.4)));
+  const bar = new THREE.Mesh(new THREE.BoxGeometry(22, 1.2, 1.2), solidMat(color, 0.45));
+  bar.position.set(-1, 4, 1.5); g.add(bar);
+  const prompt = new THREE.Mesh(new THREE.BoxGeometry(8, 1.2, 1.2), solidMat(color, 0.4));
+  prompt.position.set(-6, 0, 1.5); g.add(prompt);
+  return g;
+}
+
+function makeApiNodes(color) {
+  const g = new THREE.Group();
+  const positions = [[-12, 0, 0], [12, 0, 0], [0, 12, 0], [0, -12, 0]];
+  positions.forEach(([x, y, z]) => {
+    const n = new THREE.Mesh(new THREE.SphereGeometry(3, 8, 8), solidMat(color, 0.5));
+    n.position.set(x, y, z); g.add(n);
+  });
+  g.add(new THREE.Mesh(new THREE.TorusGeometry(12, 0.4, 6, 32), wireMat(color, 0.35)));
+  return g;
+}
+
+function makeCoffeeCup(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(8, 7, 14, 12), wireMat(color, 0.42)));
+  const handle = new THREE.Mesh(new THREE.TorusGeometry(5, 0.7, 6, 16, Math.PI), wireMat(color, 0.42));
+  handle.position.set(9, 0, 0); handle.rotation.y = Math.PI / 2;
+  g.add(handle);
+  return g;
+}
+
+function makeMongoLeaf(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(8, 10, 12, 0, Math.PI * 2, 0, Math.PI * 0.85), wireMat(color, 0.4)));
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(4, 10, 8), wireMat(color, 0.4));
+  tip.position.y = -10; g.add(tip);
+  return g;
+}
+
+function makeSpringCoil(color) {
+  const g = new THREE.Group();
+  for (let i = 0; i < 5; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(8, 0.55, 6, 24), wireMat(color, 0.38));
+    ring.position.y = i * 4 - 8;
+    ring.rotation.x = Math.PI / 2;
+    g.add(ring);
+  }
+  return g;
+}
+
+function makeTsBadge(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(20, 20, 2.5), wireMat(color, 0.42)));
+  const bar = new THREE.Mesh(new THREE.BoxGeometry(12, 2, 1.5), solidMat(color, 0.5));
+  bar.position.set(0, 4, 2); g.add(bar);
+  const stem = new THREE.Mesh(new THREE.BoxGeometry(2.2, 10, 1.5), solidMat(color, 0.5));
+  stem.position.set(0, -2, 2); g.add(stem);
+  return g;
+}
+
+function makeDockerWhale(color) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(22, 8, 10), wireMat(color, 0.4));
+  body.position.y = -2; g.add(body);
+  [[-6, 4, 0], [-1, 4, 0], [4, 4, 0]].forEach(([x, y, z]) => {
+    const box = new THREE.Mesh(new THREE.BoxGeometry(4, 4, 4), wireMat(color, 0.38));
+    box.position.set(x, y, z); g.add(box);
+  });
+  return g;
+}
+
+function makeNextTriangle(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.ConeGeometry(14, 22, 3), wireMat(color, 0.4)));
+  return g;
+}
+
+function makeCloud(color) {
+  const g = new THREE.Group();
+  [[0, 0, 0, 8], [-8, -2, 0, 6], [8, -2, 0, 6], [0, -4, 0, 7]].forEach(([x, y, z, r]) => {
+    const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 10), wireMat(color, 0.35));
+    puff.position.set(x, y, z); g.add(puff);
+  });
+  return g;
+}
+
+function makeChip(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(16, 16, 3), wireMat(color, 0.42)));
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(8, 8, 4), solidMat(color, 0.4)));
+  for (let i = -2; i <= 2; i++) {
+    if (i === 0) continue;
+    [[i * 3.2, 10, 0], [i * 3.2, -10, 0], [10, i * 3.2, 0], [-10, i * 3.2, 0]].forEach(([x, y, z]) => {
+      const pin = new THREE.Mesh(new THREE.BoxGeometry(1.2, 3.5, 1.2), solidMat(color, 0.35));
+      pin.position.set(x, y, z);
+      if (Math.abs(x) > Math.abs(y)) pin.rotation.z = Math.PI / 2;
+      g.add(pin);
+    });
+  }
+  return g;
+}
+
+function makeHtmlTag(color) {
+  const g = new THREE.Group();
+  const m = wireMat(color, 0.45);
+  const left = new THREE.Mesh(new THREE.BoxGeometry(2.2, 16, 2.2), m);
+  left.position.x = -6; left.rotation.z = 0.45; g.add(left);
+  const right = new THREE.Mesh(new THREE.BoxGeometry(2.2, 16, 2.2), m);
+  right.position.x = 6; right.rotation.z = -0.45; g.add(right);
+  const slash = new THREE.Mesh(new THREE.BoxGeometry(2, 14, 2), m);
+  slash.rotation.z = -0.5; g.add(slash);
+  return g;
+}
+
+function makeLock(color) {
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(14, 12, 6), wireMat(color, 0.4)));
+  const shackle = new THREE.Mesh(new THREE.TorusGeometry(5, 1.1, 6, 16, Math.PI), wireMat(color, 0.4));
+  shackle.position.y = 8; shackle.rotation.x = Math.PI; g.add(shackle);
+  return g;
+}
+
+function createTechFloats(palette) {
+  techGroup = new THREE.Group();
+  scene.add(techGroup);
+
+  const makers = [
+    makeCodeBrackets, makeReactAtom, makeNodeHex, makeDatabase,
+    makeGitBranch, makeTerminal, makeApiNodes, makeCoffeeCup, makeMongoLeaf, makeSpringCoil,
+    makeTsBadge, makeDockerWhale, makeNextTriangle, makeCloud, makeChip, makeHtmlTag, makeLock
+  ];
+  const count = isLowPower ? 8 : makers.length + 4;
+  const spread = Math.min(window.innerWidth / 8.5, 160);
+
+  for (let i = 0; i < count; i++) {
+    const maker = makers[i % makers.length];
+    const mesh = maker(i % 2 === 0 ? palette.meshColor : palette.ringColor);
+    const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.4;
+    const radius = spread * (0.5 + (i % 5) * 0.2);
+    const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
+    const z = -20 - (i % 6) * 18 - Math.random() * 35;
+    mesh.position.set(x, y, z);
+    mesh.scale.setScalar(0.48 + (i % 5) * 0.12);
+    mesh.userData = {
+      baseX: x, baseY: y, baseZ: z,
+      speed: 0.18 + (i % 6) * 0.08,
+      amp: 9 + (i % 5) * 3.5,
+      rotSpeed: 0.1 + (i % 5) * 0.05,
+      phase: i * 0.72,
+      scrollFactor: 0.35 + (i % 4) * 0.28,
+      parallaxX: (i % 2 === 0 ? 1 : -1) * (16 + i * 2.5)
+    };
+    techGroup.add(mesh);
+    techMeshes.push(mesh);
+  }
+}
+
+function layoutTechForViewport() {
+  if (!techMeshes.length) return;
+  const spread = Math.min(window.innerWidth / 8.5, 160);
+  techMeshes.forEach((mesh, i) => {
+    const angle = (i / techMeshes.length) * Math.PI * 2 + (i % 3) * 0.4;
+    const radius = spread * (0.5 + (i % 5) * 0.2);
+    const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
+    const z = mesh.userData.baseZ;
+    mesh.userData.baseX = x;
+    mesh.userData.baseY = y;
+    mesh.position.x = x;
+    mesh.position.y = y;
+  });
 }
 
 function onWindowResize() {
@@ -151,6 +361,7 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  layoutTechForViewport();
 }
 function onMouseMove(e) {
   targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -164,50 +375,41 @@ function animate() {
   rafId = requestAnimationFrame(animate);
   if (!renderer || !scene || !camera) return;
 
-  const time = Date.now() * 0.00045;
+  const time = Date.now() * 0.0004;
 
-  if (particleSystem) { particleSystem.rotation.y = time * 0.08; particleSystem.rotation.x = time * 0.03; }
-  if (heroMesh) {
-    heroMesh.rotation.y = time * 0.35; heroMesh.rotation.x = time * 0.22;
-    heroMesh.scale.setScalar(1 + Math.sin(time * 2.4) * 0.04);
-    heroMesh.material.opacity = 0.32 + Math.sin(time * 1.8) * 0.08;
+  if (particleSystem) {
+    particleSystem.rotation.y = time * 0.06;
+    particleSystem.rotation.x = time * 0.02;
   }
-  if (ringMesh && heroMesh) {
-    ringMesh.rotation.z = time * 0.4;
-    ringMesh.rotation.x = Math.PI / 2.4 + Math.sin(time) * 0.15;
-    ringMesh.position.copy(heroMesh.position);
-  }
-  if (secondaryMesh) {
-    secondaryMesh.rotation.y = -time * 0.5;
-    secondaryMesh.rotation.z = time * 0.3;
-    secondaryMesh.position.y = -40 + Math.sin(time * 1.5) * 12;
-  }
+
+  scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * 0.1;
+  const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const scrollNorm = scrollInfo.y / docHeight;
+  const scrollWave = Math.sin(scrollNorm * Math.PI * 5);
+
+  techMeshes.forEach(mesh => {
+    const d = mesh.userData;
+    mesh.rotation.y = time * d.rotSpeed + d.phase + scrollNorm * 2.2;
+    mesh.rotation.x = time * d.rotSpeed * 0.7 + scrollNorm * d.scrollFactor;
+    mesh.position.y = d.baseY + Math.sin(time * d.speed + d.phase) * d.amp + scrollWave * 28 * d.scrollFactor;
+    mesh.position.x = d.baseX + Math.cos(time * d.speed * 0.7 + d.phase) * (d.amp * 0.5) + scrollNorm * d.parallaxX;
+    mesh.position.z = d.baseZ + Math.sin(scrollNorm * Math.PI * 3 + d.phase) * 22;
+  });
 
   currentMouseX += (targetMouseX - currentMouseX) * 0.04;
   currentMouseY += (targetMouseY - currentMouseY) * 0.04;
-  camera.position.x += (currentMouseX * 28 - camera.position.x) * 0.04;
-  camera.position.y += (-currentMouseY * 18 - camera.position.y) * 0.04;
-  camera.lookAt(20, 0, 0);
-
-  scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * 0.08;
-
-  const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-  const scrollNorm = scrollInfo.y / docHeight;
-  const waveY = Math.sin(scrollNorm * Math.PI * 4) * 35;
-  const waveX = Math.cos(scrollNorm * Math.PI * 3) * 25;
+  camera.position.x += (currentMouseX * 28 - camera.position.x) * 0.045;
+  camera.position.y += (-currentMouseY * 16 - camera.position.y) * 0.045;
+  camera.lookAt(8, scrollNorm * -12, 0);
 
   if (particleSystem) {
-    particleSystem.position.y = waveY;
-    particleSystem.position.x = waveX * 0.5;
-    particleSystem.rotation.y = time * 0.08 + scrollNorm * Math.PI * 2;
+    particleSystem.position.y = scrollWave * 40;
+    particleSystem.position.x = Math.cos(scrollNorm * Math.PI * 2) * 24;
+    particleSystem.rotation.y = time * 0.06 + scrollNorm * Math.PI * 1.4;
   }
-  if (heroMesh) {
-    heroMesh.position.y = 10 + waveY * 0.4;
-    heroMesh.position.x = 70 + waveX;
-  }
-  if (secondaryMesh) {
-    secondaryMesh.position.x = -90 - waveX * 0.6;
-    secondaryMesh.position.y = -40 + Math.sin(time * 1.5) * 12 + waveY * 0.3;
+  if (techGroup) {
+    techGroup.rotation.y = scrollNorm * 0.85;
+    techGroup.position.y = -scrollNorm * 35;
   }
 
   renderer.render(scene, camera);
@@ -269,7 +471,7 @@ if (!isTouchDevice && cursor && follower) {
     requestAnimationFrame(animateCursor);
   })();
 
-  const hoverTargets = document.querySelectorAll('a, button, [role="button"], .media-thumb, .feat-card, .creative-card, .project-img-wrap, .achievement-card, .skill-card');
+  const hoverTargets = document.querySelectorAll('a, button, [role="button"], .media-thumb, .feat-slide, .project-card, .achievement-card, .cert-card, .lead-node, .skill-card');
   hoverTargets.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.classList.add('is-hover');
@@ -332,34 +534,33 @@ function closeMobileMenu() {
   hamburger?.setAttribute('aria-expanded', 'false'); document.body.style.overflow = '';
 }
 
-/* ── TYPEWRITER ─────────────────────────────────────────────── */
+/* ── TYPEWRITER (optional) ──────────────────────────────────── */
 const typeEl = document.getElementById('typewriter');
-const words = ['Full Stack Developer', 'Java Programmer', 'Blockchain Enthusiast', 'Theatre Club President', 'Problem Solver', 'Mr. Techofest 2026', 'Event Emcee'];
-let wordIndex = 0, charIndex = 0, isDeleting = false;
-
-function typeWriter() {
-  if (!typeEl) return;
-  const word = words[wordIndex];
-  if (!isDeleting) {
-    typeEl.textContent = word.slice(0, ++charIndex);
-    if (charIndex === word.length) { setTimeout(() => { isDeleting = true; typeWriter(); }, 2200); return; }
-  } else {
-    typeEl.textContent = word.slice(0, --charIndex);
-    if (charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
+if (typeEl) {
+  const words = ['Full Stack Developer', 'Java Programmer', 'Blockchain Enthusiast', 'Theatre Club President', 'Problem Solver'];
+  let wordIndex = 0, charIndex = 0, isDeleting = false;
+  function typeWriter() {
+    const word = words[wordIndex];
+    typeEl.textContent = word.slice(0, charIndex);
+    if (!isDeleting && charIndex < word.length) { charIndex++; setTimeout(typeWriter, 85); }
+    else if (isDeleting && charIndex > 0) { charIndex--; setTimeout(typeWriter, 50); }
+    else {
+      isDeleting = !isDeleting;
+      if (!isDeleting) wordIndex = (wordIndex + 1) % words.length;
+      setTimeout(typeWriter, isDeleting ? 900 : 1200);
+    }
   }
-  setTimeout(typeWriter, isDeleting ? 50 : 85);
+  setTimeout(typeWriter, 1800);
 }
-setTimeout(typeWriter, isTouchDevice ? 800 : 2200);
 
 /* ── GSAP CINEMATIC ANIMATIONS ──────────────────────────────── */
 function initEntranceAnimations() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-    // Fallback: reveal everything immediately
-    document.querySelectorAll('.line-inner, .brand-line-inner, .quote-line-inner, .cine-sub, .cine-number').forEach(el => {
+    document.querySelectorAll('.line-inner, .brand-line-inner, .cine-sub, .cine-number, .cine-heading').forEach(el => {
       el.style.transform = 'none'; el.style.opacity = '1';
     });
     document.querySelectorAll('.skill-fill').forEach(bar => { bar.style.width = (bar.getAttribute('data-width') || '0') + '%'; });
-    document.querySelectorAll('.hero-eyebrow, .hero-role, .hero-cta, .hero-meta-bar, .manifesto-sign').forEach(el => {
+    document.querySelectorAll('.hero-eyebrow, .hero-role, .hero-role-primary, .hero-cta, .hero-stats').forEach(el => {
       el.style.opacity = '1'; el.style.transform = 'none';
     });
     document.querySelectorAll('.hero-portrait').forEach(el => {
@@ -370,168 +571,124 @@ function initEntranceAnimations() {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // 1. Camera parallax through full page scroll
   if (camera) {
     gsap.timeline({
       scrollTrigger: {
         trigger: document.documentElement,
-        start: 'top top',
-        end: 'max',
-        scrub: 1.2,
-        invalidateOnRefresh: true
+        start: 'top top', end: 'max', scrub: 1.2, invalidateOnRefresh: true
       }
     })
-      .to(camera.position, { z: 200, x: -25, y: -8, ease: 'none' }, 0)
-      .to(camera.position, { z: 185, x: 30, y: 12, ease: 'none' }, 0.15)
-      .to(camera.position, { z: 210, x: -18, y: -5, ease: 'none' }, 0.3)
-      .to(camera.position, { z: 195, x: 22, y: 8, ease: 'none' }, 0.45)
-      .to(camera.position, { z: 220, x: -12, y: -10, ease: 'none' }, 0.6)
-      .to(camera.position, { z: 205, x: 18, y: 6, ease: 'none' }, 0.75)
+      .to(camera.position, { z: 200, x: -20, y: -6, ease: 'none' }, 0)
+      .to(camera.position, { z: 190, x: 24, y: 10, ease: 'none' }, 0.25)
+      .to(camera.position, { z: 210, x: -14, y: -4, ease: 'none' }, 0.5)
       .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' }, 1);
   }
 
-  // 2. HERO entrance — cinematic zoom-in from scale
   const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
   heroTl
-    .to('.brand-line-inner', { y: 0, opacity: 1, scale: 1, duration: 1.1, stagger: 0.14, ease: 'expo.out' }, 0.1)
-    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.05)
-    .to('.hero-role', { opacity: 1, y: 0, duration: 0.75 }, 0.55)
-    .to('.hero-cta', { opacity: 1, y: 0, duration: 0.65 }, 0.75)
+    .to('.brand-line-inner', { y: 0, opacity: 1, scale: 1, duration: 1.05, ease: 'expo.out' }, 0.1)
+    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.65 }, 0.05)
+    .to('.hero-role-primary', { opacity: 1, y: 0, duration: 0.7 }, 0.45)
+    .to('.hero-role', { opacity: 1, y: 0, duration: 0.7 }, 0.58)
+    .to('.hero-cta', { opacity: 1, y: 0, duration: 0.6 }, 0.72)
     .to('#heroPortrait', {
       opacity: 1, scale: 1, clipPath: 'inset(0% 0% 0% 0% round 32px)',
-      duration: 1.4, ease: 'expo.out'
+      duration: 1.3, ease: 'expo.out'
     }, 0.18)
-    .to('.hero-meta-bar', { opacity: 1, y: 0, duration: 0.65 }, 0.9);
+    .to('.hero-stats', { opacity: 1, y: 0, duration: 0.7 }, 0.9);
 
-  // 3. All sections — intro text reveal + smooth per-section transitions
-  const sectionAnimSelectors = [
-    '.feat-card', '.creative-card', '.achievement-card', '.leadership-card',
-    '.edu-item', '.skill-card', '.project-item', '.contact-card', '.connect-card',
-    '.stat-item', '.about-grid', '.manifesto-inner'
+  const fxMap = {
+    'fade-up': { from: { y: 36, opacity: 0 }, to: { y: 0, opacity: 1 } },
+    'slide-left': { from: { x: -40, opacity: 0 }, to: { x: 0, opacity: 1 } },
+    'slide-right': { from: { x: 40, opacity: 0 }, to: { x: 0, opacity: 1 } },
+    'slide-up': { from: { y: 40, opacity: 0 }, to: { y: 0, opacity: 1 } },
+    'scale-fade': { from: { scale: 0.94, opacity: 0 }, to: { scale: 1, opacity: 1 } },
+    'rotate-fade': { from: { rotate: -4, opacity: 0, y: 24, scale: 0.97 }, to: { rotate: 0, opacity: 1, y: 0, scale: 1 } },
+    'stagger-cards': { from: { y: 32, opacity: 0, scale: 0.97 }, to: { y: 0, opacity: 1, scale: 1 }, stagger: 0.08 }
+  };
+
+  const itemSelectors = [
+    '.feat-slide', '.achievement-card', '.cert-card', '.lead-node',
+    '.edu-item', '.project-item', '.contact-card', '.contact-social', '.connect-card',
+    '.stat-item', '.about-grid', '.ach-cat-header'
   ].join(', ');
 
-  function getSectionItems(section) {
-    return section.querySelectorAll(sectionAnimSelectors);
-  }
-
   function initSectionTransition(section) {
-    const number = section.querySelector('.cine-number');
-    const titleInner = section.querySelectorAll('.line-inner');
+    const fx = section.dataset.fx || 'fade-up';
+    const preset = fxMap[fx] || fxMap['fade-up'];
+    const heading = section.querySelector('.cine-heading');
     const sub = section.querySelector('.cine-sub');
-    const outro = section.querySelector('.cine-outro span');
-    const items = getSectionItems(section);
+    const items = section.querySelectorAll(itemSelectors);
+    const duration = prefersReducedMotion ? 0.2 : 0.75;
 
-    if (titleInner.length) gsap.set(titleInner, { yPercent: 110 });
-    if (sub) gsap.set(sub, { opacity: 0, y: 28 });
-    if (number) gsap.set(number, { opacity: 0, y: 12 });
-    if (items.length) gsap.set(items, { opacity: 0, y: 36 });
-
+    // Soft enter once — CSS keeps titles readable if ST misses
     const introTl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 82%',
-        toggleActions: 'play none none none',
+        start: 'top 92%',
         once: true
       }
     });
-    if (number) introTl.to(number, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0);
-    if (titleInner.length) introTl.to(titleInner, { yPercent: 0, duration: 0.85, stagger: 0.1, ease: 'expo.out' }, 0.06);
-    if (sub) introTl.to(sub, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.28);
+    if (heading) introTl.from(heading, { opacity: 0, y: 16, duration: 0.55, ease: 'power3.out' }, 0);
+    if (sub) introTl.from(sub, { opacity: 0, y: 12, duration: 0.5, ease: 'power3.out' }, 0.1);
 
     if (items.length) {
-      // Smooth enter — animate individual items (avoids backdrop-filter blur on parent)
-      gsap.fromTo(items,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          ease: 'none',
-          stagger: 0.04,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 90%',
-            end: 'top 55%',
-            scrub: 0.6
-          }
+      gsap.from(items, {
+        ...preset.from,
+        duration,
+        ease: 'power3.out',
+        stagger: preset.stagger || 0.06,
+        clearProps: 'transform,opacity',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 90%',
+          once: true
         }
-      );
-
-      // Smooth exit — subtle fade, fully reverses on scroll up
-      gsap.fromTo(items,
-        { y: 0, opacity: 1 },
-        {
-          y: -40,
-          opacity: 0.55,
-          ease: 'none',
-          stagger: 0.03,
-          scrollTrigger: {
-            trigger: section,
-            start: 'bottom 60%',
-            end: 'bottom 15%',
-            scrub: 0.6
-          }
-        }
-      );
-    }
-
-    if (outro) {
-      gsap.to(outro, { width: '100%', ease: 'none',
-        scrollTrigger: { trigger: section, start: 'bottom 88%', end: 'bottom 70%', scrub: true } });
+      });
     }
   }
 
-  document.querySelectorAll('section[data-cinematic]').forEach(initSectionTransition);
+  document.querySelectorAll('section[data-cinematic]:not(#home)').forEach(initSectionTransition);
 
-  // Manifesto quote lines (split-out)
-  const quoteLineInners = document.querySelectorAll('.quote-line-inner');
-  if (quoteLineInners.length) {
-    gsap.set(quoteLineInners, { y: '100%' });
-    gsap.to(quoteLineInners, {
-      y: '0%', stagger: 0.18, duration: 0.95, ease: 'expo.out',
-      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none none', once: true }
-    });
-    gsap.to('.manifesto-sign', {
-      opacity: 1, duration: 0.8, delay: 0.5,
-      scrollTrigger: { trigger: '#manifesto', start: 'top 72%', toggleActions: 'play none none none', once: true }
-    });
-  }
-
-  // Skill bar fills
-  gsap.utils.toArray('.skill-card').forEach(card => {
+  gsap.utils.toArray('.skill-card').forEach((card, i) => {
     const bar = card.querySelector('.skill-fill');
-    if (!bar) return;
-    gsap.to(bar, {
-      width: (bar.getAttribute('data-width') || '0') + '%',
-      duration: 1.2, ease: 'power2.out',
-      scrollTrigger: { trigger: card, start: 'top 92%' }
+    gsap.from(card, {
+      y: 20, opacity: 0, scale: 0.98,
+      duration: 0.65, ease: 'power3.out', delay: i * 0.03,
+      clearProps: 'transform',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 94%',
+        once: true
+      }
     });
-  });
-
-  // Skill bar fills
-  gsap.utils.toArray('.skill-card').forEach(card => {
-    const bar = card.querySelector('.skill-fill');
     if (!bar) return;
-    gsap.to(bar, {
-      width: (bar.getAttribute('data-width') || '0') + '%',
-      duration: 1.2, ease: 'power2.out',
-      scrollTrigger: { trigger: card, start: 'top 92%' }
-    });
+    gsap.fromTo(bar,
+      { width: '0%' },
+      {
+        width: (bar.getAttribute('data-width') || '0') + '%',
+        duration: 1, ease: 'power2.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 94%',
+          once: true
+        }
+      }
+    );
   });
 
   ScrollTrigger.refresh();
 
-  // Magnetic elements
   if (!isTouchDevice) {
-    document.querySelectorAll('[data-magnetic], .btn-primary, .btn-glass, .nav-logo, .creative-card, .feat-card').forEach(btn => {
+    document.querySelectorAll('[data-magnetic], .btn-primary, .btn-glass, .nav-logo, .feat-slide').forEach(btn => {
       btn.addEventListener('mousemove', e => {
         const b = btn.getBoundingClientRect();
         const x = e.clientX - b.left - b.width / 2;
         const y = e.clientY - b.top - b.height / 2;
-        gsap.to(btn, { x: x * 0.24, y: y * 0.24, duration: 0.3, ease: 'power2.out' });
+        gsap.to(btn, { x: x * 0.2, y: y * 0.2, duration: 0.3, ease: 'power2.out' });
       });
       btn.addEventListener('mouseleave', () => {
-        gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.38)' });
+        gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1, 0.38)' });
       });
     });
   }
@@ -595,7 +752,7 @@ const statObs = new IntersectionObserver(entries => {
     const original = (el.textContent || '').trim();
     const numeric = original.match(/-?\d+(?:\.\d+)?/);
     const num = numeric ? Number(numeric[0]) : NaN;
-    el.dataset.suffix = original.replace(/[-\d.]/g, '');
+    el.dataset.suffix = el.dataset.suffix || original.replace(/[-\d.]/g, '');
     if (!Number.isNaN(num) && num > 0) {
       const decimals = (numeric?.[0].split('.')[1]?.length) || 0;
       if (decimals === 0) { countUp(el, num); }
@@ -614,9 +771,6 @@ const statObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.stat-number').forEach(n => statObs.observe(n));
 
 /* ── MEDIA GALLERIES ────────────────────────────────────────── */
-const GALLERY_PREVIEW_MAX = 4;
-const GALLERY_SEE_MORE_AT = 3;
-
 const mediaGalleries = {
   president: [
     'pictures/president/m.jpeg',
@@ -692,6 +846,27 @@ const mediaGalleries = {
   'cert-oracle': ['pictures/Oracle/Gokul_Oracle.pdf'],
   'cert-cisco': ['pictures/Networking basics/Networking basics.pdf'],
   'cert-cpp': ['pictures/C++ fundamentals/C++.pdf'],
+  campusbox: [
+    'pictures/campusbox/optimized/01-landing.jpg',
+    'pictures/campusbox/optimized/02-browse.jpg',
+    'pictures/campusbox/optimized/03-trending.jpg',
+    'pictures/campusbox/optimized/04-my-items.jpg',
+    'pictures/campusbox/optimized/05-physics.jpg',
+    'pictures/campusbox/optimized/06-blazer.jpg',
+    'pictures/campusbox/optimized/07-sell.jpg',
+    'pictures/campusbox/optimized/08-profile.jpg',
+  ],
+  travo: [
+    'pictures/travo/01-hero.png',
+    'pictures/travo/02-planner.png',
+    'pictures/travo/03-itinerary.png',
+    'pictures/travo/04-compare.png',
+    'pictures/travo/05-destination.png',
+    'pictures/travo/06-assistant.png',
+  ],
+  ayurchain: [
+    'assets/ayurchain-preview.svg',
+  ],
 };
 
 let activeGalleryItems = [];
@@ -717,6 +892,7 @@ function ensureMediaLightbox() {
         <img alt="Preview" class="media-lightbox-img" />
         <iframe class="media-lightbox-pdf" title="Certificate" frameborder="0"></iframe>
       </div>
+      <div class="media-lightbox-dots" role="tablist" aria-label="Gallery slides"></div>
       <p class="media-lightbox-counter"></p>
     </div>`;
   document.body.appendChild(lb);
@@ -725,6 +901,11 @@ function ensureMediaLightbox() {
   lb.querySelector('.media-lightbox-close').addEventListener('click', close);
   lb.querySelector('.media-lightbox-prev').addEventListener('click', () => stepMediaLightbox(-1));
   lb.querySelector('.media-lightbox-next').addEventListener('click', () => stepMediaLightbox(1));
+  lb.querySelector('.media-lightbox-dots').addEventListener('click', e => {
+    const dot = e.target.closest('[data-lb-index]');
+    if (!dot) return;
+    renderLightboxItem(Number(dot.dataset.lbIndex) || 0);
+  });
   document.addEventListener('keydown', e => {
     if (!lb.classList.contains('open')) return;
     if (e.key === 'Escape') close();
@@ -741,6 +922,7 @@ function renderLightboxItem(index) {
   const img = lb.querySelector('.media-lightbox-img');
   const iframe = lb.querySelector('.media-lightbox-pdf');
   const counter = lb.querySelector('.media-lightbox-counter');
+  const dots = lb.querySelector('.media-lightbox-dots');
   const prev = lb.querySelector('.media-lightbox-prev');
   const next = lb.querySelector('.media-lightbox-next');
   activeGalleryIndex = index;
@@ -758,6 +940,17 @@ function renderLightboxItem(index) {
   if (counter) counter.textContent = total > 1 ? `${index + 1} / ${total}` : '';
   if (prev) prev.style.display = total > 1 ? 'inline-flex' : 'none';
   if (next) next.style.display = total > 1 ? 'inline-flex' : 'none';
+  if (dots) {
+    if (total > 1) {
+      dots.innerHTML = activeGalleryItems.map((_, i) =>
+        `<button type="button" class="media-lightbox-dot${i === index ? ' is-active' : ''}" data-lb-index="${i}" aria-label="Image ${i + 1}"></button>`
+      ).join('');
+      dots.hidden = false;
+    } else {
+      dots.innerHTML = '';
+      dots.hidden = true;
+    }
+  }
 }
 
 function openMediaLightbox(items, startIndex = 0) {
@@ -788,16 +981,6 @@ function buildMediaThumb(item, index, animDelay = 0) {
   </button>`;
 }
 
-function buildSeeMoreThumb(hiddenCount, startIndex, items) {
-  const previewItem = items[startIndex];
-  const previewSrc = previewItem && isImagePath(previewItem) ? encodeMediaPath(previewItem) : '';
-  const previewImg = previewSrc ? `<img data-src="${previewSrc}" alt="" class="media-more-preview-img" loading="lazy" />` : '';
-  return `<button class="media-thumb media-thumb-more gallery-thumb-enter" type="button" data-index="${startIndex}">
-    ${previewImg}
-    <span class="media-more-overlay"><i class="fas fa-images"></i><span>See more</span><strong>+${hiddenCount}</strong></span>
-  </button>`;
-}
-
 function loadGalleryImages(container) {
   container.querySelectorAll('img[data-src]').forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
   container.querySelectorAll('.media-cert-thumb').forEach(img => {
@@ -805,28 +988,51 @@ function loadGalleryImages(container) {
     img.addEventListener('load', () => btn?.classList.add('media-thumb-pdf-has-img'), { once: true });
     img.addEventListener('error', () => { img.style.display = 'none'; btn?.classList.add('media-thumb-pdf-fallback'); }, { once: true });
   });
-  if (!isTouchDevice) initGalleryThumbCycle(container);
+  if (container.classList.contains('achievement-thumb') || container.classList.contains('lead-card-media') || container.classList.contains('cert-thumb')) {
+    initHeroMediaCarousel(container);
+  }
 }
 
-function initGalleryThumbCycle(container) {
-  const moreThumb = container.querySelector('.media-thumb-more');
-  if (!moreThumb) return;
-  const previewImg = moreThumb.querySelector('.media-more-preview-img');
-  if (!previewImg) return;
-  const key = container.getAttribute('data-gallery');
-  const items = key ? mediaGalleries[key] : null;
-  if (!items || items.length <= GALLERY_PREVIEW_MAX) return;
-  const hiddenItems = items.slice(GALLERY_SEE_MORE_AT).filter(isImagePath);
-  if (hiddenItems.length < 2) return;
-  let cycleIndex = 0;
-  previewImg.style.transition = 'opacity 0.35s ease';
-  const cycle = () => {
-    previewImg.style.opacity = '0';
-    setTimeout(() => { previewImg.src = encodeMediaPath(hiddenItems[cycleIndex]); previewImg.style.opacity = '1'; cycleIndex = (cycleIndex + 1) % hiddenItems.length; }, 320);
+function initHeroMediaCarousel(container) {
+  const images = [...container.querySelectorAll('.hero-carousel-img')];
+  const dotsWrap = container.querySelector('.hero-carousel-dots');
+  if (images.length < 2) return;
+  let idx = 0;
+  let paused = false;
+  const setActive = (next) => {
+    images[idx]?.classList.remove('is-active');
+    idx = ((next % images.length) + images.length) % images.length;
+    images[idx]?.classList.add('is-active');
+    container.dataset.activeIndex = String(idx);
+    if (dotsWrap) {
+      dotsWrap.querySelectorAll('.hero-carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === idx);
+      });
+    }
   };
-  cycle();
-  const id = setInterval(cycle, 2800);
-  moreThumb.addEventListener('click', () => clearInterval(id), { once: true });
+  images.forEach((img, i) => img.classList.toggle('is-active', i === 0));
+  container.dataset.activeIndex = '0';
+  if (dotsWrap) {
+    dotsWrap.innerHTML = images.map((_, i) =>
+      `<button type="button" class="hero-carousel-dot${i === 0 ? ' is-active' : ''}" data-hero-index="${i}" aria-label="Preview image ${i + 1}"></button>`
+    ).join('');
+    dotsWrap.addEventListener('click', e => {
+      e.stopPropagation();
+      const dot = e.target.closest('[data-hero-index]');
+      if (!dot) return;
+      paused = true;
+      setActive(Number(dot.dataset.heroIndex) || 0);
+    });
+  }
+  if (prefersReducedMotion) return;
+  const timer = setInterval(() => {
+    if (paused) return;
+    setActive(idx + 1);
+  }, 2800);
+  container.addEventListener('mouseenter', () => { paused = true; });
+  container.addEventListener('mouseleave', () => { paused = false; });
+  container.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+  container._heroCarouselStop = () => clearInterval(timer);
 }
 
 function renderSingleGallery(g) {
@@ -834,17 +1040,32 @@ function renderSingleGallery(g) {
   const items = key ? mediaGalleries[key] : null;
   if (!items || items.length === 0 || g.dataset.rendered === '1') return;
   g.dataset.rendered = '1';
+
+  const isHero = g.classList.contains('achievement-thumb') || g.classList.contains('cert-thumb') || g.classList.contains('lead-card-media');
   let html = '';
-  if (items.length > GALLERY_PREVIEW_MAX) {
-    items.slice(0, GALLERY_SEE_MORE_AT).forEach((item, i) => { html += buildMediaThumb(item, i, i * 80); });
-    html += buildSeeMoreThumb(items.length - GALLERY_SEE_MORE_AT, GALLERY_SEE_MORE_AT, items);
+  if (isHero) {
+    const heroItems = items.filter(isImagePath).length ? items.filter(isImagePath) : items;
+    html += `<div class="hero-media-carousel" role="img" aria-label="Gallery preview" data-active-index="0">`;
+    heroItems.forEach((item, i) => {
+      const src = isPdfPath(item) ? encodeMediaPath(getCertThumbPath(item)) : encodeMediaPath(item);
+      html += `<img class="hero-carousel-img${i === 0 ? ' is-active' : ''}" data-src="${src}" alt="" loading="lazy" />`;
+    });
+    if (heroItems.length > 1) {
+      html += `<div class="hero-carousel-dots" role="tablist" aria-label="Preview slides"></div>`;
+    }
+    html += `</div>`;
   } else {
     items.forEach((item, i) => { html += buildMediaThumb(item, i, i * 80); });
   }
   g.innerHTML = html;
   loadGalleryImages(g);
-  g.querySelectorAll('.media-thumb').forEach(btn => {
-    btn.addEventListener('click', () => openMediaLightbox(items, Number(btn.dataset.index) || 0));
+  g.querySelectorAll('.media-thumb, .hero-media-carousel').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('.hero-carousel-dots')) return;
+      const carousel = el.classList.contains('hero-media-carousel') ? el : g.querySelector('.hero-media-carousel');
+      const start = Number(carousel?.dataset?.activeIndex || el.dataset?.index) || 0;
+      openMediaLightbox(items, start);
+    });
   });
 }
 
@@ -857,7 +1078,113 @@ function renderMediaGalleries() {
   galleries.forEach(g => obs.observe(g));
 }
 
-/* ── PROJECT CAROUSEL ───────────────────────────────────────── */
+/* ── FEATURED INFINITE CAROUSEL ─────────────────────────────── */
+function initFeaturedCarousel() {
+  const root = document.querySelector('[data-featured-carousel]');
+  if (!root) return;
+  const track = root.querySelector('.featured-track');
+  const viewport = root.querySelector('.featured-viewport');
+  const prevBtn = root.querySelector('.feat-nav-prev');
+  const nextBtn = root.querySelector('.feat-nav-next');
+  if (!track || !viewport) return;
+
+  const originals = [...track.children];
+  if (!originals.length) return;
+
+  // Duplicate for seamless loop
+  originals.forEach(slide => track.appendChild(slide.cloneNode(true)));
+
+  let offset = 0;
+  let paused = false;
+  let dragging = false;
+  let didDrag = false;
+  let startX = 0;
+  let startOffset = 0;
+  let lastTs = 0;
+  const speed = prefersReducedMotion ? 0 : (isLowPower ? 0.35 : 0.55);
+
+  function loopWidth() {
+    return track.scrollWidth / 2;
+  }
+
+  function apply() {
+    const w = loopWidth();
+    if (w <= 0) return;
+    if (offset <= -w) offset += w;
+    if (offset > 0) offset -= w;
+    track.style.transform = `translate3d(${offset}px,0,0)`;
+  }
+
+  function tick(ts) {
+    if (!lastTs) lastTs = ts;
+    const dt = Math.min(32, ts - lastTs);
+    lastTs = ts;
+    if (!paused && !dragging && speed) {
+      offset -= speed * (dt / 16);
+      apply();
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  const pause = () => { paused = true; track.classList.add('is-paused'); };
+  const resume = () => { if (!dragging) { paused = false; track.classList.remove('is-paused'); } };
+
+  function onPointerDown(e) {
+    dragging = true;
+    didDrag = false;
+    paused = true;
+    track.classList.add('is-dragging');
+    startX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+    startOffset = offset;
+  }
+  function onPointerMove(e) {
+    if (!dragging) return;
+    const x = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+    if (Math.abs(x - startX) > 6) didDrag = true;
+    offset = startOffset + (x - startX);
+    apply();
+  }
+  function onPointerUp() {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+    resume();
+  }
+
+  track.addEventListener('pointerdown', onPointerDown);
+  window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('pointerup', onPointerUp);
+  track.addEventListener('click', e => { if (didDrag) { e.preventDefault(); e.stopPropagation(); didDrag = false; } }, true);
+
+  const step = () => {
+    const slide = track.querySelector('.feat-slide');
+    return slide ? slide.getBoundingClientRect().width + 20 : 400;
+  };
+  prevBtn?.addEventListener('click', () => {
+    offset += step();
+    apply();
+    prevBtn.blur();
+    resume();
+  });
+  nextBtn?.addEventListener('click', () => {
+    offset -= step();
+    apply();
+    nextBtn.blur();
+    resume();
+  });
+}
+
+function initShowcaseButtons() {
+  document.querySelectorAll('[data-showcase]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-showcase');
+      const items = key ? mediaGalleries[key] : null;
+      if (items?.length) openMediaLightbox(items, 0);
+    });
+  });
+}
+
 function initProjectCarousels() {
   document.querySelectorAll('[data-carousel]').forEach(carousel => {
     const slides = [...carousel.querySelectorAll('.project-carousel-slide')];
@@ -898,7 +1225,9 @@ function initProjectCarousels() {
 /* ── INIT ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initThree();
+  initFeaturedCarousel();
   initProjectCarousels();
+  initShowcaseButtons();
   renderMediaGalleries();
   highlightNavLink();
   toggleBackToTop();
