@@ -601,14 +601,15 @@ function initEntranceAnimations() {
     }, 0.18)
     .to('.hero-stats', { opacity: 1, y: 0, duration: 0.7 }, 0.9);
 
+  /* ── FX presets ─────────────────────────────────────────────── */
   const fxMap = {
-    'fade-up': { from: { y: 36, opacity: 0 }, to: { y: 0, opacity: 1 } },
-    'slide-left': { from: { x: -40, opacity: 0 }, to: { x: 0, opacity: 1 } },
-    'slide-right': { from: { x: 40, opacity: 0 }, to: { x: 0, opacity: 1 } },
-    'slide-up': { from: { y: 40, opacity: 0 }, to: { y: 0, opacity: 1 } },
-    'scale-fade': { from: { scale: 0.94, opacity: 0 }, to: { scale: 1, opacity: 1 } },
-    'rotate-fade': { from: { rotate: -4, opacity: 0, y: 24, scale: 0.97 }, to: { rotate: 0, opacity: 1, y: 0, scale: 1 } },
-    'stagger-cards': { from: { y: 32, opacity: 0, scale: 0.97 }, to: { y: 0, opacity: 1, scale: 1 }, stagger: 0.08 }
+    'fade-up'      : { from: { y: 48,  opacity: 0 },                         to: { y: 0,  opacity: 1 } },
+    'slide-left'   : { from: { x: -55, opacity: 0 },                         to: { x: 0,  opacity: 1 } },
+    'slide-right'  : { from: { x: 55,  opacity: 0 },                         to: { x: 0,  opacity: 1 } },
+    'slide-up'     : { from: { y: 55,  opacity: 0 },                         to: { y: 0,  opacity: 1 } },
+    'scale-fade'   : { from: { scale: 0.88, opacity: 0 },                    to: { scale: 1, opacity: 1 } },
+    'rotate-fade'  : { from: { rotate: -6, opacity: 0, y: 32, scale: 0.94 }, to: { rotate: 0, opacity: 1, y: 0, scale: 1 } },
+    'stagger-cards': { from: { y: 44,  opacity: 0, scale: 0.93 },            to: { y: 0, opacity: 1, scale: 1 }, stagger: 0.1 }
   };
 
   const itemSelectors = [
@@ -617,66 +618,117 @@ function initEntranceAnimations() {
     '.stat-item', '.about-grid', '.ach-cat-header'
   ].join(', ');
 
+  /* ────────────────────────────────────────────────────────────
+     Scroll-IN animations only — elements animate in when they
+     enter the viewport and stay visible (no reverse on scroll-up)
+  ──────────────────────────────────────────────────────────── */
   function initSectionTransition(section) {
-    const fx = section.dataset.fx || 'fade-up';
-    const preset = fxMap[fx] || fxMap['fade-up'];
-    const heading = section.querySelector('.cine-heading');
-    const sub = section.querySelector('.cine-sub');
-    const items = section.querySelectorAll(itemSelectors);
-    const duration = prefersReducedMotion ? 0.2 : 0.75;
+    const fx      = section.dataset.fx || 'fade-up';
+    const preset  = fxMap[fx] || fxMap['fade-up'];
+    const numEl   = section.querySelector('.cine-number');
+    const titleEl = section.querySelector('.cine-title');
+    const sub     = section.querySelector('.cine-sub');
+    const items   = section.querySelectorAll(itemSelectors);
+    const dur     = prefersReducedMotion ? 0.2 : 0.72;
+    const ease    = 'power3.out';
+    const toggle  = 'play none none none';
 
-    // Soft enter once — CSS keeps titles readable if ST misses
-    const introTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 92%',
-        once: true
-      }
-    });
-    if (heading) introTl.from(heading, { opacity: 0, y: 16, duration: 0.55, ease: 'power3.out' }, 0);
-    if (sub) introTl.from(sub, { opacity: 0, y: 12, duration: 0.5, ease: 'power3.out' }, 0.1);
-
-    if (items.length) {
-      gsap.from(items, {
-        ...preset.from,
-        duration,
-        ease: 'power3.out',
-        stagger: preset.stagger || 0.06,
-        clearProps: 'transform,opacity',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 90%',
-          once: true
+    /* — Gold section number (e.g. "01", "02" …) — */
+    if (numEl) {
+      gsap.fromTo(numEl,
+        { opacity: 0, x: -20, scale: 0.82 },
+        { opacity: 1, x: 0,   scale: 1, duration: 0.48, ease,
+          scrollTrigger: {
+            trigger: section, start: 'top 90%', end: 'top 32%',
+            toggleActions: toggle
+          }
         }
-      });
+      );
+    }
+
+    /* — Section title text — */
+    if (titleEl) {
+      const inner = titleEl.querySelector('.line-inner') || titleEl;
+      gsap.fromTo(inner,
+        { opacity: 0, y: 30, skewX: 2.5 },
+        { opacity: 1, y: 0,  skewX: 0, duration: 0.7, ease: 'expo.out',
+          scrollTrigger: {
+            trigger: section, start: 'top 88%', end: 'top 30%',
+            toggleActions: toggle
+          }
+        }
+      );
+    }
+
+    /* — Sub-heading / descriptor line — */
+    if (sub) {
+      gsap.fromTo(sub,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0,  duration: 0.55, ease,
+          scrollTrigger: {
+            trigger: section, start: 'top 86%', end: 'top 28%',
+            toggleActions: toggle
+          }
+        }
+      );
+    }
+
+    /* — Cards / items with cascade stagger — */
+    if (items.length) {
+      gsap.fromTo(items,
+        { ...preset.from },
+        {
+          ...preset.to,
+          duration: dur,
+          ease,
+          stagger: { each: preset.stagger || 0.07, from: 'start' },
+          clearProps: prefersReducedMotion ? '' : 'transform',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 84%',
+            end:   'top 20%',
+            toggleActions: toggle
+          }
+        }
+      );
+    }
+
+    /* — Gentle parallax Y drift on the section container as it scrolls past — */
+    if (!prefersReducedMotion) {
+      gsap.fromTo(section,
+        { y: 0 },
+        { y: -24, ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start:  'top bottom',
+            end:    'bottom top',
+            scrub:  1.8
+          }
+        }
+      );
     }
   }
 
   document.querySelectorAll('section[data-cinematic]:not(#home)').forEach(initSectionTransition);
 
+  /* ── Skill bars — scroll in only ────────────────────────── */
   gsap.utils.toArray('.skill-card').forEach((card, i) => {
     const bar = card.querySelector('.skill-fill');
-    gsap.from(card, {
-      y: 20, opacity: 0, scale: 0.98,
-      duration: 0.65, ease: 'power3.out', delay: i * 0.03,
-      clearProps: 'transform',
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 94%',
-        once: true
+
+    gsap.fromTo(card,
+      { y: 24, opacity: 0, scale: 0.95 },
+      { y: 0,  opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out',
+        clearProps: 'transform',
+        scrollTrigger: { trigger: card, start: 'top 94%', once: true }
       }
-    });
+    );
+
     if (!bar) return;
+    const targetW = (bar.getAttribute('data-width') || '0') + '%';
     gsap.fromTo(bar,
       { width: '0%' },
-      {
-        width: (bar.getAttribute('data-width') || '0') + '%',
-        duration: 1, ease: 'power2.out',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 94%',
-          once: true
-        }
+      { width: targetW, duration: 1.1, ease: 'power2.out',
+        scrollTrigger: { trigger: card, start: 'top 94%', once: true }
       }
     );
   });
