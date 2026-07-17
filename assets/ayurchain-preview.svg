@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#0a0907"/>
+  <rect x="48" y="48" width="704" height="404" rx="16" stroke="#d4af37" stroke-opacity="0.25" fill="#12100c"/>
+  <text x="80" y="120" font-family="JetBrains Mono, Consolas, monospace" font-size="22" fill="#d4af37">contract</text>
+  <text x="190" y="120" font-family="JetBrains Mono, Consolas, monospace" font-size="22" fill="#e8c547">AyurChain</text>
+  <text x="320" y="120" font-family="JetBrains Mono, Consolas, monospace" font-size="22" fill="#ece8e0">{</text>
+  <text x="100" y="170" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#9ab8ff">mapping</text>
+  <text x="200" y="170" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#a39e92">(uint =&gt; Herb) herbs;</text>
+  <text x="100" y="215" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#ffb86c">trackHarvest</text>
+  <text x="260" y="215" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#a39e92">(herbId, batch);</text>
+  <text x="100" y="260" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#ffb86c">verifyQR</text>
+  <text x="210" y="260" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#a39e92">(qrCode);</text>
+  <text x="80" y="310" font-family="JetBrains Mono, Consolas, monospace" font-size="22" fill="#ece8e0">}</text>
+  <text x="80" y="370" font-family="JetBrains Mono, Consolas, monospace" font-size="18" fill="#5e5a52">// Ethereum � Solidity � Ethers.js</text>
+  <circle cx="680" cy="120" r="28" stroke="#d4af37" stroke-opacity="0.5" stroke-width="2"/>
+  <circle cx="680" cy="120" r="8" fill="#d4af37"/>
+</svg>
