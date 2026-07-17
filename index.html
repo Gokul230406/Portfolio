@@ -48,8 +48,14 @@
   <div class="loader" id="loader">
     <div class="loader-inner">
       <p class="loader-eyebrow">Portfolio</p>
-      <h1 class="loader-title"><span class="loader-load">Load</span> Gokul</h1>
-      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <h1 class="loader-title">Gokul</h1>
+      <div class="loader-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="loaderTrack">
+        <div class="loader-fill" id="loaderFill"></div>
+        <span class="loader-rider" id="loaderRider" aria-hidden="true">
+          <i class="fas fa-rocket"></i>
+          <span class="loader-exhaust"></span>
+        </span>
+      </div>
       <p class="loader-pct" id="loaderPct">0%</p>
     </div>
   </div>
@@ -275,7 +281,7 @@
               </div>
             </a>
             <a href="#certifications" class="feat-slide" data-magnetic>
-              <div class="feat-media"><img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java SE17 Certification" loading="lazy" /></div>
+              <div class="feat-media feat-media--zoom"><img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java SE17 Certification" loading="lazy" /></div>
               <div class="feat-overlay">
                 <span class="feat-tag">Certification</span>
                 <h3>Oracle Java SE17</h3>
@@ -594,7 +600,9 @@
       </div>
       <div class="certs-grid">
         <div class="cert-card">
-          <div class="cert-thumb media-gallery" data-gallery="cert-oracle"></div>
+          <div class="cert-thumb media-gallery" data-gallery="cert-oracle">
+            <img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java SE17 Certificate preview" class="cert-static-fallback" loading="eager" />
+          </div>
           <div class="cert-body">
             <div class="cert-icon"><i class="devicon-java-plain colored" aria-hidden="true"></i></div>
             <h3 class="achievement-title">Oracle Java SE17</h3>
@@ -639,62 +647,70 @@
         <article class="lead-node">
           <div class="lead-node-marker" aria-hidden="true"></div>
           <div class="lead-node-branch" aria-hidden="true"></div>
-          <div class="lead-node-thumb media-gallery" data-gallery="president"></div>
-          <div class="lead-node-body">
-            <span class="lead-year">2025 – Present</span>
-            <h3 class="lead-role">President – Theatre Club</h3>
-            <p class="lead-org">SRM Easwari · <span>40+ members</span></p>
-            <p class="lead-desc">Directing performances and emceeing major intercollege events.</p>
+          <div class="lead-node-card">
+            <div class="lead-node-thumb media-gallery" data-gallery="joint-sec"></div>
+            <div class="lead-node-body">
+              <span class="lead-year">2024 – 2025</span>
+              <h3 class="lead-role">Joint Secretary – CSE</h3>
+              <p class="lead-org">SRM Easwari · <span>AI Wars & Kratos</span></p>
+              <p class="lead-desc">Organized technical events for the department.</p>
+            </div>
           </div>
         </article>
 
         <article class="lead-node">
           <div class="lead-node-marker" aria-hidden="true"></div>
           <div class="lead-node-branch" aria-hidden="true"></div>
-          <div class="lead-node-thumb lead-node-thumb-placeholder">
-            <i class="fas fa-users" aria-hidden="true"></i>
-          </div>
-          <div class="lead-node-body">
-            <span class="lead-year">2026 – Present</span>
-            <h3 class="lead-role">Cultural Head – CSE</h3>
-            <p class="lead-org">SRM Easwari · <span>50+ students</span></p>
-            <p class="lead-desc">Coordinating department culturals and championships.</p>
-          </div>
-        </article>
-
-        <article class="lead-node">
-          <div class="lead-node-marker" aria-hidden="true"></div>
-          <div class="lead-node-branch" aria-hidden="true"></div>
-          <div class="lead-node-thumb media-gallery" data-gallery="ambassador"></div>
-          <div class="lead-node-body">
-            <span class="lead-year">2025 – Present</span>
-            <h3 class="lead-role">Ambassador – CSE</h3>
-            <p class="lead-org">SRM Easwari · <span>Overall winners ’25 & ’26</span></p>
-            <p class="lead-desc">Representing the department on stage.</p>
+          <div class="lead-node-card">
+            <div class="lead-node-thumb media-gallery" data-gallery="pro"></div>
+            <div class="lead-node-body">
+              <span class="lead-year">2024 – 2025</span>
+              <h3 class="lead-role">PRO – Rotaract</h3>
+              <p class="lead-org">SRM Easwari</p>
+              <p class="lead-desc">Promotion, outreach, and campus Rotaract communication.</p>
+            </div>
           </div>
         </article>
 
         <article class="lead-node">
           <div class="lead-node-marker" aria-hidden="true"></div>
           <div class="lead-node-branch" aria-hidden="true"></div>
-          <div class="lead-node-thumb media-gallery" data-gallery="pro"></div>
-          <div class="lead-node-body">
-            <span class="lead-year">2024 – 2025</span>
-            <h3 class="lead-role">PRO – Rotaract</h3>
-            <p class="lead-org">SRM Easwari</p>
-            <p class="lead-desc">Promotion, outreach, and campus Rotaract communication.</p>
+          <div class="lead-node-card">
+            <div class="lead-node-thumb media-gallery" data-gallery="president"></div>
+            <div class="lead-node-body">
+              <span class="lead-year">2025 – Present</span>
+              <h3 class="lead-role">President – Theatre Club</h3>
+              <p class="lead-org">SRM Easwari · <span>40+ members</span></p>
+              <p class="lead-desc">Directing performances and emceeing major intercollege events.</p>
+            </div>
           </div>
         </article>
 
         <article class="lead-node">
           <div class="lead-node-marker" aria-hidden="true"></div>
           <div class="lead-node-branch" aria-hidden="true"></div>
-          <div class="lead-node-thumb media-gallery" data-gallery="joint-sec"></div>
-          <div class="lead-node-body">
-            <span class="lead-year">2024 – 2025</span>
-            <h3 class="lead-role">Joint Secretary – CSE</h3>
-            <p class="lead-org">SRM Easwari · <span>AI Wars & Kratos</span></p>
-            <p class="lead-desc">Organized technical events for the department.</p>
+          <div class="lead-node-card">
+            <div class="lead-node-thumb media-gallery" data-gallery="ambassador"></div>
+            <div class="lead-node-body">
+              <span class="lead-year">2025 – Present</span>
+              <h3 class="lead-role">Ambassador – CSE</h3>
+              <p class="lead-org">SRM Easwari · <span>Overall winners ’25 & ’26</span></p>
+              <p class="lead-desc">Representing the department on stage.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="lead-node">
+          <div class="lead-node-marker" aria-hidden="true"></div>
+          <div class="lead-node-branch" aria-hidden="true"></div>
+          <div class="lead-node-card">
+            <div class="lead-node-thumb media-gallery" data-gallery="cultural-head"></div>
+            <div class="lead-node-body">
+              <span class="lead-year">2026 – Present</span>
+              <h3 class="lead-role">Cultural Head – CSE</h3>
+              <p class="lead-org">SRM Easwari · <span>50+ students</span></p>
+              <p class="lead-desc">Coordinating department culturals and championships.</p>
+            </div>
           </div>
         </article>
       </div>

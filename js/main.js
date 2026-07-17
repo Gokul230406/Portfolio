@@ -19,6 +19,8 @@ let resizeTimer = 0;
 function runLoader() {
   const loader = document.getElementById('loader');
   const fill = document.getElementById('loaderFill');
+  const rider = document.getElementById('loaderRider');
+  const track = document.getElementById('loaderTrack');
   const pct = document.getElementById('loaderPct');
   if (!loader) { initEntranceAnimations(); return; }
 
@@ -30,6 +32,8 @@ function runLoader() {
     const t = Math.min(1, (now - start) / duration);
     progress = Math.round(easeOutCubic(t) * 100);
     if (fill) fill.style.width = progress + '%';
+    if (rider) rider.style.left = progress + '%';
+    if (track) track.setAttribute('aria-valuenow', String(progress));
     if (pct) pct.textContent = progress + '%';
     if (t < 1) { requestAnimationFrame(tick); }
     else { loader.classList.add('hidden'); initEntranceAnimations(); }
@@ -843,7 +847,12 @@ const mediaGalleries = {
     'pictures/Overalls/WhatsApp Image 2026-06-29 at 4.34.44 PM.jpeg',
     'pictures/Overalls/WhatsApp Image 2026-06-29 at 4.35.06 PM.jpeg',
   ],
-  'cert-oracle': ['pictures/Oracle/Gokul_Oracle.pdf'],
+  'cultural-head': [
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.16 PM.jpeg',
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.22 PM.jpeg',
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.45.34 PM.jpeg',
+  ],
+  'cert-oracle': ['pictures/Oracle/Gokul_Oracle.jpg', 'pictures/Oracle/Gokul_Oracle.pdf'],
   'cert-cisco': ['pictures/Networking basics/Networking basics.pdf'],
   'cert-cpp': ['pictures/C++ fundamentals/C++.pdf'],
   campusbox: [
@@ -988,7 +997,7 @@ function loadGalleryImages(container) {
     img.addEventListener('load', () => btn?.classList.add('media-thumb-pdf-has-img'), { once: true });
     img.addEventListener('error', () => { img.style.display = 'none'; btn?.classList.add('media-thumb-pdf-fallback'); }, { once: true });
   });
-  if (container.classList.contains('achievement-thumb') || container.classList.contains('lead-card-media') || container.classList.contains('cert-thumb')) {
+  if (container.classList.contains('achievement-thumb') || container.classList.contains('lead-card-media') || container.classList.contains('lead-node-thumb') || container.classList.contains('cert-thumb')) {
     initHeroMediaCarousel(container);
   }
 }
@@ -1041,7 +1050,7 @@ function renderSingleGallery(g) {
   if (!items || items.length === 0 || g.dataset.rendered === '1') return;
   g.dataset.rendered = '1';
 
-  const isHero = g.classList.contains('achievement-thumb') || g.classList.contains('cert-thumb') || g.classList.contains('lead-card-media');
+  const isHero = g.classList.contains('achievement-thumb') || g.classList.contains('cert-thumb') || g.classList.contains('lead-card-media') || g.classList.contains('lead-node-thumb');
   let html = '';
   if (isHero) {
     const heroItems = items.filter(isImagePath).length ? items.filter(isImagePath) : items;
