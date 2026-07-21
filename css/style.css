@@ -1297,6 +1297,8 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .project-actions { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 0.35rem; width: 100%; margin-top: 0.75rem; }
   .project-actions .btn { flex: 1 1 0; min-width: 0; padding: 0.45rem 0.3rem; font-size: 0.72rem; justify-content: center; white-space: nowrap; border-radius: var(--radius-sm); gap: 0.28rem; }
   .project-actions .btn i { font-size: 0.72rem; }
+  .about-actions { display: flex; flex-direction: row; gap: 0.45rem; margin-top: 0.85rem; width: 100%; }
+  .about-actions .btn { flex: 1 1 0; min-width: 0; padding: 0.5rem 0.55rem; font-size: 0.76rem; justify-content: center; border-radius: var(--radius-md); white-space: nowrap; }
   .about-profiles-row { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; gap: 0.3rem !important; align-items: flex-start !important; margin-top: 0.75rem !important; padding-top: 0.65rem !important; width: 100% !important; }
   .about-profiles-row .coding-profiles { flex: 1 1 0 !important; min-width: 0 !important; }
   .profiles-label { font-size: 0.54rem !important; letter-spacing: 0.04em !important; margin-bottom: 0.25rem !important; white-space: nowrap !important; }
