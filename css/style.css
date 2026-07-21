@@ -53,6 +53,32 @@
   will-change: transform;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  section[data-cinematic] {
+    contain: content;
+  }
+
+  .achievement-card,
+  .cert-card,
+  .skill-card,
+  .stat-item,
+  .connect-card,
+  .lead-node-card,
+  .project-item,
+  .feat-slide,
+  .about-image-col,
+  .about-content-col {
+    transform: translateZ(0);
+  }
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }

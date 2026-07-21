@@ -574,14 +574,19 @@ function initEntranceAnimations() {
   }
 
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.config({ limitCallbacks: true });
+  ScrollTrigger.config({
+    limitCallbacks: true,
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+  });
+
+  const isMobile = window.innerWidth <= 640;
 
   /* ── Dynamic Three.js Camera Scroll Shift ────────────────────── */
   if (camera) {
     gsap.timeline({
       scrollTrigger: {
         trigger: document.documentElement,
-        start: 'top top', end: 'max', scrub: 1.2, invalidateOnRefresh: true
+        start: 'top top', end: 'max', scrub: isMobile ? 0.6 : 1.2, invalidateOnRefresh: true
       }
     })
       .to(camera.position, { z: 200, x: -20, y: -6, ease: 'none' }, 0)
@@ -591,7 +596,7 @@ function initEntranceAnimations() {
   }
 
   /* ── High-Impact Hero Entrance Animation ─────────────────────── */
-  const heroTl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  const heroTl = gsap.timeline({ defaults: { ease: 'expo.out', force3D: true } });
   heroTl
     .to('.brand-line-inner', { y: 0, opacity: 1, scale: 1, rotateX: 0, duration: 1.15 }, 0.1)
     .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.05)
@@ -614,29 +619,29 @@ function initEntranceAnimations() {
 
       if (numEl) {
         gsap.fromTo(numEl,
-          { opacity: 0, x: -40, scale: 0.4, rotate: -25 },
+          { opacity: 0, x: isMobile ? -20 : -40, scale: 0.4, rotate: -25 },
           {
-            opacity: 1, x: 0, scale: 1, rotate: 0, duration: 0.65, ease: 'back.out(2)',
-            scrollTrigger: { trigger: section, start: 'top 88%', toggleActions: 'play none none none' }
+            opacity: 1, x: 0, scale: 1, rotate: 0, duration: 0.65, ease: 'back.out(2)', force3D: true,
+            scrollTrigger: { trigger: section, start: 'top 90%', toggleActions: 'play none none none' }
           }
         );
       }
       if (titleEl) {
         const inner = titleEl.querySelector('.line-inner') || titleEl;
         gsap.fromTo(inner,
-          { opacity: 0, y: 50, rotateX: -30, skewY: 3, transformOrigin: 'left top' },
+          { opacity: 0, y: isMobile ? 35 : 50, rotateX: -30, skewY: 3, transformOrigin: 'left top' },
           {
-            opacity: 1, y: 0, rotateX: 0, skewY: 0, duration: 0.85, ease: 'expo.out',
-            scrollTrigger: { trigger: section, start: 'top 86%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, rotateX: 0, skewY: 0, duration: 0.85, ease: 'expo.out', force3D: true,
+            scrollTrigger: { trigger: section, start: 'top 88%', toggleActions: 'play none none none' }
           }
         );
       }
       if (sub) {
         gsap.fromTo(sub,
-          { opacity: 0, y: 24, letterSpacing: '0.12em' },
+          { opacity: 0, y: 20, letterSpacing: '0.12em' },
           {
-            opacity: 1, y: 0, letterSpacing: '0.01em', duration: 0.7, ease: 'power3.out',
-            scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, letterSpacing: '0.01em', duration: 0.7, ease: 'power3.out', force3D: true,
+            scrollTrigger: { trigger: section, start: 'top 86%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -651,31 +656,31 @@ function initEntranceAnimations() {
       
       if (photo) {
         gsap.fromTo(photo,
-          { opacity: 0, x: -80, rotateY: 25, transformPerspective: 1000, scale: 0.88 },
+          { opacity: 0, x: isMobile ? -35 : -80, rotateY: isMobile ? 12 : 25, transformPerspective: 1000, scale: 0.9 },
           {
-            opacity: 1, x: 0, rotateY: 0, scale: 1, duration: 1.1, ease: 'expo.out',
+            opacity: 1, x: 0, rotateY: 0, scale: 1, duration: 1.1, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 82%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
       if (content) {
         gsap.fromTo(content,
-          { opacity: 0, x: 70, y: 20 },
+          { opacity: 0, x: isMobile ? 35 : 70, y: 20 },
           {
-            opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out',
+            opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 82%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
       if (details.length) {
         gsap.fromTo(details,
-          { opacity: 0, scale: 0.7, y: 20 },
+          { opacity: 0, scale: 0.7, y: 15 },
           {
-            opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'back.out(1.8)', stagger: 0.05,
+            opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'back.out(1.8)', stagger: 0.04, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 78%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: 'top 80%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -687,11 +692,11 @@ function initEntranceAnimations() {
       const slides = featSec.querySelectorAll('.feat-slide');
       if (slides.length) {
         gsap.fromTo(slides,
-          { opacity: 0, scale: 0.82, y: 80, rotateY: -15, transformPerspective: 1200 },
+          { opacity: 0, scale: 0.85, y: isMobile ? 45 : 80, rotateY: isMobile ? -8 : -15, transformPerspective: 1200 },
           {
-            opacity: 1, scale: 1, y: 0, rotateY: 0, duration: 0.95, ease: 'expo.out',
-            stagger: 0.09, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: featSec, start: 'top 82%', toggleActions: 'play none none none' }
+            opacity: 1, scale: 1, y: 0, rotateY: 0, duration: 0.95, ease: 'expo.out', force3D: true,
+            stagger: 0.08, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: featSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -704,19 +709,19 @@ function initEntranceAnimations() {
       items.forEach((item, idx) => {
         const icon = item.querySelector('.edu-icon-wrap');
         gsap.fromTo(item,
-          { opacity: 0, x: idx % 2 === 0 ? -60 : 60, y: 30 },
+          { opacity: 0, x: isMobile ? (idx % 2 === 0 ? -30 : 30) : (idx % 2 === 0 ? -60 : 60), y: 25 },
           {
-            opacity: 1, x: 0, y: 0, duration: 0.85, ease: 'expo.out',
+            opacity: 1, x: 0, y: 0, duration: 0.85, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' }
           }
         );
         if (icon) {
           gsap.fromTo(icon,
             { opacity: 0, rotate: -180, scale: 0.2 },
             {
-              opacity: 1, rotate: 0, scale: 1, duration: 0.75, ease: 'back.out(2)',
-              scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' }
+              opacity: 1, rotate: 0, scale: 1, duration: 0.75, ease: 'back.out(2)', force3D: true,
+              scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' }
             }
           );
         }
@@ -729,14 +734,14 @@ function initEntranceAnimations() {
       const cards = skillsSec.querySelectorAll('.skill-card');
       cards.forEach((card, idx) => {
         const bar = card.querySelector('.skill-fill');
-        const rot = idx % 2 === 0 ? -14 : 14;
+        const rot = idx % 2 === 0 ? -10 : 10;
         gsap.fromTo(card,
-          { opacity: 0, scale: 0.5, rotateZ: rot, y: 40 },
+          { opacity: 0, scale: 0.6, rotateZ: rot, y: isMobile ? 25 : 40 },
           {
-            opacity: 1, scale: 1, rotateZ: 0, y: 0, duration: 0.8, ease: 'back.out(1.7)',
-            delay: (idx % 4) * 0.06,
+            opacity: 1, scale: 1, rotateZ: 0, y: 0, duration: 0.8, ease: 'back.out(1.7)', force3D: true,
+            delay: (idx % 4) * 0.05,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: skillsSec, start: 'top 82%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: skillsSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
         if (bar) {
@@ -745,8 +750,8 @@ function initEntranceAnimations() {
             { width: '0%' },
             {
               width: targetW, duration: 1.35, ease: 'power3.out',
-              delay: (idx % 4) * 0.06,
-              scrollTrigger: { trigger: skillsSec, start: 'top 82%', toggleActions: 'play none none none' }
+              delay: (idx % 4) * 0.05,
+              scrollTrigger: { trigger: skillsSec, start: 'top 85%', toggleActions: 'play none none none' }
             }
           );
         }
@@ -765,31 +770,31 @@ function initEntranceAnimations() {
 
         if (imgCol) {
           gsap.fromTo(imgCol,
-            { opacity: 0, x: isReverse ? 90 : -90, scale: 0.9, rotateY: isReverse ? -12 : 12, transformPerspective: 1000 },
+            { opacity: 0, x: isMobile ? (isReverse ? 40 : -40) : (isReverse ? 90 : -90), scale: 0.9, rotateY: isReverse ? -8 : 8, transformPerspective: 1000 },
             {
-              opacity: 1, x: 0, scale: 1, rotateY: 0, duration: 1.05, ease: 'expo.out',
+              opacity: 1, x: 0, scale: 1, rotateY: 0, duration: 1.05, ease: 'expo.out', force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 82%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: 'top 85%', toggleActions: 'play none none none' }
             }
           );
         }
         if (textCol) {
           gsap.fromTo(textCol,
-            { opacity: 0, x: isReverse ? -80 : 80, y: 20 },
+            { opacity: 0, x: isMobile ? (isReverse ? -35 : 35) : (isReverse ? -80 : 80), y: 15 },
             {
-              opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out',
+              opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out', force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 82%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: 'top 85%', toggleActions: 'play none none none' }
             }
           );
         }
         if (btns.length) {
           gsap.fromTo(btns,
-            { opacity: 0, scale: 0.4, y: 15 },
+            { opacity: 0, scale: 0.5, y: 12 },
             {
-              opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(2)', stagger: 0.08,
+              opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(2)', stagger: 0.06, force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 78%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: 'top 82%', toggleActions: 'play none none none' }
             }
           );
         }
@@ -804,21 +809,21 @@ function initEntranceAnimations() {
 
       if (catHeaders.length) {
         gsap.fromTo(catHeaders,
-          { opacity: 0, x: -40 },
+          { opacity: 0, x: isMobile ? -20 : -40 },
           {
-            opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', stagger: 0.15,
+            opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', stagger: 0.12, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: achSec, start: 'top 84%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: achSec, start: 'top 86%', toggleActions: 'play none none none' }
           }
         );
       }
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, y: 70, rotateX: 20, scale: 0.88, transformPerspective: 1000 },
+          { opacity: 0, y: isMobile ? 40 : 70, rotateX: isMobile ? 12 : 20, scale: 0.9, transformPerspective: 1000 },
           {
-            opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 0.85, ease: 'expo.out',
-            stagger: 0.07, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: achSec, start: 'top 82%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 0.85, ease: 'expo.out', force3D: true,
+            stagger: 0.06, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: achSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -830,11 +835,11 @@ function initEntranceAnimations() {
       const cards = certSec.querySelectorAll('.cert-card');
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, rotateY: -45, y: 60, scale: 0.85, transformPerspective: 1200 },
+          { opacity: 0, rotateY: isMobile ? -25 : -45, y: isMobile ? 35 : 60, scale: 0.88, transformPerspective: 1200 },
           {
-            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: 0.95, ease: 'expo.out',
-            stagger: 0.1, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: certSec, start: 'top 82%', toggleActions: 'play none none none' }
+            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: 0.95, ease: 'expo.out', force3D: true,
+            stagger: 0.08, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: certSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -846,11 +851,11 @@ function initEntranceAnimations() {
       const nodes = leadSec.querySelectorAll('.lead-node');
       if (nodes.length) {
         gsap.fromTo(nodes,
-          { opacity: 0, scale: 0.6, rotate: 10, y: 45 },
+          { opacity: 0, scale: 0.65, rotate: 8, y: isMobile ? 30 : 45 },
           {
-            opacity: 1, scale: 1, rotate: 0, y: 0, duration: 0.8, ease: 'back.out(1.8)',
-            stagger: 0.12, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: leadSec, start: 'top 82%', toggleActions: 'play none none none' }
+            opacity: 1, scale: 1, rotate: 0, y: 0, duration: 0.8, ease: 'back.out(1.8)', force3D: true,
+            stagger: 0.1, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: leadSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -864,21 +869,21 @@ function initEntranceAnimations() {
 
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, x: -60, y: 20 },
+          { opacity: 0, x: isMobile ? -30 : -60, y: 15 },
           {
-            opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.08,
+            opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.06, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: contactSec, start: 'top 82%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: contactSec, start: 'top 85%', toggleActions: 'play none none none' }
           }
         );
       }
       if (connectCard) {
         gsap.fromTo(connectCard,
-          { opacity: 0, y: 90, scale: 0.88, rotateX: 18, transformPerspective: 1000 },
+          { opacity: 0, y: isMobile ? 45 : 90, scale: 0.9, rotateX: isMobile ? 10 : 18, transformPerspective: 1000 },
           {
-            opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.05, ease: 'expo.out',
+            opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.05, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: contactSec, start: 'top 80%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: contactSec, start: 'top 82%', toggleActions: 'play none none none' }
           }
         );
       }
