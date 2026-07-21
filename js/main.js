@@ -926,7 +926,11 @@ const mediaGalleries = {
     'pictures/travo/06-assistant.png',
   ],
   ayurchain: [
-    'assets/ayurchain-preview.svg',
+    'pictures/ayurchain/01-verify.png',
+    'pictures/ayurchain/02-farmer-portal.png',
+    'pictures/ayurchain/03-farmer-dashboard.png',
+    'pictures/ayurchain/04-admin-pipeline.png',
+    'pictures/ayurchain/05-certificate.png',
   ],
 };
 
