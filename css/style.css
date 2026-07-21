@@ -39,6 +39,22 @@
   --nav-height: 70px;
 }
 
+/* ── GPU ACCELERATION HINTS ─────────────────────────────────── */
+.achievement-card,
+.cert-card,
+.skill-card,
+.stat-item,
+.connect-card,
+.lead-node-card,
+.project-item,
+.feat-slide,
+.about-image-col,
+.about-content-col {
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--gold) #0d0c0a; }
 body {
