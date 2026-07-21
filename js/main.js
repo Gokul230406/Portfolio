@@ -557,7 +557,7 @@ if (typeEl) {
   setTimeout(typeWriter, 1800);
 }
 
-/* ── GSAP CINEMATIC ANIMATIONS ──────────────────────────────── */
+/* ── GSAP EXTREME HIGH-POWER ENTRANCE ANIMATIONS ────────────── */
 function initEntranceAnimations() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
     document.querySelectorAll('.line-inner, .brand-line-inner, .cine-sub, .cine-number, .cine-heading').forEach(el => {
@@ -574,7 +574,9 @@ function initEntranceAnimations() {
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ limitCallbacks: true });
 
+  /* ── Dynamic Three.js Camera Scroll Shift ────────────────────── */
   if (camera) {
     gsap.timeline({
       scrollTrigger: {
@@ -588,164 +590,382 @@ function initEntranceAnimations() {
       .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' }, 1);
   }
 
-  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  /* ── High-Impact Hero Entrance Animation ─────────────────────── */
+  const heroTl = gsap.timeline({ defaults: { ease: 'expo.out' } });
   heroTl
-    .to('.brand-line-inner', { y: 0, opacity: 1, scale: 1, duration: 1.05, ease: 'expo.out' }, 0.1)
-    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.65 }, 0.05)
-    .to('.hero-role-primary', { opacity: 1, y: 0, duration: 0.7 }, 0.45)
-    .to('.hero-role', { opacity: 1, y: 0, duration: 0.7 }, 0.58)
-    .to('.hero-cta', { opacity: 1, y: 0, duration: 0.6 }, 0.72)
+    .to('.brand-line-inner', { y: 0, opacity: 1, scale: 1, rotateX: 0, duration: 1.15 }, 0.1)
+    .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.7 }, 0.05)
+    .to('.hero-role-primary', { opacity: 1, y: 0, duration: 0.75 }, 0.45)
+    .to('.hero-role', { opacity: 1, y: 0, duration: 0.75 }, 0.58)
+    .to('.hero-cta', { opacity: 1, y: 0, duration: 0.65 }, 0.72)
     .to('#heroPortrait', {
       opacity: 1, scale: 1, clipPath: 'inset(0% 0% 0% 0% round 32px)',
-      duration: 1.3, ease: 'expo.out'
+      duration: 1.35
     }, 0.18)
-    .to('.hero-stats', { opacity: 1, y: 0, duration: 0.7 }, 0.9);
+    .to('.hero-stats', { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'power4.out' }, 0.85);
 
-  /* ── FX presets ─────────────────────────────────────────────── */
-  const fxMap = {
-    'fade-up'      : { from: { y: 48,  opacity: 0 },                         to: { y: 0,  opacity: 1 } },
-    'slide-left'   : { from: { x: -55, opacity: 0 },                         to: { x: 0,  opacity: 1 } },
-    'slide-right'  : { from: { x: 55,  opacity: 0 },                         to: { x: 0,  opacity: 1 } },
-    'slide-up'     : { from: { y: 55,  opacity: 0 },                         to: { y: 0,  opacity: 1 } },
-    'scale-fade'   : { from: { scale: 0.88, opacity: 0 },                    to: { scale: 1, opacity: 1 } },
-    'rotate-fade'  : { from: { rotate: -6, opacity: 0, y: 32, scale: 0.94 }, to: { rotate: 0, opacity: 1, y: 0, scale: 1 } },
-    'stagger-cards': { from: { y: 44,  opacity: 0, scale: 0.93 },            to: { y: 0, opacity: 1, scale: 1 }, stagger: 0.1 }
-  };
+  /* ── UNIQUE SECTION-BY-SECTION ANIMATION SIGNATURES ────────── */
+  function initUniqueSectionAnimations() {
+    /* Generic Header animations (Numbers & 3D Title Skew) */
+    document.querySelectorAll('section[data-cinematic]:not(#home)').forEach(section => {
+      const numEl   = section.querySelector('.cine-number');
+      const titleEl = section.querySelector('.cine-title');
+      const sub     = section.querySelector('.cine-sub');
 
-  const itemSelectors = [
-    '.feat-slide', '.achievement-card', '.cert-card', '.lead-node',
-    '.edu-item', '.project-item', '.contact-card', '.contact-social', '.connect-card',
-    '.stat-item', '.about-grid', '.ach-cat-header'
-  ].join(', ');
-
-  /* ────────────────────────────────────────────────────────────
-     Scroll-IN animations only — elements animate in when they
-     enter the viewport and stay visible (no reverse on scroll-up)
-  ──────────────────────────────────────────────────────────── */
-  function initSectionTransition(section) {
-    const fx      = section.dataset.fx || 'fade-up';
-    const preset  = fxMap[fx] || fxMap['fade-up'];
-    const numEl   = section.querySelector('.cine-number');
-    const titleEl = section.querySelector('.cine-title');
-    const sub     = section.querySelector('.cine-sub');
-    const items   = section.querySelectorAll(itemSelectors);
-    const dur     = prefersReducedMotion ? 0.2 : 0.72;
-    const ease    = 'power3.out';
-    const toggle  = 'play none none none';
-
-    /* — Gold section number (e.g. "01", "02" …) — */
-    if (numEl) {
-      gsap.fromTo(numEl,
-        { opacity: 0, x: -20, scale: 0.82 },
-        { opacity: 1, x: 0,   scale: 1, duration: 0.48, ease,
-          scrollTrigger: {
-            trigger: section, start: 'top 90%', end: 'top 32%',
-            toggleActions: toggle
+      if (numEl) {
+        gsap.fromTo(numEl,
+          { opacity: 0, x: -40, scale: 0.4, rotate: -25 },
+          {
+            opacity: 1, x: 0, scale: 1, rotate: 0, duration: 0.65, ease: 'back.out(2)',
+            scrollTrigger: { trigger: section, start: 'top 88%', toggleActions: 'play none none none' }
           }
-        }
-      );
+        );
+      }
+      if (titleEl) {
+        const inner = titleEl.querySelector('.line-inner') || titleEl;
+        gsap.fromTo(inner,
+          { opacity: 0, y: 50, rotateX: -30, skewY: 3, transformOrigin: 'left top' },
+          {
+            opacity: 1, y: 0, rotateX: 0, skewY: 0, duration: 0.85, ease: 'expo.out',
+            scrollTrigger: { trigger: section, start: 'top 86%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (sub) {
+        gsap.fromTo(sub,
+          { opacity: 0, y: 24, letterSpacing: '0.12em' },
+          {
+            opacity: 1, y: 0, letterSpacing: '0.01em', duration: 0.7, ease: 'power3.out',
+            scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+    });
+
+    /* 1. ABOUT SECTION: 3D Photo Slide-In & Kinetic Split */
+    const aboutSec = document.querySelector('#about');
+    if (aboutSec) {
+      const photo = aboutSec.querySelector('.about-image-col');
+      const content = aboutSec.querySelector('.about-content-col');
+      const details = aboutSec.querySelectorAll('.detail-item, .profile-badge, .about-actions .btn');
+      
+      if (photo) {
+        gsap.fromTo(photo,
+          { opacity: 0, x: -80, rotateY: 25, transformPerspective: 1000, scale: 0.88 },
+          {
+            opacity: 1, x: 0, rotateY: 0, scale: 1, duration: 1.1, ease: 'expo.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: aboutSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (content) {
+        gsap.fromTo(content,
+          { opacity: 0, x: 70, y: 20 },
+          {
+            opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: aboutSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (details.length) {
+        gsap.fromTo(details,
+          { opacity: 0, scale: 0.7, y: 20 },
+          {
+            opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'back.out(1.8)', stagger: 0.05,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: aboutSec, start: 'top 78%', toggleActions: 'play none none none' }
+          }
+        );
+      }
     }
 
-    /* — Section title text — */
-    if (titleEl) {
-      const inner = titleEl.querySelector('.line-inner') || titleEl;
-      gsap.fromTo(inner,
-        { opacity: 0, y: 30, skewX: 2.5 },
-        { opacity: 1, y: 0,  skewX: 0, duration: 0.7, ease: 'expo.out',
-          scrollTrigger: {
-            trigger: section, start: 'top 88%', end: 'top 30%',
-            toggleActions: toggle
+    /* 2. FEATURED SECTION: Zoom & Cascade Fan-Out */
+    const featSec = document.querySelector('#featured');
+    if (featSec) {
+      const slides = featSec.querySelectorAll('.feat-slide');
+      if (slides.length) {
+        gsap.fromTo(slides,
+          { opacity: 0, scale: 0.82, y: 80, rotateY: -15, transformPerspective: 1200 },
+          {
+            opacity: 1, scale: 1, y: 0, rotateY: 0, duration: 0.95, ease: 'expo.out',
+            stagger: 0.09, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: featSec, start: 'top 82%', toggleActions: 'play none none none' }
           }
-        }
-      );
+        );
+      }
     }
 
-    /* — Sub-heading / descriptor line — */
-    if (sub) {
-      gsap.fromTo(sub,
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0,  duration: 0.55, ease,
-          scrollTrigger: {
-            trigger: section, start: 'top 86%', end: 'top 28%',
-            toggleActions: toggle
+    /* 3. EDUCATION SECTION: Timeline Ladder Ascend & Icon Spin */
+    const eduSec = document.querySelector('#education');
+    if (eduSec) {
+      const items = eduSec.querySelectorAll('.edu-item');
+      items.forEach((item, idx) => {
+        const icon = item.querySelector('.edu-icon-wrap');
+        gsap.fromTo(item,
+          { opacity: 0, x: idx % 2 === 0 ? -60 : 60, y: 30 },
+          {
+            opacity: 1, x: 0, y: 0, duration: 0.85, ease: 'expo.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' }
           }
+        );
+        if (icon) {
+          gsap.fromTo(icon,
+            { opacity: 0, rotate: -180, scale: 0.2 },
+            {
+              opacity: 1, rotate: 0, scale: 1, duration: 0.75, ease: 'back.out(2)',
+              scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' }
+            }
+          );
         }
-      );
+      });
     }
 
-    /* — Cards / items with cascade stagger — */
-    if (items.length) {
-      gsap.fromTo(items,
-        { ...preset.from },
-        {
-          ...preset.to,
-          duration: dur,
-          ease,
-          stagger: { each: preset.stagger || 0.07, from: 'start' },
-          clearProps: prefersReducedMotion ? '' : 'transform',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 84%',
-            end:   'top 20%',
-            toggleActions: toggle
+    /* 4. SKILLS SECTION: Spiral Vortex & Elastic Spring Burst */
+    const skillsSec = document.querySelector('#skills');
+    if (skillsSec) {
+      const cards = skillsSec.querySelectorAll('.skill-card');
+      cards.forEach((card, idx) => {
+        const bar = card.querySelector('.skill-fill');
+        const rot = idx % 2 === 0 ? -14 : 14;
+        gsap.fromTo(card,
+          { opacity: 0, scale: 0.5, rotateZ: rot, y: 40 },
+          {
+            opacity: 1, scale: 1, rotateZ: 0, y: 0, duration: 0.8, ease: 'back.out(1.7)',
+            delay: (idx % 4) * 0.06,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: skillsSec, start: 'top 82%', toggleActions: 'play none none none' }
           }
+        );
+        if (bar) {
+          const targetW = (bar.getAttribute('data-width') || '0') + '%';
+          gsap.fromTo(bar,
+            { width: '0%' },
+            {
+              width: targetW, duration: 1.35, ease: 'power3.out',
+              delay: (idx % 4) * 0.06,
+              scrollTrigger: { trigger: skillsSec, start: 'top 82%', toggleActions: 'play none none none' }
+            }
+          );
         }
-      );
+      });
     }
 
-    /* — Gentle parallax Y drift on the section container as it scrolls past — */
-    if (!prefersReducedMotion) {
-      gsap.fromTo(section,
-        { y: 0 },
-        { y: -24, ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start:  'top bottom',
-            end:    'bottom top',
-            scrub:  1.8
-          }
+    /* 5. PROJECTS SECTION: Alternating Horizontal Slide & Button Pop */
+    const projSec = document.querySelector('#projects');
+    if (projSec) {
+      const projects = projSec.querySelectorAll('.project-item');
+      projects.forEach((proj) => {
+        const isReverse = proj.classList.contains('project-reverse');
+        const imgCol = proj.querySelector('.project-image-col');
+        const textCol = proj.querySelector('.project-content-col');
+        const btns = proj.querySelectorAll('.project-actions .btn');
+
+        if (imgCol) {
+          gsap.fromTo(imgCol,
+            { opacity: 0, x: isReverse ? 90 : -90, scale: 0.9, rotateY: isReverse ? -12 : 12, transformPerspective: 1000 },
+            {
+              opacity: 1, x: 0, scale: 1, rotateY: 0, duration: 1.05, ease: 'expo.out',
+              clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: proj, start: 'top 82%', toggleActions: 'play none none none' }
+            }
+          );
         }
-      );
+        if (textCol) {
+          gsap.fromTo(textCol,
+            { opacity: 0, x: isReverse ? -80 : 80, y: 20 },
+            {
+              opacity: 1, x: 0, y: 0, duration: 1.0, ease: 'expo.out',
+              clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: proj, start: 'top 82%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+        if (btns.length) {
+          gsap.fromTo(btns,
+            { opacity: 0, scale: 0.4, y: 15 },
+            {
+              opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(2)', stagger: 0.08,
+              clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: proj, start: 'top 78%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+      });
+    }
+
+    /* 6. ACHIEVEMENTS SECTION: Wave Stagger Pop-Up */
+    const achSec = document.querySelector('#achievements');
+    if (achSec) {
+      const catHeaders = achSec.querySelectorAll('.ach-cat-header');
+      const cards = achSec.querySelectorAll('.achievement-card');
+
+      if (catHeaders.length) {
+        gsap.fromTo(catHeaders,
+          { opacity: 0, x: -40 },
+          {
+            opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', stagger: 0.15,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: achSec, start: 'top 84%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (cards.length) {
+        gsap.fromTo(cards,
+          { opacity: 0, y: 70, rotateX: 20, scale: 0.88, transformPerspective: 1000 },
+          {
+            opacity: 1, y: 0, rotateX: 0, scale: 1, duration: 0.85, ease: 'expo.out',
+            stagger: 0.07, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: achSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+    }
+
+    /* 7. CERTIFICATIONS SECTION: 3D Y-Axis Unfold */
+    const certSec = document.querySelector('#certifications');
+    if (certSec) {
+      const cards = certSec.querySelectorAll('.cert-card');
+      if (cards.length) {
+        gsap.fromTo(cards,
+          { opacity: 0, rotateY: -45, y: 60, scale: 0.85, transformPerspective: 1200 },
+          {
+            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: 0.95, ease: 'expo.out',
+            stagger: 0.1, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: certSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+    }
+
+    /* 8. LEADERSHIP SECTION: Ripple Node Expand */
+    const leadSec = document.querySelector('#leadership');
+    if (leadSec) {
+      const nodes = leadSec.querySelectorAll('.lead-node');
+      if (nodes.length) {
+        gsap.fromTo(nodes,
+          { opacity: 0, scale: 0.6, rotate: 10, y: 45 },
+          {
+            opacity: 1, scale: 1, rotate: 0, y: 0, duration: 0.8, ease: 'back.out(1.8)',
+            stagger: 0.12, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: leadSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+    }
+
+    /* 9. CONTACT SECTION: Magnet Launch & Connect Elevate */
+    const contactSec = document.querySelector('#contact');
+    if (contactSec) {
+      const cards = contactSec.querySelectorAll('.contact-card, .contact-social');
+      const connectCard = contactSec.querySelector('.connect-card');
+
+      if (cards.length) {
+        gsap.fromTo(cards,
+          { opacity: 0, x: -60, y: 20 },
+          {
+            opacity: 1, x: 0, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.08,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: contactSec, start: 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (connectCard) {
+        gsap.fromTo(connectCard,
+          { opacity: 0, y: 90, scale: 0.88, rotateX: 18, transformPerspective: 1000 },
+          {
+            opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.05, ease: 'expo.out',
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: contactSec, start: 'top 80%', toggleActions: 'play none none none' }
+          }
+        );
+      }
     }
   }
 
-  document.querySelectorAll('section[data-cinematic]:not(#home)').forEach(initSectionTransition);
+  initUniqueSectionAnimations();
 
-  /* ── Skill bars — scroll in only ────────────────────────── */
-  gsap.utils.toArray('.skill-card').forEach((card, i) => {
-    const bar = card.querySelector('.skill-fill');
+  /* ── Scrubbed Image Parallax (Parallax inside viewport, stays opaque) ── */
+  if (!prefersReducedMotion) {
+    document.querySelectorAll('.about-photo, .project-img-wrap img, .feat-media img').forEach(img => {
+      const parentSec = img.closest('section') || img;
+      gsap.fromTo(img,
+        { yPercent: -8, scale: 1.1 },
+        { yPercent: 8, scale: 1.0, ease: 'none',
+          scrollTrigger: { trigger: parentSec, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+        }
+      );
+    });
 
-    gsap.fromTo(card,
-      { y: 24, opacity: 0, scale: 0.95 },
-      { y: 0,  opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out',
-        clearProps: 'transform',
-        scrollTrigger: { trigger: card, start: 'top 94%', once: true }
-      }
-    );
-
-    if (!bar) return;
-    const targetW = (bar.getAttribute('data-width') || '0') + '%';
-    gsap.fromTo(bar,
-      { width: '0%' },
-      { width: targetW, duration: 1.1, ease: 'power2.out',
-        scrollTrigger: { trigger: card, start: 'top 94%', once: true }
-      }
-    );
-  });
+    /* ── Section Bridge Diamond Rotation ── */
+    document.querySelectorAll('.section-bridge-diamond, .stats-bridge-diamond').forEach(diamond => {
+      gsap.fromTo(diamond,
+        { rotate: 45, scale: 0.8 },
+        { rotate: 225, scale: 1.3, ease: 'none',
+          scrollTrigger: { trigger: diamond, start: 'top 95%', end: 'bottom 5%', scrub: 1 }
+        }
+      );
+    });
+  }
 
   ScrollTrigger.refresh();
 
-  if (!isTouchDevice) {
+  /* ── Optimized 3D Card Hover Tilt (RAF Throttled Desktop) ──── */
+  if (!isTouchDevice && !prefersReducedMotion) {
+    document.querySelectorAll('.achievement-card, .cert-card, .skill-card, .stat-item, .connect-card, .lead-node-card').forEach(card => {
+      let rect = null;
+      let ticking = false;
+
+      card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); }, { passive: true });
+
+      card.addEventListener('mousemove', e => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            if (!rect) rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const rx = (y / rect.height) * -12;
+            const ry = (x / rect.width) * 12;
+            gsap.to(card, {
+              transformPerspective: 900,
+              rotateX: rx,
+              rotateY: ry,
+              scale: 1.025,
+              duration: 0.35,
+              ease: 'power2.out',
+              overwrite: 'auto'
+            });
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      card.addEventListener('mouseleave', () => {
+        rect = null;
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          scale: 1,
+          duration: 0.65,
+          ease: 'elastic.out(1, 0.4)',
+          overwrite: 'auto'
+        });
+      }, { passive: true });
+    });
+
     document.querySelectorAll('[data-magnetic], .btn-primary, .btn-glass, .nav-logo, .feat-slide').forEach(btn => {
       btn.addEventListener('mousemove', e => {
         const b = btn.getBoundingClientRect();
         const x = e.clientX - b.left - b.width / 2;
         const y = e.clientY - b.top - b.height / 2;
         gsap.to(btn, { x: x * 0.2, y: y * 0.2, duration: 0.3, ease: 'power2.out' });
-      });
+      }, { passive: true });
       btn.addEventListener('mouseleave', () => {
         gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1, 0.38)' });
-      });
+      }, { passive: true });
     });
   }
 }
