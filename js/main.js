@@ -49,7 +49,7 @@ let scene, camera, renderer;
 let particleSystem, techGroup;
 let techMeshes = [];
 let targetMouseX = 0, targetMouseY = 0, currentMouseX = 0, currentMouseY = 0;
-const scrollInfo = { y: 0, targetY: 0 };
+const scrollInfo = { y: 0, targetY: 0, docHeight: 1 };
 
 const theme = {
   particleColor1: 0xd4af37,
@@ -71,7 +71,7 @@ function initThree() {
   camera.position.set(0, 0, 240);
 
   renderer = new THREE.WebGLRenderer({ canvas, antialias: !isLowPower, alpha: true, powerPreference: isLowPower ? 'low-power' : 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPower ? 1.25 : 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPower ? 1.25 : 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
@@ -95,7 +95,7 @@ function initThree() {
 }
 
 function createParticles(palette) {
-  const count = isLowPower ? 500 : 1400;
+  const count = isLowPower ? 200 : 450;
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
@@ -317,7 +317,7 @@ function createTechFloats(palette) {
     makeGitBranch, makeTerminal, makeApiNodes, makeCoffeeCup, makeMongoLeaf, makeSpringCoil,
     makeTsBadge, makeDockerWhale, makeNextTriangle, makeCloud, makeChip, makeHtmlTag, makeLock
   ];
-  const count = isLowPower ? 8 : makers.length + 4;
+  const count = isLowPower ? 5 : 8;
   const spread = Math.min(window.innerWidth / 8.5, 160);
 
   for (let i = 0; i < count; i++) {
@@ -365,19 +365,28 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
   layoutTechForViewport();
 }
 function onMouseMove(e) {
   targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
   targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 }
-function onScroll() { scrollInfo.targetY = window.scrollY; }
+function onScroll() {
+  scrollInfo.targetY = window.scrollY;
+  if (!scrollInfo.docHeight || Math.random() < 0.05) {
+    scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  }
+}
 
 function animate() {
   rafId = 0;
   if (!animationRunning) return;
   rafId = requestAnimationFrame(animate);
   if (!renderer || !scene || !camera) return;
+
+  // Pause WebGL rendering when scrolled down past hero section to save 100% GPU
+  if (scrollInfo.y > window.innerHeight * 1.35) return;
 
   const time = Date.now() * 0.0004;
 
@@ -387,7 +396,7 @@ function animate() {
   }
 
   scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * 0.1;
-  const docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+  const docHeight = scrollInfo.docHeight || 1;
   const scrollNorm = scrollInfo.y / docHeight;
   const scrollWave = Math.sin(scrollNorm * Math.PI * 5);
 
@@ -438,36 +447,31 @@ if (!isTouchDevice && cursor && follower) {
 
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX; mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top = mouseY + 'px';
-  });
+    cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+  }, { passive: true });
 
   (function animateCursor() {
     // Follower spring
-    followerX += (mouseX - followerX) * 0.09;
-    followerY += (mouseY - followerY) * 0.09;
-    follower.style.left = followerX + 'px';
-    follower.style.top = followerY + 'px';
+    followerX += (mouseX - followerX) * 0.12;
+    followerY += (mouseY - followerY) * 0.12;
+    follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
 
     // Glow (slow smooth)
     if (glowEl) {
-      glowX += (mouseX - glowX) * 0.04;
-      glowY += (mouseY - glowY) * 0.04;
-      glowEl.style.left = glowX + 'px';
-      glowEl.style.top = glowY + 'px';
+      glowX += (mouseX - glowX) * 0.05;
+      glowY += (mouseY - glowY) * 0.05;
+      glowEl.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
     }
 
     // Spring trail
     let prevX = mouseX, prevY = mouseY;
     trailDots.forEach((dot, i) => {
       const hist = trailHistory[i];
-      hist.x += (prevX - hist.x) * (0.3 - i * 0.028);
-      hist.y += (prevY - hist.y) * (0.3 - i * 0.028);
-      dot.style.left = hist.x + 'px';
-      dot.style.top = hist.y + 'px';
+      hist.x += (prevX - hist.x) * (0.32 - i * 0.025);
+      hist.y += (prevY - hist.y) * (0.32 - i * 0.025);
       const scale = 1 - (i / dotCount) * 0.65;
       const opacity = 0.9 - (i / dotCount) * 0.85;
-      dot.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      dot.style.transform = `translate3d(${hist.x}px, ${hist.y}px, 0) translate(-50%, -50%) scale(${scale})`;
       dot.style.opacity = opacity;
       prevX = hist.x; prevY = hist.y;
     });
@@ -892,23 +896,12 @@ function initEntranceAnimations() {
 
   initUniqueSectionAnimations();
 
-  /* ── Scrubbed Image Parallax (Parallax inside viewport, stays opaque) ── */
-  if (!prefersReducedMotion) {
-    document.querySelectorAll('.about-photo, .project-img-wrap img, .feat-media img').forEach(img => {
-      const parentSec = img.closest('section') || img;
-      gsap.fromTo(img,
-        { yPercent: -8, scale: 1.1 },
-        { yPercent: 8, scale: 1.0, ease: 'none',
-          scrollTrigger: { trigger: parentSec, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
-        }
-      );
-    });
-
-    /* ── Section Bridge Diamond Rotation ── */
+  /* ── Scrubbed Image Parallax (Simplified for ultra-smooth performance) ── */
+  if (!prefersReducedMotion && !isLowPower) {
     document.querySelectorAll('.section-bridge-diamond, .stats-bridge-diamond').forEach(diamond => {
       gsap.fromTo(diamond,
-        { rotate: 45, scale: 0.8 },
-        { rotate: 225, scale: 1.3, ease: 'none',
+        { rotate: 45 },
+        { rotate: 135, ease: 'none',
           scrollTrigger: { trigger: diamond, start: 'top 95%', end: 'bottom 5%', scrub: 1 }
         }
       );
@@ -917,59 +910,17 @@ function initEntranceAnimations() {
 
   ScrollTrigger.refresh();
 
-  /* ── Optimized 3D Card Hover Tilt (RAF Throttled Desktop) ──── */
+  /* ── Optimized Card Hover Transitions (Pure CSS fallback for 0ms JS latency) ── */
   if (!isTouchDevice && !prefersReducedMotion) {
-    document.querySelectorAll('.achievement-card, .cert-card, .skill-card, .stat-item, .connect-card, .lead-node-card').forEach(card => {
-      let rect = null;
-      let ticking = false;
-
-      card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); }, { passive: true });
-
-      card.addEventListener('mousemove', e => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            if (!rect) rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            const rx = (y / rect.height) * -12;
-            const ry = (x / rect.width) * 12;
-            gsap.to(card, {
-              transformPerspective: 900,
-              rotateX: rx,
-              rotateY: ry,
-              scale: 1.025,
-              duration: 0.35,
-              ease: 'power2.out',
-              overwrite: 'auto'
-            });
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-
-      card.addEventListener('mouseleave', () => {
-        rect = null;
-        gsap.to(card, {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          duration: 0.65,
-          ease: 'elastic.out(1, 0.4)',
-          overwrite: 'auto'
-        });
-      }, { passive: true });
-    });
-
-    document.querySelectorAll('[data-magnetic], .btn-primary, .btn-glass, .nav-logo, .feat-slide').forEach(btn => {
+    document.querySelectorAll('[data-magnetic]').forEach(btn => {
       btn.addEventListener('mousemove', e => {
         const b = btn.getBoundingClientRect();
         const x = e.clientX - b.left - b.width / 2;
         const y = e.clientY - b.top - b.height / 2;
-        gsap.to(btn, { x: x * 0.2, y: y * 0.2, duration: 0.3, ease: 'power2.out' });
+        gsap.to(btn, { x: x * 0.15, y: y * 0.15, duration: 0.25, ease: 'power2.out' });
       }, { passive: true });
       btn.addEventListener('mouseleave', () => {
-        gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1, 0.38)' });
+        gsap.to(btn, { x: 0, y: 0, duration: 0.45, ease: 'power2.out' });
       }, { passive: true });
     });
   }
