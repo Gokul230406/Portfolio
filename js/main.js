@@ -81,6 +81,7 @@ function initThree() {
   const lightB = new THREE.PointLight(theme.particleColor2, 1.4, 280);
   lightB.position.set(-110, -70, 60); scene.add(lightB);
 
+  scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
   createParticles(theme);
   createTechFloats(theme);
 
@@ -118,18 +119,20 @@ function createParticles(palette) {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   particleSystem = new THREE.Points(geometry, new THREE.PointsMaterial({
-    size: isLowPower ? 1.8 : 2.1, vertexColors: true, transparent: true,
-    opacity: 0.55, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
+    size: isLowPower ? 1.4 : 2.1, vertexColors: true, transparent: true,
+    opacity: isLowPower ? 0.35 : 0.55, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
   scene.add(particleSystem);
 }
 
 function wireMat(color, opacity = 0.42) {
-  return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity, depthWrite: false });
+  const finalOpacity = isLowPower ? opacity * 0.5 : opacity;
+  return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
 function solidMat(color, opacity = 0.28) {
-  return new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false });
+  const finalOpacity = isLowPower ? opacity * 0.5 : opacity;
+  return new THREE.MeshBasicMaterial({ color, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
 function makeCodeBrackets(color) {
@@ -318,22 +321,24 @@ function createTechFloats(palette) {
     makeTsBadge, makeDockerWhale, makeNextTriangle, makeCloud, makeChip, makeHtmlTag, makeLock
   ];
   const count = isLowPower ? 5 : 8;
-  const spread = Math.min(window.innerWidth / 8.5, 160);
+  const isMobileWin = window.innerWidth <= 768;
+  const spread = isMobileWin ? Math.min(window.innerWidth / 4, 110) : Math.min(window.innerWidth / 8.5, 160);
+  const baseScaleFactor = isMobileWin ? 0.24 : 0.48;
 
   for (let i = 0; i < count; i++) {
     const maker = makers[i % makers.length];
     const mesh = maker(i % 2 === 0 ? palette.meshColor : palette.ringColor);
     const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.4;
-    const radius = spread * (0.5 + (i % 5) * 0.2);
+    const radius = spread * (isMobileWin ? (0.8 + (i % 3) * 0.3) : (0.5 + (i % 5) * 0.2));
     const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
     const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
-    const z = -20 - (i % 6) * 18 - Math.random() * 35;
+    const z = isMobileWin ? (-70 - (i % 5) * 22) : (-20 - (i % 6) * 18 - Math.random() * 35);
     mesh.position.set(x, y, z);
-    mesh.scale.setScalar(0.48 + (i % 5) * 0.12);
+    mesh.scale.setScalar(baseScaleFactor + (i % 5) * (isMobileWin ? 0.04 : 0.12));
     mesh.userData = {
       baseX: x, baseY: y, baseZ: z,
       speed: 0.18 + (i % 6) * 0.08,
-      amp: 9 + (i % 5) * 3.5,
+      amp: (isMobileWin ? 4 : 9) + (i % 5) * 2,
       rotSpeed: 0.1 + (i % 5) * 0.05,
       phase: i * 0.72,
       scrollFactor: 0.35 + (i % 4) * 0.28,
@@ -346,17 +351,21 @@ function createTechFloats(palette) {
 
 function layoutTechForViewport() {
   if (!techMeshes.length) return;
-  const spread = Math.min(window.innerWidth / 8.5, 160);
+  const isMobileWin = window.innerWidth <= 768;
+  const spread = isMobileWin ? Math.min(window.innerWidth / 4, 110) : Math.min(window.innerWidth / 8.5, 160);
+  const baseScaleFactor = isMobileWin ? 0.24 : 0.48;
+
   techMeshes.forEach((mesh, i) => {
     const angle = (i / techMeshes.length) * Math.PI * 2 + (i % 3) * 0.4;
-    const radius = spread * (0.5 + (i % 5) * 0.2);
+    const radius = spread * (isMobileWin ? (0.8 + (i % 3) * 0.3) : (0.5 + (i % 5) * 0.2));
     const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
     const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
-    const z = mesh.userData.baseZ;
+    const z = isMobileWin ? (-70 - (i % 5) * 22) : (-20 - (i % 6) * 18 - Math.random() * 35);
     mesh.userData.baseX = x;
     mesh.userData.baseY = y;
-    mesh.position.x = x;
-    mesh.position.y = y;
+    mesh.userData.baseZ = z;
+    mesh.position.set(x, y, z);
+    mesh.scale.setScalar(baseScaleFactor + (i % 5) * (isMobileWin ? 0.04 : 0.12));
   });
 }
 
@@ -384,9 +393,6 @@ function animate() {
   if (!animationRunning) return;
   rafId = requestAnimationFrame(animate);
   if (!renderer || !scene || !camera) return;
-
-  // Pause WebGL rendering when scrolled down past hero section to save 100% GPU
-  if (scrollInfo.y > window.innerHeight * 1.35) return;
 
   const time = Date.now() * 0.0004;
 
@@ -583,7 +589,7 @@ function initEntranceAnimations() {
     autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
   });
 
-  const isMobile = window.innerWidth <= 640;
+  const isMobile = window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches;
 
   /* ── Dynamic Three.js Camera Scroll Shift ────────────────────── */
   if (camera) {
@@ -613,8 +619,19 @@ function initEntranceAnimations() {
     }, 0.18)
     .to('.hero-stats', { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'power4.out' }, 0.85);
 
+  const statItems = document.querySelectorAll('.hero-stats .stat-item');
+  if (statItems.length) {
+    gsap.fromTo(statItems,
+      { opacity: 0, y: isMobile ? 12 : 25, scale: isMobile ? 0.94 : 0.8 },
+      { opacity: 1, y: 0, scale: 1, duration: isMobile ? 0.45 : 0.6, ease: 'back.out(1.5)', stagger: isMobile ? 0.03 : 0.07, delay: 0.9, force3D: true }
+    );
+  }
+
   /* ── UNIQUE SECTION-BY-SECTION ANIMATION SIGNATURES ────────── */
   function initUniqueSectionAnimations() {
+    const triggerStart = isMobile ? 'top 94%' : 'top 88%';
+    const headerStart = isMobile ? 'top 95%' : 'top 92%';
+
     /* Generic Header animations (Numbers & 3D Title Skew) */
     document.querySelectorAll('section[data-cinematic]:not(#home)').forEach(section => {
       const numEl   = section.querySelector('.cine-number');
@@ -623,29 +640,29 @@ function initEntranceAnimations() {
 
       if (numEl) {
         gsap.fromTo(numEl,
-          { opacity: 0, x: isMobile ? -10 : -40, scale: isMobile ? 0.85 : 0.4, rotate: isMobile ? 0 : -25 },
+          { opacity: 0, x: isMobile ? -15 : -40, scale: isMobile ? 0.85 : 0.4, rotate: isMobile ? 0 : -25 },
           {
-            opacity: 1, x: 0, scale: 1, rotate: 0, duration: isMobile ? 0.45 : 0.65, ease: isMobile ? 'power2.out' : 'back.out(2)', force3D: true,
-            scrollTrigger: { trigger: section, start: 'top 92%', toggleActions: 'play none none none' }
+            opacity: 1, x: 0, scale: 1, rotate: 0, duration: isMobile ? 0.5 : 0.65, ease: isMobile ? 'power2.out' : 'back.out(2)', force3D: true,
+            scrollTrigger: { trigger: section, start: headerStart, toggleActions: 'play none none none' }
           }
         );
       }
       if (titleEl) {
         const inner = titleEl.querySelector('.line-inner') || titleEl;
         gsap.fromTo(inner,
-          { opacity: 0, y: isMobile ? 18 : 50, rotateX: isMobile ? 0 : -30, skewY: isMobile ? 0 : 3, transformOrigin: 'left top' },
+          { opacity: 0, y: isMobile ? 22 : 50, rotateX: isMobile ? 0 : -30, skewY: isMobile ? 0 : 3, transformOrigin: 'left top' },
           {
-            opacity: 1, y: 0, rotateX: 0, skewY: 0, duration: isMobile ? 0.5 : 0.85, ease: isMobile ? 'power2.out' : 'expo.out', force3D: true,
-            scrollTrigger: { trigger: section, start: 'top 90%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, rotateX: 0, skewY: 0, duration: isMobile ? 0.55 : 0.85, ease: isMobile ? 'power2.out' : 'expo.out', force3D: true,
+            scrollTrigger: { trigger: section, start: headerStart, toggleActions: 'play none none none' }
           }
         );
       }
       if (sub) {
         gsap.fromTo(sub,
-          { opacity: 0, y: isMobile ? 12 : 20, letterSpacing: isMobile ? '0.02em' : '0.12em' },
+          { opacity: 0, y: isMobile ? 14 : 20, letterSpacing: isMobile ? '0.02em' : '0.12em' },
           {
-            opacity: 1, y: 0, letterSpacing: '0.01em', duration: isMobile ? 0.45 : 0.7, ease: 'power2.out', force3D: true,
-            scrollTrigger: { trigger: section, start: 'top 88%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, letterSpacing: '0.01em', duration: isMobile ? 0.5 : 0.7, ease: 'power2.out', force3D: true,
+            scrollTrigger: { trigger: section, start: headerStart, toggleActions: 'play none none none' }
           }
         );
       }
@@ -656,35 +673,77 @@ function initEntranceAnimations() {
     if (aboutSec) {
       const photo = aboutSec.querySelector('.about-image-col');
       const content = aboutSec.querySelector('.about-content-col');
-      const details = aboutSec.querySelectorAll('.detail-item, .profile-badge, .about-actions .btn');
+      const subtitle = aboutSec.querySelector('.about-subtitle');
+      const texts = aboutSec.querySelectorAll('.about-text');
+      const details = aboutSec.querySelectorAll('.detail-item');
+      const btns = aboutSec.querySelectorAll('.about-actions .btn');
+      const profiles = aboutSec.querySelectorAll('.profile-badge');
       
       if (photo) {
         gsap.fromTo(photo,
-          { opacity: 0, x: isMobile ? 0 : -80, y: isMobile ? 20 : 0, rotateY: isMobile ? 0 : 25, transformPerspective: 1000, scale: isMobile ? 0.96 : 0.88 },
+          { opacity: 0, x: isMobile ? 0 : -80, y: isMobile ? 25 : 0, rotateY: isMobile ? 0 : 25, transformPerspective: 1000, scale: isMobile ? 0.95 : 0.88 },
           {
-            opacity: 1, x: 0, y: 0, rotateY: 0, scale: 1, duration: isMobile ? 0.55 : 1.1, ease: 'expo.out', force3D: true,
+            opacity: 1, x: 0, y: 0, rotateY: 0, scale: 1, duration: isMobile ? 0.6 : 1.1, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
       if (content) {
         gsap.fromTo(content,
-          { opacity: 0, x: isMobile ? 0 : 70, y: isMobile ? 18 : 20 },
+          { opacity: 0, x: isMobile ? 0 : 70, y: isMobile ? 20 : 20 },
           {
-            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.55 : 1.0, ease: 'expo.out', force3D: true,
+            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.6 : 1.0, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: triggerStart, toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (subtitle) {
+        gsap.fromTo(subtitle,
+          { opacity: 0, y: isMobile ? 15 : 20 },
+          {
+            opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', force3D: true,
+            scrollTrigger: { trigger: aboutSec, start: triggerStart, toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (texts.length) {
+        gsap.fromTo(texts,
+          { opacity: 0, y: isMobile ? 15 : 20 },
+          {
+            opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.08, force3D: true,
+            scrollTrigger: { trigger: aboutSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
       if (details.length) {
         gsap.fromTo(details,
-          { opacity: 0, scale: isMobile ? 0.95 : 0.7, y: isMobile ? 12 : 20 },
+          { opacity: 0, scale: isMobile ? 0.95 : 0.7, y: isMobile ? 14 : 20 },
           {
-            opacity: 1, scale: 1, y: 0, duration: isMobile ? 0.45 : 0.65, ease: isMobile ? 'power2.out' : 'back.out(1.8)', stagger: isMobile ? 0.03 : 0.05, force3D: true,
+            opacity: 1, scale: 1, y: 0, duration: isMobile ? 0.5 : 0.65, ease: isMobile ? 'power2.out' : 'back.out(1.8)', stagger: isMobile ? 0.04 : 0.05, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: aboutSec, start: 'top 85%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: aboutSec, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (btns.length) {
+        gsap.fromTo(btns,
+          { opacity: 0, y: isMobile ? 12 : 15, scale: isMobile ? 0.96 : 0.9 },
+          {
+            opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.5)', stagger: 0.05, force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: aboutSec, start: isMobile ? 'top 88%' : 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (profiles.length) {
+        gsap.fromTo(profiles,
+          { opacity: 0, y: isMobile ? 10 : 15, scale: isMobile ? 0.92 : 0.8 },
+          {
+            opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.6)', stagger: 0.03, force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: aboutSec, start: isMobile ? 'top 85%' : 'top 80%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -696,11 +755,11 @@ function initEntranceAnimations() {
       const slides = featSec.querySelectorAll('.feat-slide');
       if (slides.length) {
         gsap.fromTo(slides,
-          { opacity: 0, scale: isMobile ? 0.96 : 0.82, y: isMobile ? 22 : 80, rotateY: isMobile ? 0 : -15, transformPerspective: 1200 },
+          { opacity: 0, scale: isMobile ? 0.94 : 0.82, y: isMobile ? 25 : 80, rotateY: isMobile ? 0 : -15, transformPerspective: 1200 },
           {
-            opacity: 1, scale: 1, y: 0, rotateY: 0, duration: isMobile ? 0.55 : 0.95, ease: 'expo.out', force3D: true,
+            opacity: 1, scale: 1, y: 0, rotateY: 0, duration: isMobile ? 0.6 : 0.95, ease: 'expo.out', force3D: true,
             stagger: isMobile ? 0.05 : 0.09, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: featSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: featSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
@@ -712,20 +771,40 @@ function initEntranceAnimations() {
       const items = eduSec.querySelectorAll('.edu-item');
       items.forEach((item, idx) => {
         const icon = item.querySelector('.edu-icon-wrap');
+        const tags = item.querySelectorAll('.tag');
+        const score = item.querySelector('.edu-score-wrap');
         gsap.fromTo(item,
-          { opacity: 0, x: isMobile ? 0 : (idx % 2 === 0 ? -60 : 60), y: isMobile ? 20 : 30 },
+          { opacity: 0, x: isMobile ? 0 : (idx % 2 === 0 ? -60 : 60), y: isMobile ? 25 : 30 },
           {
-            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.5 : 0.85, ease: 'expo.out', force3D: true,
+            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.55 : 0.85, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: item, start: isMobile ? 'top 94%' : 'top 90%', toggleActions: 'play none none none' }
           }
         );
         if (icon) {
           gsap.fromTo(icon,
-            { opacity: 0, rotate: isMobile ? 0 : -180, scale: isMobile ? 0.8 : 0.2 },
+            { opacity: 0, rotate: isMobile ? -90 : -180, scale: isMobile ? 0.7 : 0.2 },
             {
-              opacity: 1, rotate: 0, scale: 1, duration: isMobile ? 0.45 : 0.75, ease: isMobile ? 'power2.out' : 'back.out(2)', force3D: true,
-              scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' }
+              opacity: 1, rotate: 0, scale: 1, duration: isMobile ? 0.5 : 0.75, ease: isMobile ? 'back.out(1.8)' : 'back.out(2)', force3D: true,
+              scrollTrigger: { trigger: item, start: isMobile ? 'top 94%' : 'top 90%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+        if (tags.length) {
+          gsap.fromTo(tags,
+            { opacity: 0, scale: 0.9 },
+            {
+              opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, force3D: true,
+              scrollTrigger: { trigger: item, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+        if (score) {
+          gsap.fromTo(score,
+            { opacity: 0, y: 10 },
+            {
+              opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', force3D: true,
+              scrollTrigger: { trigger: item, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
             }
           );
         }
@@ -740,12 +819,12 @@ function initEntranceAnimations() {
         const bar = card.querySelector('.skill-fill');
         const rot = isMobile ? 0 : (idx % 2 === 0 ? -14 : 14);
         gsap.fromTo(card,
-          { opacity: 0, scale: isMobile ? 0.96 : 0.5, rotateZ: rot, y: isMobile ? 18 : 40 },
+          { opacity: 0, scale: isMobile ? 0.94 : 0.5, rotateZ: rot, y: isMobile ? 22 : 40 },
           {
-            opacity: 1, scale: 1, rotateZ: 0, y: 0, duration: isMobile ? 0.45 : 0.8, ease: isMobile ? 'power2.out' : 'back.out(1.7)', force3D: true,
-            delay: isMobile ? 0 : (idx % 4) * 0.06,
+            opacity: 1, scale: 1, rotateZ: 0, y: 0, duration: isMobile ? 0.5 : 0.8, ease: isMobile ? 'back.out(1.5)' : 'back.out(1.7)', force3D: true,
+            delay: isMobile ? (idx % 2) * 0.04 : (idx % 4) * 0.06,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: skillsSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: skillsSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
         if (bar) {
@@ -753,9 +832,9 @@ function initEntranceAnimations() {
           gsap.fromTo(bar,
             { width: '0%' },
             {
-              width: targetW, duration: isMobile ? 0.9 : 1.35, ease: 'power3.out',
-              delay: isMobile ? 0 : (idx % 4) * 0.06,
-              scrollTrigger: { trigger: skillsSec, start: 'top 88%', toggleActions: 'play none none none' }
+              width: targetW, duration: isMobile ? 0.85 : 1.35, ease: 'power3.out',
+              delay: isMobile ? (idx % 2) * 0.04 : (idx % 4) * 0.06,
+              scrollTrigger: { trigger: skillsSec, start: triggerStart, toggleActions: 'play none none none' }
             }
           );
         }
@@ -770,35 +849,45 @@ function initEntranceAnimations() {
         const isReverse = proj.classList.contains('project-reverse');
         const imgCol = proj.querySelector('.project-image-col');
         const textCol = proj.querySelector('.project-content-col');
+        const tags = proj.querySelectorAll('.project-tags .tag');
         const btns = proj.querySelectorAll('.project-actions .btn');
 
         if (imgCol) {
           gsap.fromTo(imgCol,
-            { opacity: 0, x: isMobile ? 0 : (isReverse ? 90 : -90), y: isMobile ? 22 : 0, scale: isMobile ? 0.97 : 0.9, rotateY: isMobile ? 0 : (isReverse ? -12 : 12), transformPerspective: 1000 },
+            { opacity: 0, x: isMobile ? 0 : (isReverse ? 90 : -90), y: isMobile ? 25 : 0, scale: isMobile ? 0.96 : 0.9, rotateY: isMobile ? 0 : (isReverse ? -12 : 12), transformPerspective: 1000 },
             {
-              opacity: 1, x: 0, y: 0, scale: 1, rotateY: 0, duration: isMobile ? 0.55 : 1.05, ease: 'expo.out', force3D: true,
+              opacity: 1, x: 0, y: 0, scale: 1, rotateY: 0, duration: isMobile ? 0.6 : 1.05, ease: 'expo.out', force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 88%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
             }
           );
         }
         if (textCol) {
           gsap.fromTo(textCol,
-            { opacity: 0, x: isMobile ? 0 : (isReverse ? -80 : 80), y: isMobile ? 18 : 20 },
+            { opacity: 0, x: isMobile ? 0 : (isReverse ? -80 : 80), y: isMobile ? 20 : 20 },
             {
-              opacity: 1, x: 0, y: 0, duration: isMobile ? 0.55 : 1.0, ease: 'expo.out', force3D: true,
+              opacity: 1, x: 0, y: 0, duration: isMobile ? 0.6 : 1.0, ease: 'expo.out', force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 88%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+        if (tags.length) {
+          gsap.fromTo(tags,
+            { opacity: 0, y: isMobile ? 8 : 12, scale: 0.92 },
+            {
+              opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out', stagger: 0.03, force3D: true,
+              scrollTrigger: { trigger: proj, start: isMobile ? 'top 90%' : 'top 86%', toggleActions: 'play none none none' }
             }
           );
         }
         if (btns.length) {
           gsap.fromTo(btns,
-            { opacity: 0, scale: isMobile ? 0.95 : 0.4, y: isMobile ? 10 : 15 },
+            { opacity: 0, scale: isMobile ? 0.94 : 0.4, y: isMobile ? 12 : 15 },
             {
-              opacity: 1, scale: 1, y: 0, duration: isMobile ? 0.4 : 0.6, ease: isMobile ? 'power2.out' : 'back.out(2)', stagger: isMobile ? 0.03 : 0.08, force3D: true,
+              opacity: 1, scale: 1, y: 0, duration: isMobile ? 0.45 : 0.6, ease: isMobile ? 'power2.out' : 'back.out(2)', stagger: isMobile ? 0.04 : 0.08, force3D: true,
               clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: proj, start: 'top 85%', toggleActions: 'play none none none' }
+              scrollTrigger: { trigger: proj, start: isMobile ? 'top 88%' : 'top 85%', toggleActions: 'play none none none' }
             }
           );
         }
@@ -813,21 +902,21 @@ function initEntranceAnimations() {
 
       if (catHeaders.length) {
         gsap.fromTo(catHeaders,
-          { opacity: 0, x: isMobile ? 0 : -40, y: isMobile ? 12 : 0 },
+          { opacity: 0, x: isMobile ? 0 : -40, y: isMobile ? 15 : 0 },
           {
-            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.45 : 0.7, ease: 'power3.out', stagger: isMobile ? 0.05 : 0.15, force3D: true,
+            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.5 : 0.7, ease: 'power3.out', stagger: isMobile ? 0.06 : 0.15, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: achSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: achSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, y: isMobile ? 22 : 70, rotateX: isMobile ? 0 : 20, scale: isMobile ? 0.96 : 0.88, transformPerspective: 1000 },
+          { opacity: 0, y: isMobile ? 25 : 70, rotateX: isMobile ? 0 : 20, scale: isMobile ? 0.95 : 0.88, transformPerspective: 1000 },
           {
-            opacity: 1, y: 0, rotateX: 0, scale: 1, duration: isMobile ? 0.5 : 0.85, ease: 'expo.out', force3D: true,
-            stagger: isMobile ? 0.04 : 0.07, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: achSec, start: 'top 88%', toggleActions: 'play none none none' }
+            opacity: 1, y: 0, rotateX: 0, scale: 1, duration: isMobile ? 0.55 : 0.85, ease: 'expo.out', force3D: true,
+            stagger: isMobile ? 0.05 : 0.07, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: achSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
@@ -839,11 +928,11 @@ function initEntranceAnimations() {
       const cards = certSec.querySelectorAll('.cert-card');
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, rotateY: isMobile ? 0 : -45, y: isMobile ? 22 : 60, scale: isMobile ? 0.96 : 0.85, transformPerspective: 1200 },
+          { opacity: 0, rotateY: isMobile ? 0 : -45, y: isMobile ? 25 : 60, scale: isMobile ? 0.95 : 0.85, transformPerspective: 1200 },
           {
-            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: isMobile ? 0.5 : 0.95, ease: 'expo.out', force3D: true,
-            stagger: isMobile ? 0.04 : 0.1, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: certSec, start: 'top 88%', toggleActions: 'play none none none' }
+            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: isMobile ? 0.55 : 0.95, ease: 'expo.out', force3D: true,
+            stagger: isMobile ? 0.06 : 0.1, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: certSec, start: triggerStart, toggleActions: 'play none none none' }
           }
         );
       }
@@ -854,40 +943,85 @@ function initEntranceAnimations() {
     if (leadSec) {
       const nodes = leadSec.querySelectorAll('.lead-node');
       if (nodes.length) {
-        gsap.fromTo(nodes,
-          { opacity: 0, scale: isMobile ? 0.96 : 0.6, rotate: isMobile ? 0 : 10, y: isMobile ? 20 : 45 },
-          {
-            opacity: 1, scale: 1, rotate: 0, y: 0, duration: isMobile ? 0.5 : 0.8, ease: isMobile ? 'power2.out' : 'back.out(1.8)', force3D: true,
-            stagger: isMobile ? 0.06 : 0.12, clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: leadSec, start: 'top 88%', toggleActions: 'play none none none' }
+        nodes.forEach((node, idx) => {
+          const marker = node.querySelector('.lead-node-marker');
+          const card = node.querySelector('.lead-node-card');
+          gsap.fromTo(node,
+            { opacity: 0, scale: isMobile ? 0.95 : 0.6, rotate: isMobile ? 0 : 10, y: isMobile ? 22 : 45 },
+            {
+              opacity: 1, scale: 1, rotate: 0, y: 0, duration: isMobile ? 0.55 : 0.8, ease: isMobile ? 'power2.out' : 'back.out(1.8)', force3D: true,
+              clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: node, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
+            }
+          );
+          if (marker) {
+            gsap.fromTo(marker,
+              { opacity: 0, scale: 0.4 },
+              {
+                opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)', force3D: true,
+                scrollTrigger: { trigger: node, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
+              }
+            );
           }
-        );
+        });
       }
     }
 
     /* 9. CONTACT SECTION */
     const contactSec = document.querySelector('#contact');
     if (contactSec) {
-      const cards = contactSec.querySelectorAll('.contact-card, .contact-social');
+      const cards = contactSec.querySelectorAll('.contact-card');
+      const socials = contactSec.querySelectorAll('.contact-social');
+      const availBadge = contactSec.querySelector('.availability-badge');
       const connectCard = contactSec.querySelector('.connect-card');
+      const resumeBtns = contactSec.querySelectorAll('.resume-actions .btn');
 
       if (cards.length) {
         gsap.fromTo(cards,
-          { opacity: 0, x: isMobile ? 0 : -60, y: isMobile ? 18 : 20 },
+          { opacity: 0, x: isMobile ? 0 : -60, y: isMobile ? 20 : 20 },
           {
-            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.48 : 0.8, ease: 'expo.out', stagger: isMobile ? 0.04 : 0.08, force3D: true,
+            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.5 : 0.8, ease: 'expo.out', stagger: isMobile ? 0.05 : 0.08, force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: contactSec, start: 'top 88%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: contactSec, start: triggerStart, toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (socials.length) {
+        gsap.fromTo(socials,
+          { opacity: 0, scale: isMobile ? 0.92 : 0.8, y: isMobile ? 12 : 15 },
+          {
+            opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'back.out(1.5)', stagger: 0.04, force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: contactSec, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (availBadge) {
+        gsap.fromTo(availBadge,
+          { opacity: 0, scale: 0.9, y: 10 },
+          {
+            opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)', force3D: true,
+            scrollTrigger: { trigger: contactSec, start: isMobile ? 'top 88%' : 'top 84%', toggleActions: 'play none none none' }
           }
         );
       }
       if (connectCard) {
         gsap.fromTo(connectCard,
-          { opacity: 0, y: isMobile ? 45 : 90, scale: 0.9, rotateX: isMobile ? 10 : 18, transformPerspective: 1000 },
+          { opacity: 0, y: isMobile ? 35 : 90, scale: isMobile ? 0.95 : 0.9, rotateX: isMobile ? 0 : 18, transformPerspective: 1000 },
           {
-            opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.05, ease: 'expo.out', force3D: true,
+            opacity: 1, y: 0, scale: 1, rotateX: 0, duration: isMobile ? 0.65 : 1.05, ease: 'expo.out', force3D: true,
             clearProps: 'transform,opacity',
-            scrollTrigger: { trigger: contactSec, start: 'top 82%', toggleActions: 'play none none none' }
+            scrollTrigger: { trigger: connectCard || contactSec, start: isMobile ? 'top 92%' : 'top 82%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (resumeBtns.length) {
+        gsap.fromTo(resumeBtns,
+          { opacity: 0, y: 12, scale: 0.95 },
+          {
+            opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.5)', stagger: 0.05, force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: connectCard || contactSec, start: isMobile ? 'top 88%' : 'top 80%', toggleActions: 'play none none none' }
           }
         );
       }
@@ -895,6 +1029,11 @@ function initEntranceAnimations() {
   }
 
   initUniqueSectionAnimations();
+
+  /* ── Resize listener to refresh triggers on device orientation change ── */
+  window.addEventListener('resize', () => {
+    ScrollTrigger.refresh();
+  });
 
   /* ── Scrubbed Image Parallax (Simplified for ultra-smooth performance) ── */
   if (!prefersReducedMotion && !isLowPower) {

@@ -1320,6 +1320,27 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .footer-links { justify-content: center; gap: 0.75rem 1.25rem; padding: 0; }
   .footer-socials { justify-content: center; }
   .footer-bottom { margin-top: 1.5rem; padding: 1rem 1.25rem 0; }
+
+  /* Mobile hardware-accelerated animation optimization */
+  .cine-section, .skill-card, .project-item, .achievement-card,
+  .cert-card, .lead-node, .contact-card, .connect-card, .feat-slide,
+  .detail-item, .profile-badge, .stat-item {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Mobile backdrop contrast & readability over 3D background */
+  main, section, .cine-section, .cine-intro, .about-content-col, .project-content-col {
+    position: relative;
+    z-index: 2;
+  }
+  .skill-card, .achievement-card, .cert-card, .lead-node-card,
+  .contact-card, .connect-card, .feat-slide {
+    background: rgba(10, 10, 16, 0.84) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
 }
 
 @media (max-width: 640px) {
