@@ -7,7 +7,7 @@ import * as THREE from 'three';
 
 const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isLowPower = isTouchDevice || navigator.hardwareConcurrency <= 4 || prefersReducedMotion;
+const isLowPower = prefersReducedMotion || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
 
 if (isTouchDevice) document.documentElement.classList.add('touch-device');
 
@@ -70,15 +70,15 @@ function initThree() {
   camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.set(0, 0, 240);
 
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: !isLowPower, alpha: true, powerPreference: isLowPower ? 'low-power' : 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isLowPower ? 1.25 : 1.5));
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-  const lightA = new THREE.PointLight(theme.particleColor1, 2, 320);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const lightA = new THREE.PointLight(theme.particleColor1, 2.2, 350);
   lightA.position.set(120, 90, 80); scene.add(lightA);
-  const lightB = new THREE.PointLight(theme.particleColor2, 1.4, 280);
+  const lightB = new THREE.PointLight(theme.particleColor2, 1.6, 300);
   lightB.position.set(-110, -70, 60); scene.add(lightB);
 
   scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
@@ -86,7 +86,16 @@ function initThree() {
   createTechFloats(theme);
 
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(onWindowResize, 120); });
-  if (!isTouchDevice) window.addEventListener('mousemove', onMouseMove, { passive: true });
+  if (!isTouchDevice) {
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+  } else {
+    window.addEventListener('touchmove', e => {
+      if (e.touches.length > 0) {
+        targetMouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 1.4;
+        targetMouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 1.4;
+      }
+    }, { passive: true });
+  }
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('visibilitychange', () => {
     animationRunning = !document.hidden;
@@ -96,22 +105,27 @@ function initThree() {
 }
 
 function createParticles(palette) {
-  const count = isLowPower ? 200 : 450;
+  const isMobileWin = window.innerWidth <= 768;
+  const count = isMobileWin ? 340 : 520;
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   const c1 = new THREE.Color(palette.particleColor1);
   const c2 = new THREE.Color(palette.particleColor2);
+  const c3 = new THREE.Color(0xffd700);
   const scratch = new THREE.Color();
 
   for (let i = 0; i < count; i++) {
-    const r = 140 + Math.random() * 680;
+    const r = isMobileWin ? (100 + Math.random() * 520) : (140 + Math.random() * 680);
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
     positions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
     positions[i*3+2] = r * Math.cos(phi);
-    scratch.copy(c1).lerp(c2, Math.random());
+    
+    const mix = Math.random();
+    if (mix < 0.5) scratch.copy(c1).lerp(c2, mix * 2);
+    else scratch.copy(c2).lerp(c3, (mix - 0.5) * 2);
     colors[i*3] = scratch.r; colors[i*3+1] = scratch.g; colors[i*3+2] = scratch.b;
   }
 
@@ -119,19 +133,21 @@ function createParticles(palette) {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   particleSystem = new THREE.Points(geometry, new THREE.PointsMaterial({
-    size: isLowPower ? 1.4 : 2.1, vertexColors: true, transparent: true,
-    opacity: isLowPower ? 0.35 : 0.55, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
+    size: isMobileWin ? 2.0 : 2.3, vertexColors: true, transparent: true,
+    opacity: isMobileWin ? 0.58 : 0.65, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
   scene.add(particleSystem);
 }
 
-function wireMat(color, opacity = 0.42) {
-  const finalOpacity = isLowPower ? opacity * 0.5 : opacity;
+function wireMat(color, opacity = 0.45) {
+  const isMobileWin = window.innerWidth <= 768;
+  const finalOpacity = isMobileWin ? opacity * 0.85 : opacity;
   return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
-function solidMat(color, opacity = 0.28) {
-  const finalOpacity = isLowPower ? opacity * 0.5 : opacity;
+function solidMat(color, opacity = 0.32) {
+  const isMobileWin = window.innerWidth <= 768;
+  const finalOpacity = isMobileWin ? opacity * 0.85 : opacity;
   return new THREE.MeshBasicMaterial({ color, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
@@ -320,29 +336,30 @@ function createTechFloats(palette) {
     makeGitBranch, makeTerminal, makeApiNodes, makeCoffeeCup, makeMongoLeaf, makeSpringCoil,
     makeTsBadge, makeDockerWhale, makeNextTriangle, makeCloud, makeChip, makeHtmlTag, makeLock
   ];
-  const count = isLowPower ? 5 : 8;
   const isMobileWin = window.innerWidth <= 768;
-  const spread = isMobileWin ? Math.min(window.innerWidth / 4, 110) : Math.min(window.innerWidth / 8.5, 160);
-  const baseScaleFactor = isMobileWin ? 0.24 : 0.48;
+  const count = isMobileWin ? 7 : 9;
+  const spread = isMobileWin ? Math.min(window.innerWidth / 3.2, 130) : Math.min(window.innerWidth / 8.5, 160);
 
   for (let i = 0; i < count; i++) {
     const maker = makers[i % makers.length];
     const mesh = maker(i % 2 === 0 ? palette.meshColor : palette.ringColor);
     const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.4;
-    const radius = spread * (isMobileWin ? (0.8 + (i % 3) * 0.3) : (0.5 + (i % 5) * 0.2));
-    const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
-    const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
-    const z = isMobileWin ? (-70 - (i % 5) * 22) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const radius = spread * (0.6 + (i % 4) * 0.25);
+    const sideSign = (i % 2 === 0) ? 1 : -1;
+    const x = isMobileWin ? sideSign * (34 + (i % 3) * 14) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const y = Math.sin(angle * 1.25) * (spread * 0.65) + ((i % 5) - 2) * 22;
+    const z = isMobileWin ? (-32 - (i % 5) * 12) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const scale = isMobileWin ? (0.35 + (i % 4) * 0.05) : (0.48 + (i % 5) * 0.12);
     mesh.position.set(x, y, z);
-    mesh.scale.setScalar(baseScaleFactor + (i % 5) * (isMobileWin ? 0.04 : 0.12));
+    mesh.scale.setScalar(scale);
     mesh.userData = {
       baseX: x, baseY: y, baseZ: z,
-      speed: 0.18 + (i % 6) * 0.08,
-      amp: (isMobileWin ? 4 : 9) + (i % 5) * 2,
-      rotSpeed: 0.1 + (i % 5) * 0.05,
+      speed: 0.2 + (i % 5) * 0.09,
+      amp: (isMobileWin ? 7 : 11) + (i % 4) * 3,
+      rotSpeed: 0.14 + (i % 5) * 0.06,
       phase: i * 0.72,
       scrollFactor: 0.35 + (i % 4) * 0.28,
-      parallaxX: (i % 2 === 0 ? 1 : -1) * (16 + i * 2.5)
+      parallaxX: sideSign * (12 + i * 2)
     };
     techGroup.add(mesh);
     techMeshes.push(mesh);
@@ -352,20 +369,21 @@ function createTechFloats(palette) {
 function layoutTechForViewport() {
   if (!techMeshes.length) return;
   const isMobileWin = window.innerWidth <= 768;
-  const spread = isMobileWin ? Math.min(window.innerWidth / 4, 110) : Math.min(window.innerWidth / 8.5, 160);
-  const baseScaleFactor = isMobileWin ? 0.24 : 0.48;
+  const spread = isMobileWin ? Math.min(window.innerWidth / 3.2, 130) : Math.min(window.innerWidth / 8.5, 160);
 
   techMeshes.forEach((mesh, i) => {
     const angle = (i / techMeshes.length) * Math.PI * 2 + (i % 3) * 0.4;
-    const radius = spread * (isMobileWin ? (0.8 + (i % 3) * 0.3) : (0.5 + (i % 5) * 0.2));
-    const x = Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
-    const y = Math.sin(angle * 1.25) * (spread * 0.6) + ((i % 6) - 2.5) * 16;
-    const z = isMobileWin ? (-70 - (i % 5) * 22) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const radius = spread * (0.6 + (i % 4) * 0.25);
+    const sideSign = (i % 2 === 0) ? 1 : -1;
+    const x = isMobileWin ? sideSign * (34 + (i % 3) * 14) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const y = Math.sin(angle * 1.25) * (spread * 0.65) + ((i % 5) - 2) * 22;
+    const z = isMobileWin ? (-32 - (i % 5) * 12) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const scale = isMobileWin ? (0.35 + (i % 4) * 0.05) : (0.48 + (i % 5) * 0.12);
     mesh.userData.baseX = x;
     mesh.userData.baseY = y;
     mesh.userData.baseZ = z;
     mesh.position.set(x, y, z);
-    mesh.scale.setScalar(baseScaleFactor + (i % 5) * (isMobileWin ? 0.04 : 0.12));
+    mesh.scale.setScalar(scale);
   });
 }
 
@@ -1036,7 +1054,7 @@ function initEntranceAnimations() {
   });
 
   /* ── Scrubbed Image Parallax (Simplified for ultra-smooth performance) ── */
-  if (!prefersReducedMotion && !isLowPower) {
+  if (!prefersReducedMotion) {
     document.querySelectorAll('.section-bridge-diamond, .stats-bridge-diamond').forEach(diamond => {
       gsap.fromTo(diamond,
         { rotate: 45 },
