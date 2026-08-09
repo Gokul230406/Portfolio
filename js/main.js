@@ -50,6 +50,8 @@ let particleSystem, techGroup;
 let techMeshes = [];
 let targetMouseX = 0, targetMouseY = 0, currentMouseX = 0, currentMouseY = 0;
 const scrollInfo = { y: 0, targetY: 0, docHeight: 1 };
+const cameraBasePos = { x: 0, y: 0, z: 240 };
+let isMobileDev = false;
 
 const theme = {
   particleColor1: 0xd4af37,
@@ -64,14 +66,23 @@ function initThree() {
   const canvas = document.getElementById('three-canvas');
   if (!canvas || prefersReducedMotion) { if (canvas) canvas.style.display = 'none'; return; }
 
+  isMobileDev = isTouchDevice || window.innerWidth <= 768;
+
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(theme.bgColor, theme.fog);
 
   camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.set(0, 0, 240);
+  camera.position.set(cameraBasePos.x, cameraBasePos.y, cameraBasePos.z);
 
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: !isMobileDev,
+    alpha: true,
+    powerPreference: 'high-performance',
+    precision: isMobileDev ? 'mediump' : 'highp'
+  });
+  const maxDpr = isMobileDev ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
+  renderer.setPixelRatio(maxDpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
@@ -91,8 +102,8 @@ function initThree() {
   } else {
     window.addEventListener('touchmove', e => {
       if (e.touches.length > 0) {
-        targetMouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 1.4;
-        targetMouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 1.4;
+        targetMouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 0.8;
+        targetMouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 0.8;
       }
     }, { passive: true });
   }
@@ -105,8 +116,7 @@ function initThree() {
 }
 
 function createParticles(palette) {
-  const isMobileWin = window.innerWidth <= 768;
-  const count = isMobileWin ? 340 : 520;
+  const count = isMobileDev ? 160 : 480;
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
@@ -116,7 +126,7 @@ function createParticles(palette) {
   const scratch = new THREE.Color();
 
   for (let i = 0; i < count; i++) {
-    const r = isMobileWin ? (100 + Math.random() * 520) : (140 + Math.random() * 680);
+    const r = isMobileDev ? (100 + Math.random() * 460) : (140 + Math.random() * 680);
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     positions[i*3] = r * Math.sin(phi) * Math.cos(theta);
@@ -133,21 +143,19 @@ function createParticles(palette) {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   particleSystem = new THREE.Points(geometry, new THREE.PointsMaterial({
-    size: isMobileWin ? 2.0 : 2.3, vertexColors: true, transparent: true,
-    opacity: isMobileWin ? 0.58 : 0.65, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
+    size: isMobileDev ? 1.7 : 2.3, vertexColors: true, transparent: true,
+    opacity: isMobileDev ? 0.5 : 0.65, sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
   }));
   scene.add(particleSystem);
 }
 
 function wireMat(color, opacity = 0.45) {
-  const isMobileWin = window.innerWidth <= 768;
-  const finalOpacity = isMobileWin ? opacity * 0.85 : opacity;
+  const finalOpacity = isMobileDev ? opacity * 0.8 : opacity;
   return new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
 function solidMat(color, opacity = 0.32) {
-  const isMobileWin = window.innerWidth <= 768;
-  const finalOpacity = isMobileWin ? opacity * 0.85 : opacity;
+  const finalOpacity = isMobileDev ? opacity * 0.8 : opacity;
   return new THREE.MeshBasicMaterial({ color, transparent: true, opacity: finalOpacity, depthWrite: false });
 }
 
@@ -170,9 +178,9 @@ function makeCodeBrackets(color) {
 
 function makeReactAtom(color) {
   const g = new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(4, 10, 10), solidMat(color, 0.55)));
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(4, isMobileDev ? 6 : 10, isMobileDev ? 6 : 10), solidMat(color, 0.55)));
   for (let i = 0; i < 3; i++) {
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(16, 0.45, 6, 48), wireMat(color, 0.4));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(16, 0.45, 4, isMobileDev ? 18 : 48), wireMat(color, 0.4));
     ring.rotation.x = Math.PI / 2;
     ring.rotation.y = (i * Math.PI) / 3;
     g.add(ring);
@@ -186,8 +194,8 @@ function makeNodeHex(color) {
 
 function makeDatabase(color) {
   const g = new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 18, 16), wireMat(color, 0.4)));
-  g.add(new THREE.Mesh(new THREE.TorusGeometry(10, 0.5, 6, 24), wireMat(color, 0.35)));
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 18, isMobileDev ? 8 : 16), wireMat(color, 0.4)));
+  g.add(new THREE.Mesh(new THREE.TorusGeometry(10, 0.5, 4, isMobileDev ? 14 : 24), wireMat(color, 0.35)));
   return g;
 }
 
@@ -195,12 +203,12 @@ function makeGitBranch(color) {
   const g = new THREE.Group();
   const m = solidMat(color, 0.5);
   [[0, -12, 0], [0, 0, 0], [0, 12, 0], [10, 6, 0]].forEach(([x, y, z]) => {
-    const n = new THREE.Mesh(new THREE.SphereGeometry(2.4, 8, 8), m);
+    const n = new THREE.Mesh(new THREE.SphereGeometry(2.4, isMobileDev ? 6 : 8, isMobileDev ? 6 : 8), m);
     n.position.set(x, y, z); g.add(n);
   });
-  const line = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 24, 6), wireMat(color, 0.45));
+  const line = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 24, 4), wireMat(color, 0.45));
   g.add(line);
-  const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 12, 6), wireMat(color, 0.45));
+  const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 12, 4), wireMat(color, 0.45));
   branch.rotation.z = -0.7; branch.position.set(5, 3, 0);
   g.add(branch);
   return g;
@@ -220,17 +228,17 @@ function makeApiNodes(color) {
   const g = new THREE.Group();
   const positions = [[-12, 0, 0], [12, 0, 0], [0, 12, 0], [0, -12, 0]];
   positions.forEach(([x, y, z]) => {
-    const n = new THREE.Mesh(new THREE.SphereGeometry(3, 8, 8), solidMat(color, 0.5));
+    const n = new THREE.Mesh(new THREE.SphereGeometry(3, isMobileDev ? 6 : 8, isMobileDev ? 6 : 8), solidMat(color, 0.5));
     n.position.set(x, y, z); g.add(n);
   });
-  g.add(new THREE.Mesh(new THREE.TorusGeometry(12, 0.4, 6, 32), wireMat(color, 0.35)));
+  g.add(new THREE.Mesh(new THREE.TorusGeometry(12, 0.4, 4, isMobileDev ? 16 : 32), wireMat(color, 0.35)));
   return g;
 }
 
 function makeCoffeeCup(color) {
   const g = new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.CylinderGeometry(8, 7, 14, 12), wireMat(color, 0.42)));
-  const handle = new THREE.Mesh(new THREE.TorusGeometry(5, 0.7, 6, 16, Math.PI), wireMat(color, 0.42));
+  g.add(new THREE.Mesh(new THREE.CylinderGeometry(8, 7, 14, isMobileDev ? 8 : 12), wireMat(color, 0.42)));
+  const handle = new THREE.Mesh(new THREE.TorusGeometry(5, 0.7, 4, isMobileDev ? 10 : 16, Math.PI), wireMat(color, 0.42));
   handle.position.set(9, 0, 0); handle.rotation.y = Math.PI / 2;
   g.add(handle);
   return g;
@@ -238,8 +246,8 @@ function makeCoffeeCup(color) {
 
 function makeMongoLeaf(color) {
   const g = new THREE.Group();
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(8, 10, 12, 0, Math.PI * 2, 0, Math.PI * 0.85), wireMat(color, 0.4)));
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(4, 10, 8), wireMat(color, 0.4));
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(8, isMobileDev ? 6 : 10, isMobileDev ? 6 : 12, 0, Math.PI * 2, 0, Math.PI * 0.85), wireMat(color, 0.4)));
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(4, 10, isMobileDev ? 6 : 8), wireMat(color, 0.4));
   tip.position.y = -10; g.add(tip);
   return g;
 }
@@ -247,7 +255,7 @@ function makeMongoLeaf(color) {
 function makeSpringCoil(color) {
   const g = new THREE.Group();
   for (let i = 0; i < 5; i++) {
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(8, 0.55, 6, 24), wireMat(color, 0.38));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(8, 0.55, 4, isMobileDev ? 12 : 24), wireMat(color, 0.38));
     ring.position.y = i * 4 - 8;
     ring.rotation.x = Math.PI / 2;
     g.add(ring);
@@ -285,7 +293,7 @@ function makeNextTriangle(color) {
 function makeCloud(color) {
   const g = new THREE.Group();
   [[0, 0, 0, 8], [-8, -2, 0, 6], [8, -2, 0, 6], [0, -4, 0, 7]].forEach(([x, y, z, r]) => {
-    const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 10), wireMat(color, 0.35));
+    const puff = new THREE.Mesh(new THREE.SphereGeometry(r, isMobileDev ? 6 : 10, isMobileDev ? 6 : 10), wireMat(color, 0.35));
     puff.position.set(x, y, z); g.add(puff);
   });
   return g;
@@ -322,7 +330,7 @@ function makeHtmlTag(color) {
 function makeLock(color) {
   const g = new THREE.Group();
   g.add(new THREE.Mesh(new THREE.BoxGeometry(14, 12, 6), wireMat(color, 0.4)));
-  const shackle = new THREE.Mesh(new THREE.TorusGeometry(5, 1.1, 6, 16, Math.PI), wireMat(color, 0.4));
+  const shackle = new THREE.Mesh(new THREE.TorusGeometry(5, 1.1, 4, isMobileDev ? 10 : 16, Math.PI), wireMat(color, 0.4));
   shackle.position.y = 8; shackle.rotation.x = Math.PI; g.add(shackle);
   return g;
 }
@@ -336,9 +344,8 @@ function createTechFloats(palette) {
     makeGitBranch, makeTerminal, makeApiNodes, makeCoffeeCup, makeMongoLeaf, makeSpringCoil,
     makeTsBadge, makeDockerWhale, makeNextTriangle, makeCloud, makeChip, makeHtmlTag, makeLock
   ];
-  const isMobileWin = window.innerWidth <= 768;
-  const count = isMobileWin ? 7 : 9;
-  const spread = isMobileWin ? Math.min(window.innerWidth / 3.2, 130) : Math.min(window.innerWidth / 8.5, 160);
+  const count = isMobileDev ? 4 : 9;
+  const spread = isMobileDev ? Math.min(window.innerWidth / 3.2, 120) : Math.min(window.innerWidth / 8.5, 160);
 
   for (let i = 0; i < count; i++) {
     const maker = makers[i % makers.length];
@@ -346,16 +353,16 @@ function createTechFloats(palette) {
     const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.4;
     const radius = spread * (0.6 + (i % 4) * 0.25);
     const sideSign = (i % 2 === 0) ? 1 : -1;
-    const x = isMobileWin ? sideSign * (34 + (i % 3) * 14) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const x = isMobileDev ? sideSign * (36 + (i % 2) * 16) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
     const y = Math.sin(angle * 1.25) * (spread * 0.65) + ((i % 5) - 2) * 22;
-    const z = isMobileWin ? (-32 - (i % 5) * 12) : (-20 - (i % 6) * 18 - Math.random() * 35);
-    const scale = isMobileWin ? (0.35 + (i % 4) * 0.05) : (0.48 + (i % 5) * 0.12);
+    const z = isMobileDev ? (-36 - (i % 4) * 14) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const scale = isMobileDev ? (0.34 + (i % 3) * 0.04) : (0.48 + (i % 5) * 0.12);
     mesh.position.set(x, y, z);
     mesh.scale.setScalar(scale);
     mesh.userData = {
       baseX: x, baseY: y, baseZ: z,
       speed: 0.2 + (i % 5) * 0.09,
-      amp: (isMobileWin ? 7 : 11) + (i % 4) * 3,
+      amp: (isMobileDev ? 6 : 11) + (i % 4) * 3,
       rotSpeed: 0.14 + (i % 5) * 0.06,
       phase: i * 0.72,
       scrollFactor: 0.35 + (i % 4) * 0.28,
@@ -368,17 +375,16 @@ function createTechFloats(palette) {
 
 function layoutTechForViewport() {
   if (!techMeshes.length) return;
-  const isMobileWin = window.innerWidth <= 768;
-  const spread = isMobileWin ? Math.min(window.innerWidth / 3.2, 130) : Math.min(window.innerWidth / 8.5, 160);
+  const spread = isMobileDev ? Math.min(window.innerWidth / 3.2, 120) : Math.min(window.innerWidth / 8.5, 160);
 
   techMeshes.forEach((mesh, i) => {
     const angle = (i / techMeshes.length) * Math.PI * 2 + (i % 3) * 0.4;
     const radius = spread * (0.6 + (i % 4) * 0.25);
     const sideSign = (i % 2 === 0) ? 1 : -1;
-    const x = isMobileWin ? sideSign * (34 + (i % 3) * 14) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
+    const x = isMobileDev ? sideSign * (36 + (i % 2) * 16) : Math.cos(angle) * radius * (i % 2 === 0 ? 1.2 : -1.05);
     const y = Math.sin(angle * 1.25) * (spread * 0.65) + ((i % 5) - 2) * 22;
-    const z = isMobileWin ? (-32 - (i % 5) * 12) : (-20 - (i % 6) * 18 - Math.random() * 35);
-    const scale = isMobileWin ? (0.35 + (i % 4) * 0.05) : (0.48 + (i % 5) * 0.12);
+    const z = isMobileDev ? (-36 - (i % 4) * 14) : (-20 - (i % 6) * 18 - Math.random() * 35);
+    const scale = isMobileDev ? (0.34 + (i % 3) * 0.04) : (0.48 + (i % 5) * 0.12);
     mesh.userData.baseX = x;
     mesh.userData.baseY = y;
     mesh.userData.baseZ = z;
@@ -389,11 +395,14 @@ function layoutTechForViewport() {
 
 function onWindowResize() {
   if (!camera || !renderer) return;
+  isMobileDev = isTouchDevice || window.innerWidth <= 768;
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+  renderer.setPixelRatio(isMobileDev ? 1.0 : Math.min(window.devicePixelRatio, 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
   scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
   layoutTechForViewport();
+  updateCachedSectionBounds();
 }
 function onMouseMove(e) {
   targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -401,9 +410,6 @@ function onMouseMove(e) {
 }
 function onScroll() {
   scrollInfo.targetY = window.scrollY;
-  if (!scrollInfo.docHeight || Math.random() < 0.05) {
-    scrollInfo.docHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-  }
 }
 
 function animate() {
@@ -419,34 +425,37 @@ function animate() {
     particleSystem.rotation.x = time * 0.02;
   }
 
-  scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * 0.1;
+  scrollInfo.y += (scrollInfo.targetY - scrollInfo.y) * (isMobileDev ? 0.08 : 0.06);
   const docHeight = scrollInfo.docHeight || 1;
   const scrollNorm = scrollInfo.y / docHeight;
-  const scrollWave = Math.sin(scrollNorm * Math.PI * 5);
+  const scrollWave = Math.sin(scrollNorm * Math.PI * 1.5);
 
   techMeshes.forEach(mesh => {
     const d = mesh.userData;
-    mesh.rotation.y = time * d.rotSpeed + d.phase + scrollNorm * 2.2;
-    mesh.rotation.x = time * d.rotSpeed * 0.7 + scrollNorm * d.scrollFactor;
-    mesh.position.y = d.baseY + Math.sin(time * d.speed + d.phase) * d.amp + scrollWave * 28 * d.scrollFactor;
-    mesh.position.x = d.baseX + Math.cos(time * d.speed * 0.7 + d.phase) * (d.amp * 0.5) + scrollNorm * d.parallaxX;
-    mesh.position.z = d.baseZ + Math.sin(scrollNorm * Math.PI * 3 + d.phase) * 22;
+    mesh.rotation.y = time * d.rotSpeed + d.phase + scrollNorm * 1.2;
+    mesh.rotation.x = time * d.rotSpeed * 0.7 + scrollNorm * (d.scrollFactor * 0.5);
+    mesh.position.y = d.baseY + Math.sin(time * d.speed + d.phase) * d.amp + scrollWave * 12 * d.scrollFactor;
+    mesh.position.x = d.baseX + Math.cos(time * d.speed * 0.7 + d.phase) * (d.amp * 0.5) + scrollNorm * (d.parallaxX * 0.4);
+    mesh.position.z = d.baseZ + Math.sin(scrollNorm * Math.PI * 1.5 + d.phase) * 12;
   });
 
-  currentMouseX += (targetMouseX - currentMouseX) * 0.04;
-  currentMouseY += (targetMouseY - currentMouseY) * 0.04;
-  camera.position.x += (currentMouseX * 28 - camera.position.x) * 0.045;
-  camera.position.y += (-currentMouseY * 16 - camera.position.y) * 0.045;
-  camera.lookAt(8, scrollNorm * -12, 0);
+  const mouseLerp = isMobileDev ? 0.025 : 0.04;
+  currentMouseX += (targetMouseX - currentMouseX) * mouseLerp;
+  currentMouseY += (targetMouseY - currentMouseY) * mouseLerp;
+
+  camera.position.x = cameraBasePos.x + currentMouseX * (isMobileDev ? 6 : 18);
+  camera.position.y = cameraBasePos.y - currentMouseY * (isMobileDev ? 4 : 12);
+  camera.position.z = cameraBasePos.z;
+  camera.lookAt(0, scrollNorm * -6, 0);
 
   if (particleSystem) {
-    particleSystem.position.y = scrollWave * 40;
-    particleSystem.position.x = Math.cos(scrollNorm * Math.PI * 2) * 24;
-    particleSystem.rotation.y = time * 0.06 + scrollNorm * Math.PI * 1.4;
+    particleSystem.position.y = scrollWave * 15;
+    particleSystem.position.x = Math.cos(scrollNorm * Math.PI * 1.5) * 10;
+    particleSystem.rotation.y = time * 0.06 + scrollNorm * Math.PI * 0.5;
   }
   if (techGroup) {
-    techGroup.rotation.y = scrollNorm * 0.85;
-    techGroup.position.y = -scrollNorm * 35;
+    techGroup.rotation.y = scrollNorm * 0.4;
+    techGroup.position.y = -scrollNorm * 18;
   }
 
   renderer.render(scene, camera);
@@ -503,7 +512,7 @@ if (!isTouchDevice && cursor && follower) {
     requestAnimationFrame(animateCursor);
   })();
 
-  const hoverTargets = document.querySelectorAll('a, button, [role="button"], .media-thumb, .feat-slide, .project-card, .achievement-card, .cert-card, .lead-node, .skill-card');
+  const hoverTargets = document.querySelectorAll('a, button, [role="button"], .media-thumb, .feat-slide, .project-card, .achievement-card, .cert-card, .badge-card, [data-showcase], .lead-node, .skill-card');
   hoverTargets.forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.classList.add('is-hover');
@@ -524,6 +533,16 @@ if (!isTouchDevice && cursor && follower) {
 /* ── NAVBAR ─────────────────────────────────────────────────── */
 const navbar = document.getElementById('navbar');
 let scrollTicking = false;
+let cachedSectionBounds = [];
+
+function updateCachedSectionBounds() {
+  const sections = document.querySelectorAll('section[id]');
+  cachedSectionBounds = Array.from(sections).map(sec => ({
+    id: sec.getAttribute('id'),
+    top: sec.offsetTop,
+    bottom: sec.offsetTop + sec.offsetHeight
+  }));
+}
 
 window.addEventListener('scroll', () => {
   if (scrollTicking) return;
@@ -537,15 +556,16 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 function highlightNavLink() {
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  if (!cachedSectionBounds.length) updateCachedSectionBounds();
   const scrollPos = window.scrollY + 120;
-  sections.forEach(sec => {
-    if (scrollPos >= sec.offsetTop && scrollPos < sec.offsetTop + sec.offsetHeight) {
-      const id = sec.getAttribute('id');
-      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('data-section') === id));
+  const navLinks = document.querySelectorAll('.nav-link');
+  for (let i = 0; i < cachedSectionBounds.length; i++) {
+    const sec = cachedSectionBounds[i];
+    if (scrollPos >= sec.top && scrollPos < sec.bottom) {
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('data-section') === sec.id));
+      break;
     }
-  });
+  }
 }
 
 /* ── MOBILE MENU ────────────────────────────────────────────── */
@@ -565,6 +585,27 @@ function closeMobileMenu() {
   mobileMenu?.classList.remove('open'); hamburger?.classList.remove('open');
   hamburger?.setAttribute('aria-expanded', 'false'); document.body.style.overflow = '';
 }
+
+/* ── SMOOTH ACCURATE SCROLL TO SECTIONS ───────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const targetId = this.getAttribute('href');
+    if (!targetId || targetId === '#') return;
+    const targetSection = document.querySelector(targetId);
+    if (targetSection) {
+      e.preventDefault();
+      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 70;
+      const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+      window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: 'smooth'
+      });
+      if (history.pushState) {
+        history.pushState(null, null, targetId);
+      }
+    }
+  });
+});
 
 /* ── TYPEWRITER (optional) ──────────────────────────────────── */
 const typeEl = document.getElementById('typewriter');
@@ -614,13 +655,13 @@ function initEntranceAnimations() {
     gsap.timeline({
       scrollTrigger: {
         trigger: document.documentElement,
-        start: 'top top', end: 'max', scrub: isMobile ? 0.6 : 1.2, invalidateOnRefresh: true
+        start: 'top top', end: 'max', scrub: isMobile ? 0.3 : 1.0, invalidateOnRefresh: true
       }
     })
-      .to(camera.position, { z: 200, x: -20, y: -6, ease: 'none' }, 0)
-      .to(camera.position, { z: 190, x: 24, y: 10, ease: 'none' }, 0.25)
-      .to(camera.position, { z: 210, x: -14, y: -4, ease: 'none' }, 0.5)
-      .to(camera.position, { z: 240, x: 0, y: 0, ease: 'none' }, 1);
+      .to(cameraBasePos, { z: 220, x: -5, y: -2, ease: 'none' }, 0)
+      .to(cameraBasePos, { z: 210, x: 6, y: 3, ease: 'none' }, 0.33)
+      .to(cameraBasePos, { z: 225, x: -4, y: -1, ease: 'none' }, 0.66)
+      .to(cameraBasePos, { z: 240, x: 0, y: 0, ease: 'none' }, 1);
   }
 
   /* ── High-Impact Hero Entrance Animation ─────────────────────── */
@@ -812,7 +853,7 @@ function initEntranceAnimations() {
           gsap.fromTo(tags,
             { opacity: 0, scale: 0.9 },
             {
-              opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, force3D: true,
+              opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, force3D: true, clearProps: 'transform,opacity',
               scrollTrigger: { trigger: item, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
             }
           );
@@ -821,7 +862,7 @@ function initEntranceAnimations() {
           gsap.fromTo(score,
             { opacity: 0, y: 10 },
             {
-              opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', force3D: true,
+              opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', force3D: true, clearProps: 'transform,opacity',
               scrollTrigger: { trigger: item, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
             }
           );
@@ -894,7 +935,7 @@ function initEntranceAnimations() {
           gsap.fromTo(tags,
             { opacity: 0, y: isMobile ? 8 : 12, scale: 0.92 },
             {
-              opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out', stagger: 0.03, force3D: true,
+              opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out', stagger: 0.03, force3D: true, clearProps: 'transform,opacity',
               scrollTrigger: { trigger: proj, start: isMobile ? 'top 90%' : 'top 86%', toggleActions: 'play none none none' }
             }
           );
@@ -956,36 +997,58 @@ function initEntranceAnimations() {
       }
     }
 
-    /* 8. LEADERSHIP SECTION */
-    const leadSec = document.querySelector('#leadership');
-    if (leadSec) {
-      const nodes = leadSec.querySelectorAll('.lead-node');
-      if (nodes.length) {
-        nodes.forEach((node, idx) => {
-          const marker = node.querySelector('.lead-node-marker');
-          const card = node.querySelector('.lead-node-card');
-          gsap.fromTo(node,
-            { opacity: 0, scale: isMobile ? 0.95 : 0.6, rotate: isMobile ? 0 : 10, y: isMobile ? 22 : 45 },
-            {
-              opacity: 1, scale: 1, rotate: 0, y: 0, duration: isMobile ? 0.55 : 0.8, ease: isMobile ? 'power2.out' : 'back.out(1.8)', force3D: true,
-              clearProps: 'transform,opacity',
-              scrollTrigger: { trigger: node, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
-            }
-          );
-          if (marker) {
-            gsap.fromTo(marker,
-              { opacity: 0, scale: 0.4 },
-              {
-                opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(2)', force3D: true,
-                scrollTrigger: { trigger: node, start: isMobile ? 'top 94%' : 'top 88%', toggleActions: 'play none none none' }
-              }
-            );
+    /* 8. BADGES SECTION */
+    const badgesSec = document.querySelector('#badges');
+    if (badgesSec) {
+      const cards = badgesSec.querySelectorAll('.badge-card');
+      if (cards.length) {
+        gsap.fromTo(cards,
+          { opacity: 0, rotateY: isMobile ? 0 : -30, y: isMobile ? 25 : 50, scale: isMobile ? 0.95 : 0.88, transformPerspective: 1000 },
+          {
+            opacity: 1, rotateY: 0, y: 0, scale: 1, duration: isMobile ? 0.55 : 0.85, ease: 'expo.out', force3D: true,
+            stagger: isMobile ? 0.05 : 0.08, clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: badgesSec, start: triggerStart, toggleActions: 'play none none none' }
           }
-        });
+        );
       }
     }
 
-    /* 9. CONTACT SECTION */
+    /* 9. LEADERSHIP SECTION */
+    const leadSec = document.querySelector('#leadership');
+    if (leadSec) {
+      const nodes = leadSec.querySelectorAll('.lead-node');
+      const markers = leadSec.querySelectorAll('.lead-node-marker');
+      if (nodes.length) {
+        gsap.fromTo(nodes,
+          { opacity: 0, y: isMobile ? 18 : 32, scale: isMobile ? 0.96 : 0.92 },
+          {
+            opacity: 1, y: 0, scale: 1,
+            duration: isMobile ? 0.5 : 0.75,
+            ease: 'power3.out',
+            stagger: isMobile ? 0.06 : 0.1,
+            force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: leadSec, start: isMobile ? 'top 92%' : 'top 84%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+      if (markers.length) {
+        gsap.fromTo(markers,
+          { opacity: 0, scale: 0.3 },
+          {
+            opacity: 1, scale: 1,
+            duration: 0.45,
+            ease: 'back.out(1.7)',
+            stagger: isMobile ? 0.06 : 0.1,
+            force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: leadSec, start: isMobile ? 'top 92%' : 'top 84%', toggleActions: 'play none none none' }
+          }
+        );
+      }
+    }
+
+    /* 10. CONTACT SECTION */
     const contactSec = document.querySelector('#contact');
     if (contactSec) {
       const cards = contactSec.querySelectorAll('.contact-card');
@@ -1018,7 +1081,7 @@ function initEntranceAnimations() {
         gsap.fromTo(availBadge,
           { opacity: 0, scale: 0.9, y: 10 },
           {
-            opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)', force3D: true,
+            opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)', force3D: true, clearProps: 'transform,opacity',
             scrollTrigger: { trigger: contactSec, start: isMobile ? 'top 88%' : 'top 84%', toggleActions: 'play none none none' }
           }
         );
@@ -1237,9 +1300,14 @@ const mediaGalleries = {
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.22 PM.jpeg',
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.45.34 PM.jpeg',
   ],
-  'cert-oracle': ['pictures/Oracle/Gokul_Oracle.jpg', 'pictures/Oracle/Gokul_Oracle.pdf'],
+  'cert-aws': ['pictures/AWS/AWS_Cloud_Practitioner.jpg'],
+  'cert-oracle': ['pictures/Oracle/Gokul_Oracle.jpg'],
   'cert-cisco': ['pictures/Networking basics/Networking basics.pdf'],
   'cert-cpp': ['pictures/C++ fundamentals/C++.pdf'],
+  'badge-aws': ['pictures/Badges/aws-cloud-practitioner-full.png'],
+  'badge-lc100-2026': ['pictures/Badges/leetcode-100-2026-full.png'],
+  'badge-lc50-2026': ['pictures/Badges/leetcode-50-2026-full.png'],
+  'badge-lc50-2025': ['pictures/Badges/leetcode-50-2025-full.png'],
   campusbox: [
     'pictures/campusbox/optimized/01-landing.jpg',
     'pictures/campusbox/optimized/02-browse.jpg',
@@ -1423,14 +1491,20 @@ function initHeroMediaCarousel(container) {
     });
   }
   if (prefersReducedMotion) return;
+  let isVisible = false;
+  const observer = new IntersectionObserver((entries) => {
+    isVisible = entries[0]?.isIntersecting || false;
+  }, { threshold: 0.1 });
+  observer.observe(container);
+
   const timer = setInterval(() => {
-    if (paused) return;
+    if (paused || !isVisible || document.hidden) return;
     setActive(idx + 1);
-  }, 2800);
+  }, 3200);
   container.addEventListener('mouseenter', () => { paused = true; });
   container.addEventListener('mouseleave', () => { paused = false; });
   container.addEventListener('touchstart', () => { paused = true; }, { passive: true });
-  container._heroCarouselStop = () => clearInterval(timer);
+  container._heroCarouselStop = () => { clearInterval(timer); observer.disconnect(); };
 }
 
 function renderSingleGallery(g) {
