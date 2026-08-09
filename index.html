@@ -80,6 +80,7 @@
         <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
         <li><a href="#achievements" class="nav-link" data-section="achievements">Achievements</a></li>
         <li><a href="#certifications" class="nav-link" data-section="certifications">Certifications</a></li>
+        <li><a href="#badges" class="nav-link" data-section="badges">Badges</a></li>
         <li><a href="#leadership" class="nav-link" data-section="leadership">Leadership</a></li>
         <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
       </ul>
@@ -107,10 +108,14 @@
       <li><a href="#projects" class="mobile-link">Projects</a></li>
       <li><a href="#achievements" class="mobile-link">Achievements</a></li>
       <li><a href="#certifications" class="mobile-link">Certifications</a></li>
+      <li><a href="#badges" class="mobile-link">Badges</a></li>
       <li><a href="#leadership" class="mobile-link">Leadership</a></li>
       <li><a href="#contact" class="mobile-link">Contact</a></li>
     </ul>
-    <a href="Resume/Gokul_resume.pdf" target="_blank" rel="noopener" class="btn btn-primary mt-2">View Resume</a>
+    <div class="mobile-menu-footer">
+      <span class="logo-mark">GP</span>
+      <p class="mobile-menu-quote">“Always building. Always learning.”</p>
+    </div>
   </div>
 
   <main>
@@ -196,7 +201,7 @@
         <div class="about-content-col">
           <h3 class="about-subtitle">Full Stack Developer & Java Programmer</h3>
           <p class="about-text">Passionate Full Stack Developer building responsive, scalable web applications. Currently pursuing B.E. Computer Science at SRM Easwari Engineering College with a CGPA of 8.61/10.</p>
-          <p class="about-text">President of the Theatre Club and Cultural Head of CSE — winner of 9 cultural titles including <strong>Mr.Techofest'26</strong>. Great engineers are also great communicators.</p>
+          <p class="about-text about-text-secondary">President of the Theatre Club and Cultural Head of CSE — winner of 9 cultural titles including <strong>Mr.Techofest'26</strong>. Great engineers are also great communicators.</p>
           <div class="about-details">
             <div class="detail-item"><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span>Chennai, India</span></div>
             <div class="detail-item"><i class="fas fa-graduation-cap" aria-hidden="true"></i><span>SRM Easwari Engineering College</span></div>
@@ -641,6 +646,16 @@
       </div>
       <div class="certs-grid">
         <div class="cert-card">
+          <div class="cert-thumb media-gallery" data-gallery="cert-aws">
+            <img src="pictures/AWS/AWS_Cloud_Practitioner.jpg" alt="AWS Certified Cloud Practitioner preview" class="cert-static-fallback" loading="eager" />
+          </div>
+          <div class="cert-body">
+            <div class="cert-icon"><i class="fab fa-aws" aria-hidden="true" style="color: #ff9900;"></i></div>
+            <h3 class="achievement-title">AWS Cloud Practitioner</h3>
+            <p class="achievement-desc">Amazon Web Services</p>
+          </div>
+        </div>
+        <div class="cert-card">
           <div class="cert-thumb media-gallery" data-gallery="cert-oracle">
             <img src="pictures/Oracle/Gokul_Oracle.jpg" alt="Oracle Java SE17 Certificate preview" class="cert-static-fallback" loading="eager" />
           </div>
@@ -651,19 +666,80 @@
           </div>
         </div>
         <div class="cert-card">
-          <div class="cert-thumb media-gallery" data-gallery="cert-cisco"></div>
+          <div class="cert-thumb media-gallery" data-gallery="cert-cisco">
+            <img src="pictures/Networking basics/Networking basics.jpg" alt="Cisco Networking preview" class="cert-static-fallback" loading="eager" />
+          </div>
           <div class="cert-body">
-            <div class="cert-icon"><i class="fas fa-network-wired" aria-hidden="true"></i></div>
+            <div class="cert-icon"><i class="fas fa-network-wired" aria-hidden="true" style="color: #00a79d;"></i></div>
             <h3 class="achievement-title">Cisco Networking</h3>
             <p class="achievement-desc">Cisco Networking Academy</p>
           </div>
         </div>
         <div class="cert-card">
-          <div class="cert-thumb media-gallery" data-gallery="cert-cpp"></div>
+          <div class="cert-thumb media-gallery" data-gallery="cert-cpp">
+            <img src="pictures/C++ fundamentals/C++.jpg" alt="Infosys C++ preview" class="cert-static-fallback" loading="eager" />
+          </div>
           <div class="cert-body">
-            <div class="cert-icon"><i class="fas fa-code" aria-hidden="true"></i></div>
+            <div class="cert-icon"><i class="fas fa-code" aria-hidden="true" style="color: #0072ce;"></i></div>
             <h3 class="achievement-title">Infosys C++</h3>
             <p class="achievement-desc">Infosys Springboard</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="section-bridge" aria-hidden="true">
+      <span class="section-bridge-diamond"></span>
+    </div>
+
+    <!-- ════ 08 BADGES ════ -->
+    <section id="badges" class="cine-section badges-section" data-cinematic data-fx="scale-fade">
+      <div class="cine-intro">
+        <div class="cine-heading">
+          <span class="cine-number">08</span>
+          <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Badges</span></span></h2>
+        </div>
+        <p class="cine-sub">Official milestone badges and technical recognitions.</p>
+      </div>
+      <div class="badges-grid" id="badgesGrid">
+        <div class="badge-card" data-showcase="badge-aws">
+          <div class="badge-icon-wrap">
+            <img src="pictures/Badges/aws-cloud-practitioner-thumb.png" alt="AWS Cloud Practitioner Badge" class="badge-img" loading="eager" />
+          </div>
+          <div class="badge-body">
+            <h3 class="badge-title">AWS Cloud Practitioner</h3>
+            <p class="badge-desc">Amazon Web Services · 2026</p>
+          </div>
+        </div>
+
+        <div class="badge-card" data-showcase="badge-lc100-2026">
+          <div class="badge-icon-wrap">
+            <img src="pictures/Badges/leetcode-100-2026-thumb.png" alt="LeetCode 100 2026 Badge" class="badge-img" loading="eager" />
+          </div>
+          <div class="badge-body">
+            <h3 class="badge-title">LeetCode 100 2026</h3>
+            <p class="badge-desc">LeetCode · 100+ Days Solved</p>
+          </div>
+        </div>
+
+        <div class="badge-card" data-showcase="badge-lc50-2026">
+          <div class="badge-icon-wrap">
+            <img src="pictures/Badges/leetcode-50-2026-thumb.png" alt="LeetCode 50 2026 Badge" class="badge-img" loading="eager" />
+          </div>
+          <div class="badge-body">
+            <h3 class="badge-title">LeetCode 50 2026</h3>
+            <p class="badge-desc">LeetCode · 50+ Days Solved</p>
+          </div>
+        </div>
+
+        <div class="badge-card" data-showcase="badge-lc50-2025">
+          <div class="badge-icon-wrap">
+            <img src="pictures/Badges/leetcode-50-2025-thumb.png" alt="LeetCode 50 2025 Badge" class="badge-img" loading="eager" />
+          </div>
+          <div class="badge-body">
+            <h3 class="badge-title">LeetCode 50 2025</h3>
+            <p class="badge-desc">LeetCode · 50+ Days Solved</p>
           </div>
         </div>
       </div>
@@ -678,7 +754,7 @@
     <section id="leadership" class="cine-section leadership-section" data-cinematic data-fx="slide-right">
       <div class="cine-intro">
         <div class="cine-heading">
-          <span class="cine-number">08</span>
+          <span class="cine-number">09</span>
           <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Leadership</span></span></h2>
         </div>
         <p class="cine-sub">Leading teams on campus and behind the curtain.</p>
@@ -766,7 +842,7 @@
     <section id="contact" class="cine-section contact-section" data-cinematic data-fx="fade-up">
       <div class="cine-intro">
         <div class="cine-heading">
-          <span class="cine-number">09</span>
+          <span class="cine-number">10</span>
           <h2 class="cine-title"><span class="line-mask"><span class="line-inner">Contact</span></span></h2>
         </div>
         <p class="cine-sub">Projects, collaborations, or a quick hello.</p>
@@ -847,9 +923,12 @@
       <ul class="footer-links">
         <li><a href="#about">About</a></li>
         <li><a href="#featured">Featured</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#badges">Badges</a></li>
         <li><a href="#leadership">Leadership</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
