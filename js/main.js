@@ -1295,16 +1295,24 @@ const mediaGalleries = {
     'pictures/Overalls/WhatsApp Image 2026-06-29 at 4.34.44 PM.jpeg',
     'pictures/Overalls/WhatsApp Image 2026-06-29 at 4.35.06 PM.jpeg',
   ],
+  'cultural-secretary': [
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.16 PM.jpeg',
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.22 PM.jpeg',
+    'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.45.34 PM.jpeg',
+  ],
   'cultural-head': [
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.16 PM.jpeg',
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.22 PM.jpeg',
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.45.34 PM.jpeg',
   ],
-  'cert-aws': ['pictures/AWS/AWS_Cloud_Practitioner.jpg'],
+  'cert-aws-ai': ['pictures/AWS/AWS_AI_Practitioner.jpg?v=20260810_v2'],
+  'cert-aws': ['pictures/AWS/AWS_Cloud_Practitioner.jpg?v=20260810_v2'],
   'cert-oracle': ['pictures/Oracle/Gokul_Oracle.jpg'],
   'cert-cisco': ['pictures/Networking basics/Networking basics.pdf'],
   'cert-cpp': ['pictures/C++ fundamentals/C++.pdf'],
-  'badge-aws': ['pictures/Badges/aws-cloud-practitioner-full.png'],
+  'badge-oracle': ['pictures/Badges/oracle-java-se17-full.png'],
+  'badge-aws-ai': ['pictures/Badges/aws-ai-practitioner-full.png?v=20260810_v2'],
+  'badge-aws': ['pictures/Badges/aws-cloud-practitioner-full.png?v=20260810_v2'],
   'badge-lc100-2026': ['pictures/Badges/leetcode-100-2026-full.png'],
   'badge-lc50-2026': ['pictures/Badges/leetcode-50-2026-full.png'],
   'badge-lc50-2025': ['pictures/Badges/leetcode-50-2025-full.png'],
@@ -1338,10 +1346,14 @@ const mediaGalleries = {
 let activeGalleryItems = [];
 let activeGalleryIndex = 0;
 
-const isPdfPath = p => /\.pdf$/i.test(p);
-const isImagePath = p => /\.(jpe?g|png|gif|webp|bmp|svg)$/i.test(p);
-const encodeMediaPath = p => p.split('/').map(encodeURIComponent).join('/');
-const getCertThumbPath = p => p.replace(/\.pdf$/i, '.jpg');
+const isPdfPath = p => /\.pdf(\?.*)?$/i.test(p);
+const isImagePath = p => /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i.test(p);
+const encodeMediaPath = p => {
+  const [pathOnly, query] = p.split('?');
+  const encoded = pathOnly.split('/').map(encodeURIComponent).join('/');
+  return query ? `${encoded}?${query}` : encoded;
+};
+const getCertThumbPath = p => p.replace(/\.pdf(\?.*)?$/i, '.jpg$1');
 
 function ensureMediaLightbox() {
   let lb = document.getElementById('mediaLightbox');
