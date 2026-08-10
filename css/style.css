@@ -513,7 +513,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 .featured-track.is-dragging { cursor: grabbing; }
 .featured-track.is-paused { animation-play-state: paused; }
 .feat-slide {
-  position: relative; flex: 0 0 min(340px, 78vw); height: 360px; border-radius: var(--radius-xl);
+  position: relative; flex: 0 0 min(285px, 78vw); height: 300px; border-radius: var(--radius-xl);
   overflow: hidden; border: 1px solid var(--border-glass); background: var(--bg-card);
   isolation: isolate; display: block;
   transition: border-color 0.45s var(--ease-cine), box-shadow 0.45s, transform 0.45s;
@@ -534,12 +534,12 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 .feat-slide:hover .feat-media img { transform: scale(1.08); filter: brightness(0.45) saturate(1.05); }
 .feat-overlay {
   position: absolute; inset: 0; display: flex; flex-direction: column;
-  justify-content: flex-end; padding: 1.75rem;
+  justify-content: flex-end; padding: 1.35rem;
   background: linear-gradient(to top, rgba(5,5,5,0.94) 0%, rgba(5,5,5,0.25) 55%, transparent 100%);
 }
-.feat-tag { font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.45rem; font-family: var(--font-mono); }
-.feat-overlay h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-heading); letter-spacing: -0.025em; line-height: 1.2; }
-.feat-overlay p { color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.3rem; }
+.feat-tag { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.35rem; font-family: var(--font-mono); }
+.feat-overlay h3 { font-family: var(--font-heading); font-size: 1.18rem; font-weight: 700; color: var(--text-heading); letter-spacing: -0.025em; line-height: 1.2; }
+.feat-overlay p { color: var(--text-secondary); font-size: 0.82rem; margin-top: 0.25rem; }
 .feat-nav {
   flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
@@ -726,7 +726,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 .achievement-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; }
 
 /* ── CERTIFICATIONS ─────────────────────────────────────────── */
-.certs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 1100px; width: 100%; margin-inline: auto; }
+.certs-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; max-width: 1280px; width: 100%; margin-inline: auto; }
 .cert-card {
   background: rgba(18, 16, 12, 0.88); border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
   overflow: hidden;
@@ -767,7 +767,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 /* ── BADGES SECTION ─────────────────────────────────────────── */
 .badges-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   align-items: stretch;
   gap: 0.95rem;
   max-width: 1100px;
@@ -854,6 +854,19 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.badge-verify-icon {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.45;
+  transition: color 0.3s, opacity 0.3s, transform 0.3s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.badge-card:hover .badge-verify-icon {
+  color: var(--gold);
+  opacity: 1;
+  transform: translate(2px, -2px);
 }
 .badge-bar {
   height: 2px;
@@ -1270,6 +1283,64 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 .connect-meta-item i { color: var(--gold); width: 1rem; text-align: center; flex-shrink: 0; margin-top: 0.15rem; }
 .resume-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
 
+/* Laptop & Desktop — Compact Contact Cards */
+@media (min-width: 992px) {
+  .contact-cards { gap: 0.55rem; }
+  .contact-card {
+    padding: 0.75rem 0.95rem;
+    gap: 0.75rem;
+    border-radius: var(--radius-lg);
+  }
+  .contact-card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    border-radius: var(--radius-sm);
+  }
+  .contact-card-label { font-size: 0.6rem; }
+  .contact-card-value { font-size: 0.84rem; }
+  .contact-socials-block { margin-top: 1rem; }
+  .contact-socials { gap: 0.45rem; }
+  .contact-social {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-md);
+  }
+  .availability-badge {
+    margin-top: 0.85rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.76rem;
+  }
+  .connect-card {
+    padding: 1.15rem 1.35rem;
+    border-radius: var(--radius-xl);
+  }
+  .connect-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.45rem;
+  }
+  .connect-text {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    margin-bottom: 0.85rem;
+  }
+  .connect-meta {
+    gap: 0.4rem;
+    margin-bottom: 0.95rem;
+  }
+  .connect-meta-item {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .resume-actions {
+    gap: 0.5rem;
+  }
+  .resume-actions .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.78rem;
+  }
+}
+
 /* ── MEDIA GALLERIES ────────────────────────────────────────── */
 .media-gallery { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }
 .media-thumb { width: 58px; height: 58px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-glass); cursor: none; position: relative; transition: 0.3s var(--ease-out); }
@@ -1334,13 +1405,18 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .hamburger { display: flex; }
 }
 
-/* Laptop — tighter vertical rhythm */
+/* Laptop — tighter vertical rhythm & compact featured cards */
 @media (max-width: 1440px) and (min-width: 1101px) {
   .cine-section { padding: clamp(2.5rem, 4.5vw, 3.75rem) clamp(1.5rem, 3.5vw, 3rem); }
   .projects-list { gap: clamp(2rem, 4vw, 3.25rem); }
   .project-item { grid-template-columns: 0.85fr 1.15fr; gap: 1.75rem; }
   .project-item.project-reverse { grid-template-columns: 1.15fr 0.85fr; }
   .lead-card-media, .lead-card-media-placeholder { min-height: 160px; }
+  .feat-slide { flex: 0 0 275px; height: 295px; border-radius: var(--radius-lg); }
+  .feat-overlay { padding: 1.2rem 1.3rem; }
+  .feat-tag { font-size: 0.6rem; margin-bottom: 0.3rem; letter-spacing: 0.15em; }
+  .feat-overlay h3 { font-size: 1.12rem; line-height: 1.2; }
+  .feat-overlay p { font-size: 0.78rem; margin-top: 0.2rem; }
 }
 
 /* Tablet — keep two-column layouts down to 501px */
@@ -1364,7 +1440,8 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .contact-right-col { max-width: none; justify-self: stretch; }
   .achievements-grid { grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
   .leadership-grid { grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
-  .certs-grid, .badges-grid { grid-template-columns: repeat(2, 1fr); }
+  .certs-grid { grid-template-columns: repeat(3, 1fr); }
+  .badges-grid { grid-template-columns: repeat(3, 1fr); }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .feat-slide { flex-basis: min(260px, 70vw); height: 260px; border-radius: var(--radius-lg); }
   .feat-overlay { padding: 1rem 1.15rem; }
@@ -1628,7 +1705,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .hero-stats .stat-item { flex: 1 1 0 !important; min-width: 0 !important; padding: 0.38rem 0.1rem !important; border-radius: var(--radius-md) !important; text-align: center !important; }
   .hero-stats .stat-number { font-size: 0.92rem !important; line-height: 1.1 !important; }
   .hero-stats .stat-label { font-size: 0.5rem !important; letter-spacing: -0.01em !important; margin-top: 0.1rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-  .certs-grid { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+  .certs-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
   .achievements-grid { grid-template-columns: repeat(3, 1fr); gap: 0.35rem; }
   .achievement-thumb { min-height: 54px; aspect-ratio: 4 / 3; }
   .achievement-body { padding: 0.35rem 0.4rem 0.45rem; }
@@ -1636,10 +1713,10 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .achievement-number { font-size: 0.88rem; margin-bottom: 0.08rem; }
   .achievement-title { font-size: 0.66rem; margin-bottom: 0.08rem; line-height: 1.15; }
   .achievement-desc { font-size: 0.58rem; line-height: 1.22; }
-  .cert-body { padding: 0.45rem 0.55rem 0.55rem; }
-  .cert-icon { width: 24px; height: 24px; font-size: 0.76rem; margin-bottom: 0.2rem; border-radius: 5px; }
-  .cert-body .achievement-title { font-size: 0.74rem; margin-bottom: 0.1rem; line-height: 1.2; }
-  .cert-body .achievement-desc { font-size: 0.62rem; line-height: 1.25; }
+  .cert-body { padding: 0.35rem 0.4rem 0.45rem; }
+  .cert-icon { width: 22px; height: 22px; font-size: 0.72rem; margin-bottom: 0.18rem; border-radius: 5px; }
+  .cert-body .achievement-title { font-size: 0.66rem; margin-bottom: 0.08rem; line-height: 1.18; }
+  .cert-body .achievement-desc { font-size: 0.58rem; line-height: 1.22; }
   .badges-grid { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
   .badge-card { display: flex; flex-direction: row; align-items: center; min-height: 68px; height: auto; padding: 0.6rem 0.65rem; gap: 0.55rem; border-radius: var(--radius-md); touch-action: manipulation; }
   .badge-icon-wrap { width: 38px; height: 38px; min-width: 38px; min-height: 38px; max-width: 38px; max-height: 38px; border-radius: 9px; padding: 3px; flex-shrink: 0; }
@@ -1688,6 +1765,12 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .connect-text { font-size: 0.78rem; line-height: 1.4; margin-bottom: 0.6rem; }
   .connect-meta { gap: 0.35rem; margin-bottom: 0.75rem; }
   .connect-meta-item { font-size: 0.75rem; line-height: 1.35; gap: 0.45rem; }
+
+  /* Mobile Instant Render & Offscreen Layout Skipping */
+  .cine-section:not(#home):not(#about) {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 350px;
+  }
 }
 
 @media (max-width: 500px) {

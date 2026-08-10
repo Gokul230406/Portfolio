@@ -115,7 +115,7 @@ def create_uniform_square_badge(cropped_rgba, target_size=512, inner_size=440):
     canvas.paste(resized, (offset_x, offset_y), resized)
     return canvas
 
-# Process AWS Badge
+# Process AWS Cloud Practitioner Badge
 aws_cropped = Image.open(aws_src).convert('RGBA')
 aws_bbox = aws_cropped.getbbox()
 if aws_bbox:
@@ -123,7 +123,31 @@ if aws_bbox:
 aws_uniform = create_uniform_square_badge(aws_cropped)
 aws_uniform.save(OUT_DIR / 'aws-cloud-practitioner-thumb.png')
 aws_uniform.save(OUT_DIR / 'aws-cloud-practitioner-full.png')
-print("Saved uniform AWS badge")
+print("Saved uniform AWS Cloud Practitioner badge")
+
+# Process AWS AI Practitioner Badge
+aws_ai_src = OUT_DIR / 'aws-ai-practitioner-thumb.png'
+if aws_ai_src.exists():
+    aws_ai_cropped = Image.open(aws_ai_src).convert('RGBA')
+    aws_ai_bbox = aws_ai_cropped.getbbox()
+    if aws_ai_bbox:
+        aws_ai_cropped = aws_ai_cropped.crop(aws_ai_bbox)
+    aws_ai_uniform = create_uniform_square_badge(aws_ai_cropped)
+    aws_ai_uniform.save(OUT_DIR / 'aws-ai-practitioner-thumb.png')
+    aws_ai_uniform.save(OUT_DIR / 'aws-ai-practitioner-full.png')
+    print("Saved uniform AWS AI Practitioner badge")
+
+# Process Oracle Java SE 17 Badge
+oracle_src = OUT_DIR / 'oracle-java-se17-thumb.png'
+if oracle_src.exists():
+    oracle_cropped = Image.open(oracle_src).convert('RGBA')
+    oracle_bbox = oracle_cropped.getbbox()
+    if oracle_bbox:
+        oracle_cropped = oracle_cropped.crop(oracle_bbox)
+    oracle_uniform = create_uniform_square_badge(oracle_cropped)
+    oracle_uniform.save(OUT_DIR / 'oracle-java-se17-thumb.png')
+    oracle_uniform.save(OUT_DIR / 'oracle-java-se17-full.png')
+    print("Saved uniform Oracle Java SE 17 badge")
 
 # Process LC 100 2026
 lc100_cropped = extract_badge_white_bg(lc100_src)
