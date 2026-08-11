@@ -1305,14 +1305,15 @@ const mediaGalleries = {
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.46.22 PM.jpeg',
     'pictures/Non tech achievements/WhatsApp Image 2026-06-29 at 3.45.34 PM.jpeg',
   ],
-  'cert-aws-ai': ['pictures/AWS/AWS_AI_Practitioner.jpg?v=20260810_v2'],
-  'cert-aws': ['pictures/AWS/AWS_Cloud_Practitioner.jpg?v=20260810_v2'],
+  'cert-aws-ai': ['pictures/AWS/AWS_AI_Practitioner.jpg'],
+  'cert-aws': ['pictures/AWS/AWS_Cloud_Practitioner.jpg'],
   'cert-oracle': ['pictures/Oracle/Gokul_Oracle.jpg'],
   'cert-cisco': ['pictures/Networking basics/Networking basics.pdf'],
   'cert-cpp': ['pictures/C++ fundamentals/C++.pdf'],
   'badge-oracle': ['pictures/Badges/oracle-java-se17-full.png'],
-  'badge-aws-ai': ['pictures/Badges/aws-ai-practitioner-full.png?v=20260810_v2'],
-  'badge-aws': ['pictures/Badges/aws-cloud-practitioner-full.png?v=20260810_v2'],
+  'badge-aws-ai': ['pictures/Badges/aws-ai-practitioner-full.png'],
+  'badge-aws': ['pictures/Badges/aws-cloud-practitioner-full.png'],
+  'badge-codechef-100': ['pictures/Badges/codechef-100-full.png'],
   'badge-lc100-2026': ['pictures/Badges/leetcode-100-2026-full.png'],
   'badge-lc50-2026': ['pictures/Badges/leetcode-50-2026-full.png'],
   'badge-lc50-2025': ['pictures/Badges/leetcode-50-2025-full.png'],
@@ -1340,6 +1341,8 @@ const mediaGalleries = {
     'pictures/ayurchain/03-farmer-dashboard.png',
     'pictures/ayurchain/04-admin-pipeline.png',
     'pictures/ayurchain/05-certificate.png',
+    'pictures/ayurchain/06-patent.png',
+    'pictures/ayurchain/ERVAS_Patent.pdf',
   ],
 };
 
@@ -1706,6 +1709,21 @@ function initProjectCarousels() {
   });
 }
 
+function initBadgeCardLightbox() {
+  document.querySelectorAll('.badge-card[data-gallery]').forEach(card => {
+    const iconWrap = card.querySelector('.badge-icon-wrap');
+    const key = card.getAttribute('data-gallery');
+    if (iconWrap && key && mediaGalleries[key]) {
+      iconWrap.style.cursor = 'pointer';
+      iconWrap.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        openMediaLightbox(mediaGalleries[key], 0);
+      });
+    }
+  });
+}
+
 /* ── INIT ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initThree();
@@ -1713,6 +1731,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectCarousels();
   initShowcaseButtons();
   renderMediaGalleries();
+  initBadgeCardLightbox();
   highlightNavLink();
   toggleBackToTop();
 });

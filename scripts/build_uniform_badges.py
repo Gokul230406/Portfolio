@@ -14,7 +14,9 @@ aws_src = OUT_DIR / 'aws-cloud-practitioner-thumb.png'
 lc100_src = BRAIN_DIR / 'media__1786289672520.png'
 
 # 3. LC 50 Days 2026
-lc50_2026_src = BRAIN_DIR / 'media__1786289672552.jpg'
+lc50_2026_src = Path(r'C:\Users\GOKUL\.gemini\antigravity-ide\brain\9c768b82-6604-447d-835b-281913fccb94\media__1786450444780.jpg')
+if not lc50_2026_src.exists():
+    lc50_2026_src = BRAIN_DIR / 'media__1786289672552.jpg'
 
 # 4. LC 50 Days 2025
 lc50_2025_src = BRAIN_DIR / 'media__1786289672547.png'
@@ -62,34 +64,25 @@ def extract_badge_white_bg(img_path):
 def extract_badge_black_bg(img_path):
     img = Image.open(img_path).convert('RGB')
     arr = np.array(img)
-    r, g, b = arr[:,:,0].astype(int), arr[:,:,1].astype(int), arr[:,:,2].astype(int)
-    
-    # Black background mask (R < 25, G < 25, B < 25)
-    is_black = (r < 25) & (g < 25) & (b < 25)
+    h, w = arr.shape[:2]
     
     bgr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
-    h, w = bgr.shape[:2]
     mask = np.zeros((h + 2, w + 2), np.uint8)
     
-    seeds = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
+    seeds = []
+    for x in range(0, w, 2):
+        seeds.append((x, 0))
+        seeds.append((x, h - 1))
+    for y in range(0, h, 2):
+        seeds.append((0, y))
+        seeds.append((w - 1, y))
+        
     for seed in seeds:
-        cv2.floodFill(bgr, mask, seed, (0, 0, 0), (15, 15, 15), (15, 15, 15), cv2.FLOODFILL_MASK_ONLY | (255 << 8))
+        cv2.floodFill(bgr, mask, seed, (0, 0, 0), (12, 12, 12), (12, 12, 12), cv2.FLOODFILL_MASK_ONLY | (255 << 8))
         
-    bg = (mask[1:-1, 1:-1] == 255) | is_black
-    fg = (~bg).astype(np.uint8) * 255
+    bg_mask = (mask[1:-1, 1:-1] == 255)
+    alpha = (~bg_mask).astype(np.uint8) * 255
     
-    contours, _ = cv2.findContours(fg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if contours:
-        largest = max(contours, key=cv2.contourArea)
-        hull = cv2.convexHull(largest)
-        poly_mask = np.zeros((h, w), dtype=np.uint8)
-        cv2.drawContours(poly_mask, [hull], -1, 255, thickness=cv2.FILLED)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
-        poly_mask = cv2.erode(poly_mask, kernel, iterations=1)
-        alpha = cv2.GaussianBlur(poly_mask, (3, 3), 0)
-    else:
-        alpha = fg
-        
     rgba = np.dstack((arr, alpha))
     res = Image.fromarray(rgba, 'RGBA')
     bbox = res.getbbox()
@@ -138,12 +131,18 @@ if aws_ai_src.exists():
     print("Saved uniform AWS AI Practitioner badge")
 
 # Process Oracle Java SE 17 Badge
-oracle_src = OUT_DIR / 'oracle-java-se17-thumb.png'
+oracle_src = Path(r'C:\Users\GOKUL\.gemini\antigravity-ide\brain\9c768b82-6604-447d-835b-281913fccb94\media__1786451057876.png')
+if not oracle_src.exists():
+    oracle_src = BRAIN_DIR / 'media__1786285870954.png'
 if oracle_src.exists():
-    oracle_cropped = Image.open(oracle_src).convert('RGBA')
-    oracle_bbox = oracle_cropped.getbbox()
-    if oracle_bbox:
-        oracle_cropped = oracle_cropped.crop(oracle_bbox)
+    oracle_img = Image.open(oracle_src).convert('RGBA')
+    arr_o = np.array(oracle_img)
+    mask_o = arr_o[:,:,3] > 20
+    if np.any(mask_o):
+        ys_o, xs_o = np.where(mask_o)
+        oracle_cropped = oracle_img.crop((xs_o.min(), ys_o.min(), xs_o.max(), ys_o.max()))
+    else:
+        oracle_cropped = oracle_img
     oracle_uniform = create_uniform_square_badge(oracle_cropped)
     oracle_uniform.save(OUT_DIR / 'oracle-java-se17-thumb.png')
     oracle_uniform.save(OUT_DIR / 'oracle-java-se17-full.png')
@@ -169,5 +168,22 @@ lc50_2025_uniform = create_uniform_square_badge(lc50_2025_cropped)
 lc50_2025_uniform.save(OUT_DIR / 'leetcode-50-2025-thumb.png')
 lc50_2025_uniform.save(OUT_DIR / 'leetcode-50-2025-full.png')
 print("Saved uniform LC 50 2025 badge")
+
+# Process CodeChef 100 Days Streak Badge
+cc100_src = Path(r'C:\Users\GOKUL\.gemini\antigravity-ide\brain\9c768b82-6604-447d-835b-281913fccb94\media__1786447805437.png')
+if cc100_src.exists():
+    cc100_img = Image.open(cc100_src).convert('RGBA')
+    arr_c = np.array(cc100_img)
+    mask_c = arr_c[:,:,3] > 20
+    if np.any(mask_c):
+        ys_c, xs_c = np.where(mask_c)
+        crop_c = (xs_c.min(), ys_c.min(), xs_c.max(), ys_c.max())
+        cc100_cropped = cc100_img.crop(crop_c)
+    else:
+        cc100_cropped = cc100_img
+    cc100_uniform = create_uniform_square_badge(cc100_cropped)
+    cc100_uniform.save(OUT_DIR / 'codechef-100-thumb.png')
+    cc100_uniform.save(OUT_DIR / 'codechef-100-full.png')
+    print("Saved uniform CodeChef 100 Days badge")
 
 print("All badges processed into uniform 512x512 square transparent PNGs!")
