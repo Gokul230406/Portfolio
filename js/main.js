@@ -870,6 +870,42 @@ function initEntranceAnimations() {
       });
     }
 
+    /* EXPERIENCE SECTION */
+    const expSec = document.querySelector('#experience');
+    if (expSec) {
+      const items = expSec.querySelectorAll('.exp-item');
+      items.forEach((item, idx) => {
+        const icon = item.querySelector('.exp-icon-wrap');
+        const tags = item.querySelectorAll('.tag');
+        gsap.fromTo(item,
+          { opacity: 0, x: isMobile ? 0 : (idx % 2 === 0 ? -60 : 60), y: isMobile ? 25 : 30 },
+          {
+            opacity: 1, x: 0, y: 0, duration: isMobile ? 0.55 : 0.85, ease: 'expo.out', force3D: true,
+            clearProps: 'transform,opacity',
+            scrollTrigger: { trigger: item, start: isMobile ? 'top 94%' : 'top 90%', toggleActions: 'play none none none' }
+          }
+        );
+        if (icon) {
+          gsap.fromTo(icon,
+            { opacity: 0, rotate: isMobile ? -90 : -180, scale: isMobile ? 0.7 : 0.2 },
+            {
+              opacity: 1, rotate: 0, scale: 1, duration: isMobile ? 0.5 : 0.75, ease: isMobile ? 'back.out(1.8)' : 'back.out(2)', force3D: true,
+              scrollTrigger: { trigger: item, start: isMobile ? 'top 94%' : 'top 90%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+        if (tags.length) {
+          gsap.fromTo(tags,
+            { opacity: 0, scale: 0.9 },
+            {
+              opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, force3D: true, clearProps: 'transform,opacity',
+              scrollTrigger: { trigger: item, start: isMobile ? 'top 90%' : 'top 85%', toggleActions: 'play none none none' }
+            }
+          );
+        }
+      });
+    }
+
     /* 4. SKILLS SECTION */
     const skillsSec = document.querySelector('#skills');
     if (skillsSec) {

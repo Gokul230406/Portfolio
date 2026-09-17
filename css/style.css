@@ -329,7 +329,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.25rem, 4vw, 3.5rem);
   background: transparent; overflow: clip; box-sizing: border-box; contain: layout style;
 }
-.manifesto-section, .skills-section, .certifications-section, .badges-section, .contact-section, .education-section {
+.manifesto-section, .skills-section, .certifications-section, .badges-section, .contact-section, .education-section, .experience-section {
   min-height: auto;
 }
 .about-section { padding-top: clamp(1rem, 2vw, 1.75rem); }
@@ -613,6 +613,62 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
 .edu-meta-right { text-align: right; }
 .edu-tags, .project-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .tag { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: var(--radius-full); background: rgba(212,175,55,0.08); color: var(--text-secondary); border: 1px solid var(--border-glass); }
+
+/* ── EXPERIENCE ─────────────────────────────────────────────── */
+.experience-timeline { display: flex; flex-direction: column; gap: 1rem; max-width: 860px; width: 100%; margin-inline: auto; }
+.exp-item { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; }
+.exp-icon-wrap { width: 42px; height: 42px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; background: rgba(124,58,237,0.12); color: var(--gold); border: 1px solid var(--border-accent); flex-shrink: 0; font-size: 0.95rem; }
+.exp-card {
+  background: rgba(18, 16, 12, 0.88); border: 1px solid var(--border-glass); border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem; transition: border-color 0.35s, transform 0.35s var(--ease-out), box-shadow 0.35s;
+}
+.exp-card:hover { border-color: var(--border-glass-hover); transform: translateY(-3px); box-shadow: var(--shadow-card); }
+.exp-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.18rem 0.55rem; border-radius: var(--radius-full); background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.3); margin-bottom: 0.45rem; }
+.exp-header { display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.exp-role { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-heading); letter-spacing: -0.01em; }
+.exp-company { color: var(--gold); font-size: 0.86rem; font-weight: 600; margin-top: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
+.exp-duration { font-size: 0.72rem; font-family: var(--font-mono); color: var(--gold); white-space: nowrap; display: block; }
+.exp-location { font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 0.15rem; text-align: right; }
+.exp-meta-right { text-align: right; }
+
+.exp-stanza {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid #7c3aed;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin-bottom: 0.85rem;
+}
+.exp-stanza p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.65; font-style: italic; }
+
+.exp-highlights { margin-bottom: 0.85rem; }
+.exp-highlights ul { display: flex; flex-direction: column; gap: 0.35rem; list-style: none; padding: 0; }
+.exp-highlights li { font-size: 0.84rem; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.6; }
+.exp-highlights li i { color: #10b981; font-size: 0.78rem; margin-top: 0.25rem; flex-shrink: 0; }
+
+.exp-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.exp-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+.exp-documents { border-top: 1px dashed var(--border-glass); padding-top: 0.85rem; margin-top: 0.4rem; }
+.exp-docs-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.4rem; }
+.exp-docs-title i { color: var(--gold); }
+.exp-docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.85rem; }
+.exp-doc-card {
+  display: block; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-glass); border-radius: var(--radius-md);
+  overflow: hidden; text-decoration: none; transition: all 0.3s ease;
+}
+.exp-doc-card:hover { border-color: rgba(124, 58, 237, 0.6); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124, 58, 237, 0.2); }
+.exp-doc-thumb { position: relative; width: 100%; height: 110px; overflow: hidden; background: #0b0a0f; }
+.exp-doc-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.4s ease; display: block; }
+.exp-doc-card:hover .exp-doc-thumb img { transform: scale(1.05); }
+.exp-doc-overlay {
+  position: absolute; inset: 0; background: rgba(15, 13, 26, 0.75); backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  color: #fff; font-size: 0.75rem; font-weight: 600; opacity: 0; transition: opacity 0.3s ease;
+}
+.exp-doc-card:hover .exp-doc-overlay { opacity: 1; }
+.exp-doc-info { padding: 0.55rem 0.7rem; background: rgba(18, 16, 12, 0.95); }
+.exp-doc-name { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-heading); }
+.exp-doc-id { display: block; font-size: 0.66rem; color: var(--gold); margin-top: 0.1rem; font-family: var(--font-mono); }
 
 /* ── SKILLS ─────────────────────────────────────────────────── */
 .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1100px; width: 100%; margin-inline: auto; }
@@ -1419,25 +1475,214 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .feat-overlay p { font-size: 0.78rem; margin-top: 0.2rem; }
 }
 
-/* Tablet — keep two-column layouts down to 501px */
-@media (max-width: 1100px) and (min-width: 501px) {
+/* Tablet — keep two-column layouts down to 601px (same hero structure as laptop) */
+@media (max-width: 1100px) and (min-width: 601px) {
   .hero-stage {
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 1.75rem;
-    padding: calc(var(--nav-height) + 2rem) 1.75rem 1.5rem;
-    min-height: auto;
+    display: grid !important;
+    grid-template-columns: 1.1fr 0.9fr !important;
+    gap: clamp(1.25rem, 3.5vw, 3rem) !important;
+    align-items: center !important;
+    padding: calc(var(--nav-height) + 1.75rem) clamp(1.25rem, 3.5vw, 2.5rem) 1.25rem !important;
+    min-height: auto !important;
   }
-  .hero-portrait { width: min(300px, 100%); justify-self: end; }
-  .hero-brand { font-size: clamp(2.8rem, 7vw, 4.5rem); }
-  .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 0.85rem; padding-inline: 1.75rem; }
-  .about-grid { grid-template-columns: 0.85fr 1.15fr; gap: 1.75rem; }
-  .about-image-col, .about-img-wrap { max-width: 320px; }
-  .about-profiles-row { gap: 1.25rem 1.75rem; }
+  .hero-left {
+    text-align: left !important;
+    order: 1 !important;
+  }
+  .hero-eyebrow {
+    margin-bottom: 0.85rem !important;
+    font-size: 0.7rem !important;
+  }
+  .hero-brand {
+    font-size: clamp(2.5rem, 6vw, 4.2rem) !important;
+    margin-bottom: 0.5rem !important;
+    text-align: left !important;
+  }
+  .hero-role-primary, .hero-role {
+    margin-inline: 0 !important;
+    text-align: left !important;
+    margin-bottom: 0.75rem !important;
+    font-size: clamp(0.95rem, 2vw, 1.25rem) !important;
+  }
+  .hero-cta {
+    justify-content: flex-start !important;
+    margin-top: 0.75rem !important;
+    gap: 0.75rem !important;
+  }
+  .hero-portrait {
+    order: 2 !important;
+    justify-self: end !important;
+    width: min(340px, 100%) !important;
+    margin-bottom: 0 !important;
+  }
+  .hero-stats {
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 0.65rem !important;
+    padding: 0.85rem 1rem !important;
+  }
+  .about-grid { grid-template-columns: 0.85fr 1.15fr; gap: 1.5rem; }
+  .about-image-col, .about-img-wrap { max-width: 300px; }
+  .about-subtitle {
+    font-size: 1.15rem !important;
+    margin-bottom: 0.45rem !important;
+    line-height: 1.3 !important;
+  }
+  .about-text {
+    font-size: 0.82rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.6rem !important;
+  }
+  .about-details {
+    gap: 0.45rem !important;
+    margin: 0.85rem 0 !important;
+  }
+  .detail-item {
+    font-size: 0.74rem !important;
+    gap: 0.4rem !important;
+  }
+  .detail-item i {
+    width: 0.85rem !important;
+    font-size: 0.74rem !important;
+  }
+  .about-actions {
+    gap: 0.45rem !important;
+    margin-top: 0.65rem !important;
+  }
+  .about-actions .btn {
+    padding: 0.45rem 0.7rem !important;
+    font-size: 0.74rem !important;
+  }
+  .about-profiles-row {
+    margin-top: 0.75rem !important;
+    padding-top: 0.55rem !important;
+    gap: 0.55rem !important;
+  }
+  .profiles-label {
+    font-size: 0.58rem !important;
+    margin-bottom: 0.3rem !important;
+    letter-spacing: 0.1em !important;
+  }
+  .profiles-grid {
+    gap: 0.35rem !important;
+  }
+  .profile-badge {
+    padding: 0.28rem 0.5rem !important;
+    font-size: 0.7rem !important;
+    gap: 0.35rem !important;
+  }
+  .profile-badge img, .profile-badge i {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Compact Education Cards on Tablet */
+  .education-timeline, .experience-timeline { gap: 0.65rem !important; }
+  .edu-item, .exp-item { gap: 0.65rem !important; grid-template-columns: auto 1fr !important; }
+  .edu-icon-wrap, .exp-icon-wrap {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    font-size: 0.85rem !important;
+    border-radius: 8px !important;
+  }
+  .edu-card, .exp-card {
+    padding: 0.65rem 0.85rem !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .edu-header, .exp-header { margin-bottom: 0.35rem !important; gap: 0.35rem !important; }
+  .edu-institution, .exp-role { font-size: 0.86rem !important; line-height: 1.25 !important; }
+  .edu-degree, .exp-company { font-size: 0.74rem !important; margin-top: 0.1rem !important; }
+  .edu-year, .exp-duration { font-size: 0.64rem !important; }
+  .edu-footer, .exp-footer { margin-top: 0.35rem !important; gap: 0.35rem !important; }
+  .edu-score { font-size: 0.85rem !important; }
+  .edu-score-label { font-size: 0.52rem !important; }
+
+  /* Compact Skills Cards on Tablet */
+  .skills-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.55rem !important; }
+  .skill-card {
+    padding: 0.6rem 0.8rem !important;
+    gap: 0.65rem !important;
+    border-radius: var(--radius-lg) !important;
+  }
+  .skill-icon-wrap {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1.15rem !important;
+  }
+  .skill-name {
+    font-size: 0.8rem !important;
+  }
+  .skill-level {
+    font-size: 0.64rem !important;
+  }
+  .skill-header-row {
+    margin-bottom: 0.35rem !important;
+  }
+
   .project-item, .project-item.project-reverse { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
   .project-item.project-reverse .project-image-col { order: 2; }
   .project-item.project-reverse .project-content-col { order: 1; }
-  .contact-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .contact-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .contact-right-col { max-width: none; justify-self: stretch; }
+  .contact-cards { gap: 0.5rem !important; }
+  .contact-card {
+    padding: 0.55rem 0.75rem !important;
+    gap: 0.6rem !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .contact-card-icon {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
+  }
+  .contact-card-label { font-size: 0.58rem !important; }
+  .contact-card-value { font-size: 0.8rem !important; }
+  .contact-card-arrow { font-size: 0.75rem !important; }
+  .contact-socials-block { margin-top: 0.75rem !important; }
+  .contact-socials { gap: 0.4rem !important; }
+  .contact-social {
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.75rem !important;
+    border-radius: var(--radius-md) !important;
+    gap: 0.45rem !important;
+  }
+  .contact-social i { font-size: 0.85rem !important; }
+  .availability-badge {
+    margin-top: 0.65rem !important;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.7rem !important;
+  }
+  .connect-card {
+    padding: 0.85rem 1rem !important;
+    border-radius: var(--radius-xl) !important;
+  }
+  .connect-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+  .connect-text {
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.6rem !important;
+  }
+  .connect-meta {
+    gap: 0.3rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .connect-meta-item {
+    font-size: 0.74rem !important;
+    line-height: 1.3 !important;
+  }
+  .resume-actions {
+    gap: 0.4rem !important;
+  }
+  .resume-actions .btn {
+    padding: 0.45rem 0.6rem !important;
+    font-size: 0.74rem !important;
+  }
   .achievements-grid { grid-template-columns: repeat(3, 1fr); gap: 0.45rem; }
   .leadership-grid { grid-template-columns: repeat(2, 1fr); gap: 1.1rem; }
   .certs-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1517,7 +1762,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .hero-stage {
     display: flex;
     flex-direction: column;
@@ -1527,7 +1772,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
     min-height: auto;
   }
   .hero-eyebrow { margin-bottom: 0.4rem; font-size: 0.65rem; }
-  .hero-brand { margin-bottom: 0.25rem; font-size: clamp(2rem, 8vw, 2.8rem); }
+  .hero-brand { margin-bottom: 0.25rem; font-size: clamp(2rem, 8vw, 2.8rem); text-align: center; }
   .hero-portrait {
     order: -1;
     justify-self: center;
@@ -1535,7 +1780,7 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
     margin-bottom: 0.35rem;
   }
   .hero-left { text-align: center; order: 0; }
-  .hero-role, .hero-role-primary { margin-inline: auto; margin-bottom: 0.4rem; font-size: 0.95rem; }
+  .hero-role, .hero-role-primary { margin-inline: auto; margin-bottom: 0.4rem; font-size: 0.95rem; text-align: center; }
   .hero-cta { justify-content: center; margin-top: 0.45rem; gap: 0.4rem; }
   .hero-cta .btn { padding: 0.55rem 0.85rem; font-size: 0.78rem; }
   .lead-timeline {
@@ -1603,16 +1848,16 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .lead-org { font-size: 0.66rem; margin-bottom: 0.1rem; }
   .lead-desc { font-size: 0.66rem; line-height: 1.3; }
 
-  /* Compact Education Cards on Mobile */
-  .education-timeline { gap: 0.65rem; }
-  .edu-item { gap: 0.6rem; grid-template-columns: auto 1fr; }
-  .edu-icon-wrap { width: 34px; height: 34px; min-width: 34px; min-height: 34px; font-size: 0.85rem; border-radius: 8px; }
-  .edu-card { padding: 0.65rem 0.85rem; border-radius: var(--radius-md); }
-  .edu-header { margin-bottom: 0.35rem; gap: 0.35rem; }
-  .edu-institution { font-size: 0.86rem; line-height: 1.25; }
-  .edu-degree { font-size: 0.74rem; margin-top: 0.1rem; }
-  .edu-year { font-size: 0.64rem; }
-  .edu-footer { margin-top: 0.35rem; gap: 0.35rem; }
+  /* Compact Education & Experience Cards on Mobile */
+  .education-timeline, .experience-timeline { gap: 0.65rem; }
+  .edu-item, .exp-item { gap: 0.6rem; grid-template-columns: auto 1fr; }
+  .edu-icon-wrap, .exp-icon-wrap { width: 34px; height: 34px; min-width: 34px; min-height: 34px; font-size: 0.85rem; border-radius: 8px; }
+  .edu-card, .exp-card { padding: 0.65rem 0.85rem; border-radius: var(--radius-md); }
+  .edu-header, .exp-header { margin-bottom: 0.35rem; gap: 0.35rem; }
+  .edu-institution, .exp-role { font-size: 0.86rem; line-height: 1.25; }
+  .edu-degree, .exp-company { font-size: 0.74rem; margin-top: 0.1rem; }
+  .edu-year, .exp-duration { font-size: 0.64rem; }
+  .edu-footer, .exp-footer { margin-top: 0.35rem; gap: 0.35rem; }
   .edu-score { font-size: 0.85rem; }
   .edu-score-label { font-size: 0.52rem; }
   .tag { font-size: 0.58rem; padding: 0.12rem 0.4rem; }
@@ -1736,6 +1981,98 @@ button { border: none; background: none; cursor: none; font: inherit; color: inh
   .profiles-grid { display: flex !important; flex-wrap: nowrap !important; gap: 0.15rem !important; }
   .profile-badge { padding: 0.2rem 0.32rem !important; font-size: 0.62rem !important; gap: 0.2rem !important; border-radius: 4px !important; white-space: nowrap !important; }
   .profile-badge img, .profile-badge i { width: 10px !important; height: 10px !important; font-size: 0.65rem !important; }
+
+  /* Compact Mobile Experience Section */
+  .experience-timeline { gap: 0.5rem !important; }
+  .exp-item { gap: 0.5rem !important; grid-template-columns: auto 1fr !important; }
+  .exp-icon-wrap {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    font-size: 0.78rem !important;
+    border-radius: 6px !important;
+  }
+  .exp-card {
+    padding: 0.55rem 0.7rem !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .exp-badge {
+    font-size: 0.52rem !important;
+    padding: 0.1rem 0.4rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  .exp-header {
+    margin-bottom: 0.35rem !important;
+    gap: 0.25rem !important;
+  }
+  .exp-role {
+    font-size: 0.82rem !important;
+    line-height: 1.2 !important;
+  }
+  .exp-company {
+    font-size: 0.72rem !important;
+    margin-top: 0.1rem !important;
+    gap: 0.25rem !important;
+  }
+  .exp-duration {
+    font-size: 0.6rem !important;
+  }
+  .exp-location {
+    font-size: 0.58rem !important;
+    margin-top: 0.05rem !important;
+  }
+  .exp-stanza {
+    padding: 0.45rem 0.6rem !important;
+    border-left-width: 2px !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .exp-stanza p {
+    font-size: 0.74rem !important;
+    line-height: 1.4 !important;
+  }
+  .exp-highlights {
+    margin-bottom: 0.5rem !important;
+  }
+  .exp-highlights ul {
+    gap: 0.25rem !important;
+  }
+  .exp-highlights li {
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+    gap: 0.35rem !important;
+  }
+  .exp-highlights li i {
+    font-size: 0.65rem !important;
+    margin-top: 0.15rem !important;
+  }
+  .exp-footer {
+    margin-bottom: 0.5rem !important;
+  }
+  .exp-documents {
+    padding-top: 0.5rem !important;
+    margin-top: 0.3rem !important;
+  }
+  .exp-docs-title {
+    font-size: 0.64rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  .exp-docs-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+  }
+  .exp-doc-thumb {
+    height: 75px !important;
+  }
+  .exp-doc-info {
+    padding: 0.35rem 0.45rem !important;
+  }
+  .exp-doc-name {
+    font-size: 0.7rem !important;
+  }
+  .exp-doc-id {
+    font-size: 0.58rem !important;
+  }
   .mobile-menu { gap: 0.6rem; padding: 2rem 1rem 1rem; }
   .mobile-nav-links { gap: 0.25rem; }
   .mobile-link { font-size: 1.05rem; padding: 0.18rem 0.4rem; }
