@@ -11,7 +11,7 @@
   <text x="100" y="260" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#ffb86c">verifyQR</text>
   <text x="210" y="260" font-family="JetBrains Mono, Consolas, monospace" font-size="20" fill="#a39e92">(qrCode);</text>
   <text x="80" y="310" font-family="JetBrains Mono, Consolas, monospace" font-size="22" fill="#ece8e0">}</text>
-  <text x="80" y="370" font-family="JetBrains Mono, Consolas, monospace" font-size="18" fill="#5e5a52">// Ethereum � Solidity � Ethers.js</text>
+  <text x="80" y="370" font-family="JetBrains Mono, Consolas, monospace" font-size="18" fill="#5e5a52">// Spring Boot • RESTful APIs • Ethers.js</text>
   <circle cx="680" cy="120" r="28" stroke="#d4af37" stroke-opacity="0.5" stroke-width="2"/>
   <circle cx="680" cy="120" r="8" fill="#d4af37"/>
 </svg>
